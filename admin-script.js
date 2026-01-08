@@ -2122,11 +2122,12 @@ async function uploadExcelToERPNext(file) {
                             <details style="margin-top: 1rem;">
                                 <summary style="cursor: pointer; font-weight: 600;">View Errors (${result.errors.length})</summary>
                                 <div style="margin-top: 0.5rem; max-height: 200px; overflow-y: auto;">
-                                    ${result.errors.map(err => `
-                                        <div style="padding: 0.5rem; background: #fff; margin: 0.25rem 0; border-radius: 4px;">
-                                            <strong>Row ${err.row}</strong>${err.item_code ? ` (${err.item_code})` : ''}: ${err.error}
-                                        </div>
-                                    `).join('')}
+                                    ${result.errors.map(err => {
+                                        const itemCodePart = err.item_code ? ` (${err.item_code})` : '';
+                                        return `<div style="padding: 0.5rem; background: #fff; margin: 0.25rem 0; border-radius: 4px;">
+                                            <strong>Row ${err.row}</strong>${itemCodePart}: ${err.error}
+                                        </div>`;
+                                    }).join('')}
                                 </div>
                             </details>
                         ` : ''}
