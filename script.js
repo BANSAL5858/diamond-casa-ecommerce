@@ -436,11 +436,18 @@ function showProductDetail(productId) {
             <p class="product-detail-description">${product.description}</p>
             <div class="product-detail-specs">
                 <p><strong>Category:</strong> ${product.category}</p>
+                ${product.subcategory ? `<p><strong>Subcategory:</strong> ${product.subcategory}</p>` : ''}
                 <p><strong>Metal:</strong> ${product.metal}</p>
+                ${product.metalPurity ? `<p><strong>Metal Purity:</strong> ${product.metalPurity}</p>` : ''}
                 <p><strong>Diamond Type:</strong> ${product.diamond}</p>
                 ${product.carat ? `<p><strong>Carat:</strong> ${product.carat} Ct</p>` : ''}
-                ${product.metalPurity ? `<p><strong>Metal Purity:</strong> ${product.metalPurity}</p>` : ''}
-                ${product.readyToShip ? '<p><strong>Status:</strong> Ready to Ship</p>' : `<p><strong>Status:</strong> Made to Order (${product.leadTime} days)</p>`}
+                ${product.weight ? `<p><strong>Weight:</strong> ${product.weight} grams</p>` : ''}
+                ${product.diamondDetails ? `<p><strong>Diamond Details:</strong> ${product.diamondDetails}</p>` : ''}
+                ${product.collection ? `<p><strong>Collection:</strong> ${product.collection}</p>` : ''}
+                ${product.size ? `<p><strong>Size:</strong> ${product.size}</p>` : ''}
+                ${product.quantity ? `<p><strong>Available Quantity:</strong> ${product.quantity}</p>` : ''}
+                ${product.erpnextItemCode ? `<p><strong>SKU:</strong> ${product.erpnextItemCode}</p>` : ''}
+                ${product.readyToShip ? '<p><strong>Status:</strong> ✅ Ready to Ship</p>' : `<p><strong>Status:</strong> ⏳ Made to Order (${product.leadTime || 15} days)</p>`}
             </div>
             <div class="product-detail-actions">
                 <button class="btn btn-primary add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
@@ -821,8 +828,9 @@ function createProductCard(product) {
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
                 <p class="product-brand">${product.brand}</p>
-                <p class="product-category">${product.category} ${caratDisplay ? '• ' + caratDisplay : ''}</p>
+                <p class="product-category">${product.category} ${caratDisplay ? '• ' + caratDisplay : ''} ${product.metalPurity ? '• ' + product.metalPurity : ''}</p>
                 <p class="product-price">${priceDisplay}</p>
+                ${product.collection ? `<p class="product-collection" style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">Collection: ${product.collection}</p>` : ''}
                 <div class="product-actions">
                     <button class="compare-btn" data-product-id="${product.id}">Compare</button>
                     <button class="wishlist-btn-inline" data-product-id="${product.id}">♡ Wishlist</button>
@@ -1568,18 +1576,52 @@ function requestReturn(orderId) {
     document.getElementById('returnOrderSelect').dispatchEvent(new Event('change'));
 }
 
+// Listen for product updates from ERPNext
+window.addEventListener('productsUpdated', (event) => {
+    const updatedProducts = event.detail;
+    // Update global products array
+    products.length = 0;
+    products.push(...updatedProducts);
+    
+    // Re-render all product sections
+    renderProducts();
+    renderReadyToShip();
+    renderTrendingNow();
+    renderRingsObsession();
+    renderBestSellers();
+    renderPortugueseCut();
+    renderTitaniumCollection();
+    renderCustomerFavorites();
+    
+    console.log(`Products updated: ${updatedProducts.length} products synced from ERPNext`);
+});
+
 // Auto-sync products and inventory on page load if ERPNext is enabled
 document.addEventListener('DOMContentLoaded', () => {
     if (window.ERPNextIntegration && window.ERPNextIntegration.config.enabled) {
         // Initial sync
-        window.ERPNextIntegration.syncProducts().catch(err => console.error('Product sync error:', err));
-        window.ERPNextIntegration.syncInventory().catch(err => console.error('Inventory sync error:', err));
+        window.ERPNextIntegration.syncProducts()
+            .then(syncedProducts => {
+                console.log(`Initial sync complete: ${syncedProducts.length} products loaded from ERPNext`);
+                // Products are automatically updated via productsUpdated event
+            })
+            .catch(err => console.error('Product sync error:', err));
+        
+        window.ERPNextIntegration.syncInventory()
+            .then(() => console.log('Inventory synced from ERPNext'))
+            .catch(err => console.error('Inventory sync error:', err));
 
         // Periodic sync every 15 minutes
         setInterval(() => {
             if (window.ERPNextIntegration.config.enabled) {
-                window.ERPNextIntegration.syncProducts().catch(err => console.error('Product sync error:', err));
-                window.ERPNextIntegration.syncInventory().catch(err => console.error('Inventory sync error:', err));
+                window.ERPNextIntegration.syncProducts()
+                    .then(syncedProducts => {
+                        console.log(`Periodic sync complete: ${syncedProducts.length} products updated from ERPNext`);
+                    })
+                    .catch(err => console.error('Product sync error:', err));
+                
+                window.ERPNextIntegration.syncInventory()
+                    .catch(err => console.error('Inventory sync error:', err));
             }
         }, 15 * 60 * 1000); // 15 minutes
     }

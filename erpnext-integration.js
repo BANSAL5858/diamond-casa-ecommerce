@@ -92,8 +92,8 @@ class ERPNextIntegration {
         this.syncStatus.lastProductSync = new Date().toISOString();
 
         try {
-            // Fetch Items from ERPNext
-            const items = await this.apiRequest('GET', 'Item?filters=[["item_group","=","Jewelry"]]&fields=["name","item_name","item_code","item_group","stock_uom","description","image","custom_metal_purity","custom_weight","custom_diamond_details","custom_lead_time","has_variants"]');
+            // Fetch Items from ERPNext with ALL custom fields
+            const items = await this.apiRequest('GET', 'Item?filters=[["item_group","=","Jewelry"]]&fields=["name","item_name","item_code","item_group","stock_uom","description","image","custom_metal_purity","custom_weight","custom_diamond_details","custom_lead_time","custom_brand","custom_metal_type","custom_diamond_type","custom_subcategory","custom_collection","custom_folder_name","custom_quantity","custom_size","custom_ready_to_ship","has_variants"]');
             
             // Fetch Price Lists
             const priceLists = await this.apiRequest('GET', 'Price List?filters=[["selling","=",1]]');
@@ -211,22 +211,31 @@ class ERPNextIntegration {
                 name: item.item_name,
                 brand: item.custom_brand || 'Diamond Casa',
                 category: this.mapItemGroupToCategory(item.item_group),
+                subcategory: item.custom_subcategory || '',
                 metal: item.custom_metal_type || 'gold',
+                metalPurity: item.custom_metal_purity || '',
                 diamond: item.custom_diamond_type || 'solitaire',
+                diamondDetails: item.custom_diamond_details || '',
                 price: Math.round(price),
                 priceRange: priceRange,
                 carat: item.custom_weight || 0,
-                readyToShip: item.custom_lead_time === 0 || item.custom_lead_time === null,
+                weight: item.custom_weight || 0, // Weight in grams
+                readyToShip: item.custom_lead_time === 0 || item.custom_lead_time === null || item.custom_ready_to_ship === true,
                 description: item.description || '',
-                metalPurity: item.custom_metal_purity || '',
-                diamondDetails: item.custom_diamond_details || '',
                 leadTime: item.custom_lead_time || 0,
+                collection: item.custom_collection || '',
+                quantity: item.custom_quantity || 1,
+                size: item.custom_size || '',
+                folderName: item.custom_folder_name || '',
                 hasVariants: item.has_variants || false,
                 image: mainImage, // Main/primary image for backward compatibility
                 images: images, // Array of up to 5 images
                 video: video, // Video URL
                 status: 'active',
-                syncedAt: new Date().toISOString()
+                syncedAt: new Date().toISOString(),
+                // Additional metadata
+                itemGroup: item.item_group,
+                stockUOM: item.stock_uom || 'Nos'
             };
         });
     }
@@ -1714,6 +1723,18 @@ class ERPNextIntegration {
             updated: results.updated,
             failed: results.failed
         });
+
+        // Automatically sync products to website after Excel upload
+        if (results.created > 0 || results.updated > 0) {
+            try {
+                console.log('Auto-syncing products to website after Excel upload...');
+                await this.syncProducts();
+                console.log('Products successfully synced to website!');
+            } catch (syncError) {
+                console.warn('Failed to auto-sync products after Excel upload:', syncError);
+                // Don't fail the upload if sync fails - products are in ERPNext
+            }
+        }
 
         return results;
     }

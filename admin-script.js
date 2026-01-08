@@ -1497,12 +1497,27 @@ async function uploadExcelToERPNext(file) {
                         
                         // Enhanced status message
                         let statusMsg = progress.status || `Processing ${progress.current} of ${progress.total}...`;
-                        if (progress.status && progress.status.includes('media') || progress.status.includes('image') || progress.status.includes('video')) {
+                        if (progress.status && (progress.status.includes('media') || progress.status.includes('image') || progress.status.includes('video'))) {
                             statusMsg += ' (Uploading media files...)';
                         }
                         statusText.textContent = statusMsg;
                     }
                 });
+
+                // Automatically sync products to website after successful upload
+                if (result.created > 0 || result.updated > 0) {
+                    statusText.textContent = 'Upload complete! Syncing products to website...';
+                    progressBar.style.width = '95%';
+                    
+                    try {
+                        await window.ERPNextIntegration.syncProducts();
+                        statusText.textContent = 'Upload and sync complete! Products are now live on the website.';
+                        progressBar.style.width = '100%';
+                    } catch (syncError) {
+                        console.warn('Auto-sync after upload failed:', syncError);
+                        statusText.textContent = 'Upload complete! (Note: Manual sync may be needed)';
+                    }
+                }
 
                 // Show results
                 resultDiv.style.display = 'block';
