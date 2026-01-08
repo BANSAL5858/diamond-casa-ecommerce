@@ -177,13 +177,12 @@ function setupLogin() {
     });
 }
 
-// Navigation
+// Navigation - Direct event handlers for reliability
 function setupNavigation() {
     console.log('Setting up navigation...');
     
     const attachNavHandlers = () => {
-        const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
-        const pageContents = document.querySelectorAll('.page-content');
+        const navItems = document.querySelectorAll('.nav-item');
         const pageTitle = document.getElementById('pageTitle');
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.querySelector('.sidebar');
@@ -196,33 +195,28 @@ function setupNavigation() {
 
         console.log(`Found ${navItems.length} navigation items`);
 
-        // Use event delegation on the sidebar-nav container for better reliability
-        const sidebarNav = document.querySelector('.sidebar-nav');
-        if (sidebarNav) {
-            // Remove any existing listeners by removing and re-adding
-            const newNav = sidebarNav.cloneNode(true);
-            sidebarNav.parentNode.replaceChild(newNav, sidebarNav);
+        // Direct event handlers on each nav item for maximum reliability
+        navItems.forEach(item => {
+            // Remove any existing handlers by cloning
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
             
-            // Attach single event listener to parent (event delegation)
-            newNav.addEventListener('click', function(e) {
+            // Attach multiple event handlers for maximum reliability
+            const handleNavClick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Find the clicked nav-item (could be the link or a child)
-                let navItem = e.target.closest('.nav-item');
-                if (!navItem) return;
-                
-                const page = navItem.getAttribute('data-page');
-                console.log('Navigation clicked:', page);
+                const page = this.getAttribute('data-page');
+                console.log('Navigation clicked:', page, this);
 
                 if (!page) {
-                    console.error('No data-page attribute found on nav item');
+                    console.error('No data-page attribute found');
                     return;
                 }
 
                 // Update active nav
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                navItem.classList.add('active');
+                this.classList.add('active');
 
                 // Show correct page
                 const allPages = document.querySelectorAll('.page-content');
@@ -232,11 +226,13 @@ function setupNavigation() {
                 if (targetPage) {
                     targetPage.classList.add('active');
                     if (pageTitle) {
-                        const span = navItem.querySelector('span');
+                        const span = this.querySelector('span');
                         if (span) {
                             pageTitle.textContent = span.textContent;
                         }
                     }
+                    
+                    console.log(`Switched to ${page} page`);
                     
                     // Load page-specific data
                     try {
@@ -255,7 +251,7 @@ function setupNavigation() {
                         } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
                             setTimeout(() => loadAnalytics(), 100);
                         } else if (page === 'reports' && typeof generateReport === 'function') {
-                            // Reports page doesn't need loading, just show it
+                            // Reports page doesn't need loading
                         } else if (page === 'promotions' && typeof loadPromotions === 'function') {
                             setTimeout(() => loadPromotions(), 100);
                         } else if (page === 'content' && typeof loadBanners === 'function') {
@@ -286,8 +282,13 @@ function setupNavigation() {
                 } else {
                     console.error(`Page element not found: ${page}Page`);
                 }
-            }, true); // Use capture phase for better reliability
-        }
+            };
+            
+            // Attach multiple handlers for reliability
+            newItem.onclick = handleNavClick;
+            newItem.addEventListener('click', handleNavClick, false);
+            newItem.addEventListener('click', handleNavClick, true);
+        });
 
         // Mobile menu toggle
         if (menuToggle && sidebar) {
@@ -298,7 +299,7 @@ function setupNavigation() {
             });
         }
 
-        console.log('Navigation setup complete');
+        console.log('Navigation setup complete - all items have click handlers');
     };
 
     // Multiple initialization attempts
@@ -312,6 +313,7 @@ function setupNavigation() {
     setTimeout(attachNavHandlers, 100);
     setTimeout(attachNavHandlers, 500);
     setTimeout(attachNavHandlers, 1000);
+    setTimeout(attachNavHandlers, 2000);
 }
 
 // Dashboard
