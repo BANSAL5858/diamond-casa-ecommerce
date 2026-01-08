@@ -56,6 +56,8 @@ function initializeAdmin() {
     setupCustomers();
     setupCategories();
     setupInventory();
+    setupAnalytics();
+    setupReports();
     setupPromotions();
     setupContent();
     setupSettings();
@@ -732,6 +734,92 @@ function loadCategories() {
 // Inventory Management
 function setupInventory() {
     loadInventory();
+}
+
+// Analytics
+function setupAnalytics() {
+    // Analytics page loads charts via setupCharts()
+    // Additional analytics setup can be added here
+    const periodBtns = document.querySelectorAll('#analyticsPage .period-btn');
+    periodBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            periodBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // Reload analytics data for selected period
+            loadAnalytics(btn.getAttribute('data-period'));
+        });
+    });
+}
+
+function loadAnalytics(period = '7days') {
+    // Analytics data is loaded via charts
+    // This function can be extended to load additional analytics
+    console.log('Loading analytics for period:', period);
+}
+
+// Reports
+function setupReports() {
+    const generateBtns = document.querySelectorAll('#reportsPage .generate-btn');
+    generateBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const reportType = btn.getAttribute('data-report');
+            generateReport(reportType);
+        });
+    });
+}
+
+function generateReport(reportType) {
+    try {
+        let reportData = {};
+        
+        switch(reportType) {
+            case 'sales':
+                reportData = {
+                    type: 'Sales Report',
+                    period: 'Last 30 days',
+                    totalRevenue: adminData.orders.reduce((sum, o) => sum + (o.amount || 0), 0),
+                    totalOrders: adminData.orders.length,
+                    averageOrderValue: adminData.orders.length > 0 
+                        ? Math.round(adminData.orders.reduce((sum, o) => sum + (o.amount || 0), 0) / adminData.orders.length)
+                        : 0
+                };
+                break;
+            case 'inventory':
+                reportData = {
+                    type: 'Inventory Report',
+                    totalProducts: adminData.products.length,
+                    lowStockItems: adminData.products.filter(p => (p.stock || 0) < 10).length,
+                    totalStockValue: adminData.products.reduce((sum, p) => sum + ((p.price || 0) * (p.stock || 0)), 0)
+                };
+                break;
+            case 'customer':
+                reportData = {
+                    type: 'Customer Report',
+                    totalCustomers: adminData.customers.length,
+                    activeCustomers: adminData.customers.filter(c => c.status === 'active').length,
+                    totalRevenue: adminData.orders.reduce((sum, o) => sum + (o.amount || 0), 0)
+                };
+                break;
+            case 'performance':
+                reportData = {
+                    type: 'Performance Report',
+                    totalRevenue: adminData.orders.reduce((sum, o) => sum + (o.amount || 0), 0),
+                    totalOrders: adminData.orders.length,
+                    totalProducts: adminData.products.length,
+                    totalCustomers: adminData.customers.length
+                };
+                break;
+            default:
+                reportData = { type: 'Unknown Report' };
+        }
+        
+        // Display report (in production, would generate PDF or detailed view)
+        alert(`${reportData.type}\n\n${JSON.stringify(reportData, null, 2)}`);
+        console.log('Generated report:', reportData);
+    } catch (error) {
+        console.error('Error generating report:', error);
+        alert('Error generating report: ' + error.message);
+    }
 }
 
 function loadInventory() {
