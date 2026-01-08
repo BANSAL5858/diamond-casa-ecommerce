@@ -438,7 +438,7 @@ class ERPNextIntegration {
             return null;
         }
 
-        const idempotencyKey = `order_${orderData.id}_${Date.now()}`;
+        const idempotencyKey = `order_${orderData.id}`;
         
         // Check idempotency
         if (this.idempotencyKeys.has(idempotencyKey)) {
@@ -454,7 +454,7 @@ class ERPNextIntegration {
             const address = await this.createCustomerAddress(customer.name, orderData.shippingAddress);
             
             // 3. Create Sales Order
-            const salesOrder = await this.createSalesOrder(orderData, customer.name, address.name);
+            const salesOrder = await this.createSalesOrder(orderData, customer.name, address.name, idempotencyKey);
 
             // Mark as synced
             this.idempotencyKeys.add(idempotencyKey);
@@ -536,7 +536,7 @@ class ERPNextIntegration {
     /**
      * Create Sales Order in ERPNext
      */
-    async createSalesOrder(orderData, customerName, addressName) {
+    async createSalesOrder(orderData, customerName, addressName, idempotencyKey = null) {
         const items = orderData.items.map(item => ({
             item_code: item.erpnextItemCode || item.sku,
             qty: item.quantity,
@@ -559,7 +559,8 @@ class ERPNextIntegration {
             custom_payment_method: orderData.paymentMethod || 'Online'
         };
 
-        return await this.apiRequest('POST', 'Sales Order', { data: salesOrder });
+        const requestKey = idempotencyKey || `sales_order_${orderData.id}`;
+        return await this.apiRequest('POST', 'Sales Order', { data: salesOrder }, requestKey);
     }
 
     /**
@@ -651,7 +652,11 @@ class ERPNextIntegration {
         const order = orders.find(o => o.erpnextPayment === paymentData.name);
         
         if (order) {
-            order.paymentStatus = paymentData.paid ? 'paid' : 'pending';
+            // Better payment status evaluation - check multiple fields
+            const isPaid = paymentData.status === 'Paid' ||
+                paymentData.docstatus === 1 ||
+                (paymentData.paid_amount || 0) > 0;
+            order.paymentStatus = isPaid ? 'paid' : 'pending';
             order.paymentReference = paymentData.name;
             localStorage.setItem('orders', JSON.stringify(orders));
         }
@@ -845,8 +850,9 @@ class ERPNextIntegration {
             
             // Update config with cleaned URL
             if (cleanUrl !== this.config.apiUrl) {
+                const previousUrl = this.config.apiUrl;
                 this.config.apiUrl = cleanUrl;
-                diagnostics.fixes.push(`Cleaned URL: ${this.config.apiUrl} → ${cleanUrl}`);
+                diagnostics.fixes.push(`Cleaned URL: ${previousUrl} → ${cleanUrl}`);
             }
 
             // Step 2: Test if URL is reachable (basic connectivity)
@@ -1010,24 +1016,20 @@ class ERPNextIntegration {
         }
 
         try {
-            // 1. Create Return Order in ERPNext
-            const returnOrder = await this.createReturnOrder(returnData);
+            // 1. Create Return Credit Note (Sales Invoice with is_return)
+            const creditNote = await this.createCreditNote(returnData);
             
-            // 2. Create Credit Note
-            const creditNote = await this.createCreditNote(returnData, returnOrder.data.name);
-            
-            // 3. Update stock in RETURN warehouse
+            // 2. Update stock in RETURN warehouse
             await this.updateReturnStock(returnData.items);
 
             this.idempotencyKeys.add(idempotencyKey);
             this.saveIdempotencyKeys();
 
             this.logIntegration('success', 'CREATE', 'return_request', returnData, {
-                returnOrder: returnOrder.data.name,
                 creditNote: creditNote.data.name
             });
 
-            return { returnOrder, creditNote };
+            return { creditNote };
         } catch (error) {
             this.logIntegration('error', 'CREATE', 'return_request', returnData, { error: error.message });
             throw error;
@@ -1035,36 +1037,13 @@ class ERPNextIntegration {
     }
 
     /**
-     * Create Return Order in ERPNext
-     */
-    async createReturnOrder(returnData) {
-        const items = returnData.items.map(item => ({
-            item_code: item.erpnextItemCode || item.sku,
-            qty: item.quantity,
-            rate: item.price,
-            uom: 'Nos'
-        }));
-
-        const returnOrder = {
-            customer: returnData.customerName,
-            return_against: returnData.salesOrderName,
-            items: items,
-            return_reason: returnData.reason || 'Customer Return',
-            company: 'Diamond Casa',
-            currency: 'INR',
-            custom_website_return_id: returnData.returnId.toString()
-        };
-
-        return await this.apiRequest('POST', 'Sales Return', { data: returnOrder });
-    }
-
-    /**
      * Create Credit Note for Return
+     * Uses Sales Invoice with is_return=1 to align with ERPNext Sales Invoice returns
      */
-    async createCreditNote(returnData, returnOrderName) {
+    async createCreditNote(returnData) {
         const creditNote = {
             customer: returnData.customerName,
-            return_against: returnOrderName,
+            return_against: returnData.salesInvoiceName || returnData.salesOrderName,
             company: 'Diamond Casa',
             currency: 'INR',
             posting_date: new Date().toISOString().split('T')[0],
@@ -1072,11 +1051,13 @@ class ERPNextIntegration {
                 item_code: item.erpnextItemCode || item.sku,
                 qty: item.quantity,
                 rate: item.price
-            }))
+            })),
+            is_return: 1,
+            custom_website_return_id: returnData.returnId.toString()
         };
 
         return await this.apiRequest('POST', 'Sales Invoice', { 
-            data: { ...creditNote, is_return: 1 } 
+            data: creditNote 
         });
     }
 
@@ -1589,13 +1570,11 @@ class ERPNextIntegration {
 
         try {
             // Build filter
-            let filter = `[["item_group","=","${itemGroup}"]]`;
-            if (limit) {
-                filter += `&limit_page_length=${limit}`;
-            }
+            const filter = `[["item_group","=","${itemGroup}"]]`;
+            const limitParam = limit ? `&limit_page_length=${limit}` : '';
 
             // Fetch all items
-            const itemsResponse = await this.apiRequest('GET', `Item?filters=${filter}&fields=["name","item_name","item_code","item_group","stock_uom","description","image","custom_metal_purity","custom_weight","custom_diamond_details","custom_lead_time","has_variants","custom_brand","custom_metal_type","custom_diamond_type"]`);
+            const itemsResponse = await this.apiRequest('GET', `Item?filters=${filter}${limitParam}&fields=["name","item_name","item_code","item_group","stock_uom","description","image","custom_metal_purity","custom_weight","custom_diamond_details","custom_lead_time","has_variants","custom_brand","custom_metal_type","custom_diamond_type"]`);
             
             const items = itemsResponse.data || [];
             const totalItems = items.length;
