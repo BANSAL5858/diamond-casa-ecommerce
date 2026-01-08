@@ -1327,18 +1327,55 @@
                     adminDashboard.style.display = 'flex';
                 }
                 
-                // Initialize dashboard
+                // Ensure dashboard page is visible
+                const dashboardPage = document.getElementById('dashboardPage');
+                if (dashboardPage) {
+                    document.querySelectorAll('.page-content').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    dashboardPage.classList.add('active');
+                }
+                
+                // Set active navigation
+                const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
+                if (dashboardNav) {
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    dashboardNav.classList.add('active');
+                }
+                
+                // Update page title
+                const pageTitle = document.getElementById('pageTitle');
+                if (pageTitle) {
+                    pageTitle.textContent = 'Dashboard';
+                }
+                
+                // Initialize dashboard with multiple delays
                 setTimeout(() => {
-                    if (typeof loadDashboardData === 'function') {
-                        loadDashboardData();
-                    } else if (typeof syncDataFromWebsite === 'function') {
-                        syncDataFromWebsite();
-                        if (typeof updateBadges === 'function') updateBadges();
-                        if (typeof loadRecentOrders === 'function') loadRecentOrders();
-                        if (typeof loadTopProducts === 'function') loadTopProducts();
-                        if (typeof loadLowStock === 'function') loadLowStock();
+                    try {
+                        if (typeof loadDashboardData === 'function') {
+                            loadDashboardData();
+                        } else if (typeof syncDataFromWebsite === 'function') {
+                            syncDataFromWebsite();
+                            if (typeof updateBadges === 'function') updateBadges();
+                            if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                            if (typeof loadTopProducts === 'function') loadTopProducts();
+                            if (typeof loadLowStock === 'function') loadLowStock();
+                        }
+                    } catch (error) {
+                        console.error('Dashboard initialization error:', error);
                     }
-                }, 300);
+                }, 500);
+                
+                // Backup initialization
+                setTimeout(() => {
+                    try {
+                        if (typeof loadDashboardData === 'function') {
+                            loadDashboardData();
+                        }
+                    } catch (error) {
+                        console.error('Backup initialization error:', error);
+                    }
+                }, 1500);
                 
                 console.log('Emergency login successful:', email);
                 return true;

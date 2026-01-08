@@ -127,26 +127,67 @@ function setupLogin() {
             localStorage.setItem('adminLoggedIn', 'true');
             localStorage.setItem('adminEmail', email);
             
-            if (loginPage) loginPage.style.display = 'none';
+            if (loginPage) {
+                loginPage.style.display = 'none';
+            }
             if (adminDashboard) {
                 adminDashboard.style.display = 'flex';
+                
+                // Ensure dashboard page is visible
+                const dashboardPage = document.getElementById('dashboardPage');
+                if (dashboardPage) {
+                    // Hide all pages first
+                    document.querySelectorAll('.page-content').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    // Show dashboard
+                    dashboardPage.classList.add('active');
+                }
+                
+                // Set active navigation
+                const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
+                if (dashboardNav) {
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    dashboardNav.classList.add('active');
+                }
+                
+                // Update page title
+                const pageTitle = document.getElementById('pageTitle');
+                if (pageTitle) {
+                    pageTitle.textContent = 'Dashboard';
+                }
             }
             
             // Load dashboard data if function exists
-            // Small delay to ensure DOM is ready
+            // Multiple delays to ensure everything is ready
             setTimeout(() => {
-                if (typeof loadDashboardData === 'function') {
-                    loadDashboardData();
-                } else {
-                    console.warn('loadDashboardData function not found');
-                    // Fallback initialization
-                    if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
-                    if (typeof updateBadges === 'function') updateBadges();
-                    if (typeof loadRecentOrders === 'function') loadRecentOrders();
-                    if (typeof loadTopProducts === 'function') loadTopProducts();
-                    if (typeof loadLowStock === 'function') loadLowStock();
+                try {
+                    if (typeof loadDashboardData === 'function') {
+                        loadDashboardData();
+                    } else {
+                        console.warn('loadDashboardData function not found, using fallback');
+                        // Fallback initialization
+                        if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
+                        if (typeof updateBadges === 'function') updateBadges();
+                        if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                        if (typeof loadTopProducts === 'function') loadTopProducts();
+                        if (typeof loadLowStock === 'function') loadLowStock();
+                    }
+                } catch (error) {
+                    console.error('Error in dashboard initialization:', error);
                 }
-            }, 300);
+            }, 500);
+            
+            // Also try after longer delay as backup
+            setTimeout(() => {
+                try {
+                    if (typeof loadDashboardData === 'function') {
+                        loadDashboardData();
+                    }
+                } catch (error) {
+                    console.error('Error in backup dashboard initialization:', error);
+                }
+            }, 1000);
             
             console.log('Login successful:', email);
         } catch (error) {
@@ -275,23 +316,76 @@ function setupDashboard() {
 function loadDashboardData() {
     console.log('Loading dashboard data...');
     try {
-        // Sync data from website (localStorage)
-        syncDataFromWebsite();
+        // Ensure we're on dashboard page
+        const dashboardPage = document.getElementById('dashboardPage');
+        if (dashboardPage) {
+            dashboardPage.classList.add('active');
+        }
         
-        // Update dashboard
-        updateBadges();
-        loadRecentOrders();
-        loadTopProducts();
-        loadLowStock();
+        // Sync data from website (localStorage)
+        if (typeof syncDataFromWebsite === 'function') {
+            syncDataFromWebsite();
+        }
+        
+        // Update dashboard components with error handling
+        try {
+            if (typeof updateBadges === 'function') {
+                updateBadges();
+            }
+        } catch (e) {
+            console.warn('updateBadges error:', e);
+        }
+        
+        try {
+            if (typeof loadRecentOrders === 'function') {
+                loadRecentOrders();
+            }
+        } catch (e) {
+            console.warn('loadRecentOrders error:', e);
+        }
+        
+        try {
+            if (typeof loadTopProducts === 'function') {
+                loadTopProducts();
+            }
+        } catch (e) {
+            console.warn('loadTopProducts error:', e);
+        }
+        
+        try {
+            if (typeof loadLowStock === 'function') {
+                loadLowStock();
+            }
+        } catch (e) {
+            console.warn('loadLowStock error:', e);
+        }
         
         // Load charts if available
-        if (typeof loadCharts === 'function') {
-            loadCharts();
+        try {
+            if (typeof loadCharts === 'function') {
+                loadCharts();
+            }
+        } catch (e) {
+            console.warn('loadCharts error:', e);
+        }
+        
+        // Ensure navigation is active
+        const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
+        if (dashboardNav) {
+            dashboardNav.classList.add('active');
+        }
+        
+        // Update page title
+        const pageTitle = document.getElementById('pageTitle');
+        if (pageTitle) {
+            pageTitle.textContent = 'Dashboard';
         }
         
         console.log('Dashboard data loaded successfully');
     } catch (error) {
         console.error('Error loading dashboard data:', error);
+        // Show error to user
+        alert('Dashboard loading error. Please refresh the page. Error: ' + error.message);
     }
 }
 
@@ -368,9 +462,23 @@ function syncDataFromWebsite() {
 }
 
 function updateBadges() {
-    document.getElementById('productsBadge').textContent = adminData.products.length || 0;
-    document.getElementById('ordersBadge').textContent = adminData.orders.length || 0;
-    document.getElementById('customersBadge').textContent = adminData.customers.length || 0;
+    try {
+        const productsBadge = document.getElementById('productsBadge');
+        const ordersBadge = document.getElementById('ordersBadge');
+        const customersBadge = document.getElementById('customersBadge');
+        
+        if (productsBadge) {
+            productsBadge.textContent = adminData.products.length || 0;
+        }
+        if (ordersBadge) {
+            ordersBadge.textContent = adminData.orders.length || 0;
+        }
+        if (customersBadge) {
+            customersBadge.textContent = adminData.customers.length || 0;
+        }
+    } catch (error) {
+        console.error('Error updating badges:', error);
+    }
 }
 
 function loadRecentOrders() {
@@ -418,22 +526,29 @@ function loadTopProducts() {
 }
 
 function loadLowStock() {
-    const table = document.getElementById('lowStockTable');
-    if (!table) return;
+    try {
+        const table = document.getElementById('lowStockTable');
+        if (!table) {
+            console.warn('lowStockTable not found');
+            return;
+        }
 
-    const lowStock = adminData.products.filter(p => p.stock < 10).slice(0, 5);
-    if (lowStock.length === 0) {
-        table.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem;">All products are well stocked</td></tr>';
-        return;
+        const lowStock = adminData.products.filter(p => (p.stock || 0) < 10).slice(0, 5);
+        if (lowStock.length === 0) {
+            table.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem;">All products are well stocked</td></tr>';
+            return;
+        }
+
+        table.innerHTML = lowStock.map(product => `
+            <tr>
+                <td>${product.name || 'Product'}</td>
+                <td><span style="color: ${(product.stock || 0) < 5 ? '#f44336' : '#ff9800'}">${product.stock || 0}</span></td>
+                <td><button class="btn btn-secondary btn-small">Restock</button></td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading low stock:', error);
     }
-
-    table.innerHTML = lowStock.map(product => `
-        <tr>
-            <td>${product.name}</td>
-            <td><span style="color: ${product.stock < 5 ? '#f44336' : '#ff9800'}">${product.stock}</span></td>
-            <td><button class="btn btn-secondary btn-small">Restock</button></td>
-        </tr>
-    `).join('');
 }
 
 // Products Management
