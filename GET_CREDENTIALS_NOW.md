@@ -6,7 +6,14 @@
 
 **Step 1: Login to ERPNext** (30 seconds)
 ```
-URL: https://your-erpnext-instance.com
+URL: [YOUR ACTUAL ERPNext URL - NOT the placeholder!]
+     Examples:
+     - https://diamondcasa.frappe.cloud
+     - https://erpnext.yourdomain.com
+     - http://localhost:8000 (if local)
+     
+     ⚠️ Replace with your REAL URL!
+     
 User: Your admin user
 Password: Your password
 ```
@@ -21,7 +28,14 @@ Password: Your password
 
 **Step 3: Use These Credentials**
 ```
-API URL:     https://your-erpnext-instance.com
+API URL:     [YOUR ACTUAL ERPNext URL - the same URL you use to login]
+             Examples:
+             - https://diamondcasa.frappe.cloud
+             - https://erpnext.yourdomain.com
+             - http://localhost:8000
+             
+             ⚠️ Use your REAL URL, not the placeholder!
+             
 API Key:     [paste the API Key you copied]
 API Secret:  [paste the API Secret you copied]
 User Email:  integration@diamondcasa.in (or your user email)
@@ -34,10 +48,17 @@ User Email:  integration@diamondcasa.in (or your user email)
 ### Real Credentials Look Like This:
 
 ```
-API URL:     https://erpnext.diamondcasa.in
+API URL:     https://diamondcasa.frappe.cloud  ← YOUR ACTUAL URL
+             (This is where you login to ERPNext)
+             
 API Key:     a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+             (40-60 character string from ERPNext)
+
 API Secret:  x9y8z7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1g0f9e8d7c6b5a4z3y2
+             (40-60 character string from ERPNext)
 ```
+
+**⚠️ Important:** The API URL must be your **actual ERPNext instance URL** where you can login. It's NOT a placeholder!
 
 **Characteristics:**
 - API Key: 40-60 character alphanumeric string

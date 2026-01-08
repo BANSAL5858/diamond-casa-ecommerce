@@ -8,8 +8,21 @@ If you already have ERPNext running:
 
 1. **Get Your ERPNext URL**
    ```
-   Example: https://erpnext.diamondcasa.in
-   Or: https://your-company.erpnext.com
+   ⚠️ You need your ACTUAL ERPNext URL!
+   
+   Examples of REAL URLs:
+   - https://diamondcasa.frappe.cloud
+   - https://erpnext.yourdomain.com
+   - http://localhost:8000 (if local)
+   
+   ❌ NOT: https://your-erpnext-instance.com (this is just a placeholder!)
+   
+   How to find it:
+   - Open ERPNext in your browser
+   - Copy the URL from address bar
+   - That's your ERPNext URL!
+   
+   Don't have ERPNext? See "Option 2" below or use mock mode.
    ```
 
 2. **Generate API Credentials** (2 minutes)
