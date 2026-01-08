@@ -111,6 +111,53 @@
         <div class="hero-overlay"></div>
     </section>
 
+    <!-- MCX Gold Price Section -->
+    <section id="mcx-gold-price" class="mcx-gold-section">
+        <div class="container">
+            <div class="mcx-gold-card">
+                <div class="mcx-gold-header">
+                    <h3>MCX Gold Live Price</h3>
+                    <span class="mcx-source">Source: <a href="https://mcxlive.org/" target="_blank" rel="noopener noreferrer">mcxlive.org</a></span>
+                </div>
+                <div class="mcx-gold-content">
+                    <div class="mcx-price-main">
+                        <div class="mcx-price-label">Last Price</div>
+                        <div class="mcx-price-value" id="mcxGoldLastPrice">
+                            <span class="loading-price">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="mcx-price-details">
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">Change:</span>
+                            <span class="mcx-value" id="mcxGoldChange">-</span>
+                        </div>
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">Change %:</span>
+                            <span class="mcx-value" id="mcxGoldChangePercent">-</span>
+                        </div>
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">Previous Close:</span>
+                            <span class="mcx-value" id="mcxGoldClose">-</span>
+                        </div>
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">High:</span>
+                            <span class="mcx-value" id="mcxGoldHigh">-</span>
+                        </div>
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">Low:</span>
+                            <span class="mcx-value" id="mcxGoldLow">-</span>
+                        </div>
+                        <div class="mcx-price-item">
+                            <span class="mcx-label">Last Updated:</span>
+                            <span class="mcx-value" id="mcxGoldTimestamp">-</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="refreshMCXPrice">Refresh Price</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Trending Now Section -->
     <section id="trending-now" class="trending-section">
         <div class="container">
@@ -980,7 +1027,128 @@
         </div>
     </div>
 
+    <script src="mcx-gold-fetcher.js"></script>
     <script src="erpnext-integration.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Initialize MCX Gold Price Display
+        document.addEventListener('DOMContentLoaded', () => {
+            const lastPriceEl = document.getElementById('mcxGoldLastPrice');
+            const changeEl = document.getElementById('mcxGoldChange');
+            const changePercentEl = document.getElementById('mcxGoldChangePercent');
+            const closeEl = document.getElementById('mcxGoldClose');
+            const highEl = document.getElementById('mcxGoldHigh');
+            const lowEl = document.getElementById('mcxGoldLow');
+            const timestampEl = document.getElementById('mcxGoldTimestamp');
+            const refreshBtn = document.getElementById('refreshMCXPrice');
+
+            // Format price in Indian currency format
+            function formatPrice(price) {
+                if (price === null || price === undefined) return '-';
+                return '₹' + price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            // Format change percentage
+            function formatChangePercent(percent) {
+                if (percent === null || percent === undefined) return '-';
+                const sign = percent >= 0 ? '+' : '';
+                return sign + percent.toFixed(2) + '%';
+            }
+
+            // Update UI with price data
+            function updatePriceDisplay(priceData) {
+                if (!priceData) return;
+
+                // Update last price
+                if (priceData.lastPrice !== null && priceData.lastPrice !== undefined) {
+                    lastPriceEl.innerHTML = formatPrice(priceData.lastPrice);
+                    lastPriceEl.classList.remove('loading-price');
+                    
+                    // Add color class based on change
+                    if (priceData.changePercent !== null) {
+                        if (priceData.changePercent > 0) {
+                            lastPriceEl.classList.add('price-up');
+                            lastPriceEl.classList.remove('price-down');
+                        } else if (priceData.changePercent < 0) {
+                            lastPriceEl.classList.add('price-down');
+                            lastPriceEl.classList.remove('price-up');
+                        } else {
+                            lastPriceEl.classList.remove('price-up', 'price-down');
+                        }
+                    }
+                } else {
+                    lastPriceEl.innerHTML = '<span class="loading-price">N/A</span>';
+                }
+
+                // Update other fields
+                changeEl.textContent = priceData.change !== null ? formatPrice(priceData.change) : '-';
+                changePercentEl.textContent = formatChangePercent(priceData.changePercent);
+                closeEl.textContent = formatPrice(priceData.close);
+                highEl.textContent = formatPrice(priceData.high);
+                lowEl.textContent = formatPrice(priceData.low);
+
+                // Update timestamp
+                if (priceData.timestamp) {
+                    const date = new Date(priceData.timestamp);
+                    timestampEl.textContent = date.toLocaleString('en-IN');
+                } else {
+                    timestampEl.textContent = new Date().toLocaleString('en-IN');
+                }
+
+                // Add color classes to change values
+                if (priceData.changePercent !== null) {
+                    if (priceData.changePercent > 0) {
+                        changeEl.classList.add('price-up');
+                        changePercentEl.classList.add('price-up');
+                        changeEl.classList.remove('price-down');
+                        changePercentEl.classList.remove('price-down');
+                    } else if (priceData.changePercent < 0) {
+                        changeEl.classList.add('price-down');
+                        changePercentEl.classList.add('price-down');
+                        changeEl.classList.remove('price-up');
+                        changePercentEl.classList.remove('price-up');
+                    }
+                }
+            }
+
+            // Listen for price updates
+            mcxGoldFetcher.onPriceUpdate((priceData) => {
+                updatePriceDisplay(priceData);
+            });
+
+            // Initial load
+            mcxGoldFetcher.fetchMCXGoldPrice()
+                .then(priceData => {
+                    updatePriceDisplay(priceData);
+                })
+                .catch(error => {
+                    console.error('Failed to fetch MCX Gold price:', error);
+                    lastPriceEl.innerHTML = '<span class="error-price">Error loading price. Please try again.</span>';
+                });
+
+            // Manual refresh button
+            refreshBtn.addEventListener('click', () => {
+                refreshBtn.disabled = true;
+                refreshBtn.textContent = 'Refreshing...';
+                lastPriceEl.innerHTML = '<span class="loading-price">Loading...</span>';
+                
+                mcxGoldFetcher.fetchMCXGoldPrice()
+                    .then(priceData => {
+                        updatePriceDisplay(priceData);
+                        refreshBtn.disabled = false;
+                        refreshBtn.textContent = 'Refresh Price';
+                    })
+                    .catch(error => {
+                        console.error('Failed to refresh MCX Gold price:', error);
+                        lastPriceEl.innerHTML = '<span class="error-price">Error loading price. Please try again.</span>';
+                        refreshBtn.disabled = false;
+                        refreshBtn.textContent = 'Refresh Price';
+                    });
+            });
+
+            // Start auto-update (updates every 60 seconds)
+            mcxGoldFetcher.startAutoUpdate();
+        });
+    </script>
 </body>
 </html>

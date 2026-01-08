@@ -862,22 +862,64 @@ async function syncAllERPNext() {
 }
 
 async function testERPNextConnection() {
-    if (!window.ERPNextIntegration) return;
+    if (!window.ERPNextIntegration) {
+        alert('ERPNext Integration module not loaded. Please refresh the page.');
+        return;
+    }
 
     const btn = document.getElementById('testConnectionBtn');
+    const apiUrl = document.getElementById('erpnextApiUrl').value.trim();
+    const apiKey = document.getElementById('erpnextApiKey').value.trim();
+    const apiSecret = document.getElementById('erpnextApiSecret').value.trim();
+
+    if (!apiUrl || !apiKey || !apiSecret) {
+        alert('⚠️ Please enter all required fields:\n\n- ERPNext API URL\n- API Key\n- API Secret\n\nClick "Save Configuration" first, then test connection.');
+        return;
+    }
+
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
 
     try {
+        // Temporarily update config for testing
+        const originalConfig = { ...window.ERPNextIntegration.config };
+        window.ERPNextIntegration.config.apiUrl = apiUrl;
+        window.ERPNextIntegration.config.apiKey = apiKey;
+        window.ERPNextIntegration.config.apiSecret = apiSecret;
+        window.ERPNextIntegration.config.enabled = true; // Temporarily enable for test
+
         const result = await window.ERPNextIntegration.testConnection();
+        
         if (result.success) {
-            alert('✓ Connection successful!');
+            alert('✅ Connection Successful!\n\n' +
+                  'ERPNext is reachable and credentials are valid.\n\n' +
+                  'You can now:\n' +
+                  '1. Enable integration (toggle switch)\n' +
+                  '2. Upload products from Excel\n' +
+                  '3. Sync products to website');
         } else {
-            alert('✗ Connection failed: ' + result.message);
+            alert('❌ Connection Failed\n\n' +
+                  (result.message || result.error || 'Unknown error') + '\n\n' +
+                  'Please check:\n' +
+                  '• API URL is correct and accessible\n' +
+                  '• API Key and Secret are valid\n' +
+                  '• ERPNext instance is running\n' +
+                  '• User has proper permissions\n' +
+                  '• Network connection is working');
         }
     } catch (error) {
-        alert('✗ Connection error: ' + error.message);
+        alert('❌ Connection Error\n\n' +
+              error.message + '\n\n' +
+              'Please check:\n' +
+              '• API URL is accessible (try opening in browser)\n' +
+              '• Network connection\n' +
+              '• ERPNext instance is running\n' +
+              '• CORS settings allow API access');
     } finally {
+        // Restore original config
+        if (window.ERPNextIntegration && originalConfig) {
+            window.ERPNextIntegration.config = originalConfig;
+        }
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
     }
