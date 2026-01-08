@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERPNext Connection Test Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            color: #1565c0;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .step.success {
+            background: #e8f5e9;
+        }
+        .step.error {
+            background: #ffebee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 ERPNext Connection Diagnostic Tool</h1>
+        <p>Use this tool to test your ERPNext connection and identify issues.</p>
+        
+        <div class="form-group">
+            <label>ERPNext API URL</label>
+            <input type="text" id="apiUrl" value="https://diamondcasa.frappe.cloud" placeholder="https://diamondcasa.frappe.cloud">
+            <small style="color: #666;">Base URL only (no /app/home)</small>
+        </div>
+        
+        <div class="form-group">
+            <label>API Key</label>
+            <input type="text" id="apiKey" value="f70126362d822ce" placeholder="f70126362d822ce">
+        </div>
+        
+        <div class="form-group">
+            <label>API Secret</label>
+            <input type="password" id="apiSecret" value="077025b26" placeholder="077025b26">
+        </div>
+        
+        <button onclick="testConnection()">🔍 Test Connection</button>
+        <button onclick="runFullDiagnostics()">🔬 Run Full Diagnostics</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const apiSecret = document.getElementById('apiSecret').value.trim();
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.className = 'info';
+            resultsDiv.innerHTML = '<p>Testing connection...</p>';
+            
+            try {
+                // Test 1: Ping
+                const pingUrl = apiUrl.replace(/\/$/, '') + '/api/method/ping';
+                let pingResult = 'Testing ping...';
+                
+                try {
+                    const pingResponse = await fetch(pingUrl);
+                    const pingData = await pingResponse.text();
+                    pingResult = pingResponse.ok ? '✅ Ping successful' : `❌ Ping failed: ${pingResponse.status}`;
+                } catch (e) {
+                    pingResult = `❌ Ping error: ${e.message}`;
+                }
+                
+                // Test 2: API with credentials
+                const apiEndpoint = apiUrl.replace(/\/$/, '') + '/api/resource/User?limit_page_length=1';
+                const response = await fetch(apiEndpoint, {
+                    headers: {
+                        'Authorization': `token ${apiKey}:${apiSecret}`,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.data) {
+                    resultsDiv.className = 'success';
+                    resultsDiv.innerHTML = `
+                        <h3>✅ Connection Successful!</h3>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Ping:</strong> ${pingResult}</p>
+                        <p><strong>API Endpoint:</strong> ✅ Accessible</p>
+                        <p><strong>Credentials:</strong> ✅ Valid</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    throw new Error(data.message || `HTTP ${response.status}: ${data.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                resultsDiv.className = 'error';
+                let errorMsg = error.message;
+                let suggestions = '';
+                
+                if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                    errorMsg = 'Authentication Failed (401)';
+                    suggestions = '<p><strong>Fix:</strong> Check your API Key and Secret. They may be incorrect or expired.</p>';
+                } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+                    errorMsg = 'Access Forbidden (403)';
+                    suggestions = '<p><strong>Fix:</strong> User may not have proper permissions. Check user roles in ERPNext.</p>';
+                } else if (error.message.includes('404') || error.message.includes('Not Found')) {
+                    errorMsg = 'Endpoint Not Found (404)';
+                    suggestions = '<p><strong>Fix:</strong> Check your API URL. Should be base URL only (no /app/home).</p>';
+                } else if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+                    errorMsg = 'Network/CORS Error';
+                    suggestions = '<p><strong>Fix:</strong> CORS may not be configured in ERPNext. Check CORS settings or network connection.</p>';
+                }
+                
+                resultsDiv.innerHTML = `
+                    <h3>❌ Connection Failed</h3>
+                    <p><strong>Error:</strong> ${errorMsg}</p>
+                    <p><strong>Details:</strong> ${error.message}</p>
+                    ${suggestions}
+                    <p><strong>Your Configuration:</strong></p>
+                    <pre>URL: ${apiUrl}
+API Key: ${apiKey}
+API Secret: ${apiSecret ? '***' : 'not set'}</pre>
+                `;
+            }
+        }
+        
+        async function runFullDiagnostics() {
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const apiSecret = document.getElementById('apiSecret').value.trim();
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.className = 'info';
+            resultsDiv.innerHTML = '<p>Running full diagnostics...</p>';
+            
+            const steps = [];
+            
+            // Step 1: URL Format
+            if (!apiUrl.startsWith('http://') && !apiUrl.startsWith('https://')) {
+                steps.push({ name: 'URL Format', status: 'error', message: 'URL must start with http:// or https://' });
+            } else if (apiUrl.includes('/app/') || apiUrl.includes('/home')) {
+                steps.push({ name: 'URL Format', status: 'error', message: 'URL should not include /app/home - use base URL only' });
+            } else {
+                steps.push({ name: 'URL Format', status: 'success', message: 'URL format is correct' });
+            }
+            
+            // Step 2: Ping Test
+            try {
+                const pingUrl = apiUrl.replace(/\/$/, '') + '/api/method/ping';
+                const pingResponse = await fetch(pingUrl);
+                if (pingResponse.ok) {
+                    steps.push({ name: 'Server Reachable', status: 'success', message: 'Server is reachable' });
+                } else {
+                    steps.push({ name: 'Server Reachable', status: 'error', message: `Server returned status: ${pingResponse.status}` });
+                }
+            } catch (e) {
+                steps.push({ name: 'Server Reachable', status: 'error', message: `Cannot reach server: ${e.message}` });
+            }
+            
+            // Step 3: API Test
+            try {
+                const apiEndpoint = apiUrl.replace(/\/$/, '') + '/api/resource/User?limit_page_length=1';
+                const response = await fetch(apiEndpoint, {
+                    headers: {
+                        'Authorization': `token ${apiKey}:${apiSecret}`,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    steps.push({ name: 'API Access', status: 'success', message: 'API endpoint is accessible' });
+                    steps.push({ name: 'Authentication', status: 'success', message: 'Credentials are valid' });
+                    steps.push({ name: 'User Permissions', status: 'success', message: 'User has proper permissions' });
+                } else {
+                    if (response.status === 401) {
+                        steps.push({ name: 'Authentication', status: 'error', message: '401 Unauthorized - Wrong API Key or Secret' });
+                    } else if (response.status === 403) {
+                        steps.push({ name: 'User Permissions', status: 'error', message: '403 Forbidden - User lacks permissions' });
+                    } else {
+                        steps.push({ name: 'API Access', status: 'error', message: `API returned status: ${response.status}` });
+                    }
+                }
+            } catch (e) {
+                if (e.message.includes('Failed to fetch') || e.message.includes('CORS')) {
+                    steps.push({ name: 'API Access', status: 'error', message: 'CORS error or network issue' });
+                } else {
+                    steps.push({ name: 'API Access', status: 'error', message: e.message });
+                }
+            }
+            
+            // Display results
+            let html = '<h3>🔬 Full Diagnostics Results</h3>';
+            steps.forEach(step => {
+                const icon = step.status === 'success' ? '✅' : '❌';
+                const className = step.status === 'success' ? 'success' : 'error';
+                html += `<div class="step ${className}"><strong>${icon} ${step.name}:</strong> ${step.message}</div>`;
+            });
+            
+            const allSuccess = steps.every(s => s.status === 'success');
+            resultsDiv.className = allSuccess ? 'success' : 'error';
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
