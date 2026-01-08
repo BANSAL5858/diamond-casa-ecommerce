@@ -899,10 +899,29 @@
                             </button>
                         </div>
                         <div id="excelUploadProgress" style="display: none; margin-top: 1rem;">
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="excelUploadProgressBar" style="width: 0%;"></div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <strong>Upload Progress</strong>
+                                <span id="excelUploadPercentage" style="font-weight: bold; color: #1976d2;">0%</span>
                             </div>
-                            <p id="excelUploadStatus" style="margin-top: 0.5rem; color: #666;">Processing...</p>
+                            <div class="progress-bar-container" style="height: 30px; background: #e0e0e0; border-radius: 15px; overflow: hidden;">
+                                <div class="progress-bar" id="excelUploadProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a); transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem;"></div>
+                            </div>
+                            <p id="excelUploadStatus" style="margin-top: 0.75rem; color: #666; font-size: 0.95rem;">
+                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                            </p>
+                            <div id="excelUploadStats" style="display: none; margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 6px; font-size: 0.9rem;">
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                    <div>
+                                        <strong>Processed:</strong> <span id="statsProcessed">0</span>
+                                    </div>
+                                    <div>
+                                        <strong>Success:</strong> <span id="statsSuccess" style="color: #4caf50;">0</span>
+                                    </div>
+                                    <div>
+                                        <strong>Failed:</strong> <span id="statsFailed" style="color: #f44336;">0</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div id="excelUploadResult" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
                             <!-- Results will be shown here -->

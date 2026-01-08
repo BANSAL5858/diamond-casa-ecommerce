@@ -1548,16 +1548,18 @@ async function uploadExcelToERPNext(file) {
 
                 // Automatically sync products to website after successful upload
                 if (result.created > 0 || result.updated > 0) {
-                    statusText.textContent = 'Upload complete! Syncing products to website...';
+                    statusText.textContent = `Upload complete! Syncing ${result.created + result.updated} products to website...`;
                     progressBar.style.width = '95%';
                     
                     try {
-                        await window.ERPNextIntegration.syncProducts();
-                        statusText.textContent = 'Upload and sync complete! Products are now live on the website.';
+                        const syncedProducts = await window.ERPNextIntegration.syncProducts();
+                        statusText.textContent = `✅ Upload and sync complete! ${syncedProducts.length} products are now live on the website.`;
                         progressBar.style.width = '100%';
+                        progressBar.style.background = '#4caf50';
                     } catch (syncError) {
                         console.warn('Auto-sync after upload failed:', syncError);
-                        statusText.textContent = 'Upload complete! (Note: Manual sync may be needed)';
+                        statusText.textContent = 'Upload complete! (Note: Click "Sync Products" manually to sync to website)';
+                        progressBar.style.background = '#ff9800';
                     }
                 }
 
