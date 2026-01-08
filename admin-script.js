@@ -777,16 +777,36 @@ function saveERPNextConfig() {
         return;
     }
 
+    const apiUrl = document.getElementById('erpnextApiUrl').value.trim();
+    const apiKey = document.getElementById('erpnextApiKey').value.trim();
+    const apiSecret = document.getElementById('erpnextApiSecret').value.trim();
+    const integrationUser = document.getElementById('erpnextUser').value.trim();
+
+    // Validate URL format
+    if (apiUrl && !apiUrl.startsWith('http://') && !apiUrl.startsWith('https://')) {
+        alert('⚠️ API URL must start with http:// or https://\n\nExample: https://diamondcasa.frappe.cloud');
+        return;
+    }
+
+    // Remove trailing slash from URL
+    const cleanApiUrl = apiUrl.replace(/\/$/, '');
+
+    // Validate credentials
+    if (apiUrl && (!apiKey || !apiSecret)) {
+        alert('⚠️ Please enter both API Key and API Secret');
+        return;
+    }
+
     const config = {
-        apiUrl: document.getElementById('erpnextApiUrl').value,
-        apiKey: document.getElementById('erpnextApiKey').value,
-        apiSecret: document.getElementById('erpnextApiSecret').value,
-        integrationUser: document.getElementById('erpnextUser').value,
+        apiUrl: cleanApiUrl,
+        apiKey: apiKey,
+        apiSecret: apiSecret,
+        integrationUser: integrationUser || 'integration@diamondcasa.in',
         enabled: document.getElementById('erpnextEnabled').checked
     };
 
     window.ERPNextIntegration.updateConfig(config);
-    alert('Configuration saved successfully!');
+    alert('✅ Configuration saved successfully!\n\nClick "Test Connection" to verify your credentials.');
     updateIntegrationStatus();
 }
 

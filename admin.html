@@ -815,15 +815,22 @@
                         <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; margin-top: 1rem; border-left: 4px solid #ffc107;">
                             <strong>📝 Setup Instructions:</strong>
                             <ol style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
-                                <li>Enter your ERPNext API URL (e.g., https://erpnext.diamondcasa.in)</li>
-                                <li>Enter API Key and Secret (from ERPNext → User → API Keys)</li>
+                                <li>Enter your ERPNext API URL: <code>https://diamondcasa.frappe.cloud</code> (no trailing slash, no /app/home)</li>
+                                <li>Enter API Key: <code>f70126362d822ce</code></li>
+                                <li>Enter API Secret: <code>077025b26</code></li>
                                 <li>Click "Save Configuration"</li>
                                 <li>Click "Test Connection" to verify</li>
                                 <li>Enable integration using the toggle switch below</li>
                             </ol>
                             <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">
-                                <strong>Need help?</strong> See <a href="ERPNEXT_SETUP_GUIDE.md" target="_blank" style="color: #1976d2;">Setup Guide</a> or <a href="QUICK_START_GUIDE.md" target="_blank" style="color: #1976d2;">Quick Start Guide</a>
+                                <strong>Connection issues?</strong> See <a href="CONNECTION_TROUBLESHOOTING.md" target="_blank" style="color: #1976d2;">Troubleshooting Guide</a> or check browser console (F12) for detailed errors.
                             </p>
+                        </div>
+                        <div id="connectionDiagnostics" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-top: 1rem; border: 1px solid #dee2e6;">
+                            <strong>🔍 Connection Diagnostics:</strong>
+                            <div id="diagnosticsContent" style="margin-top: 0.5rem; font-size: 0.9rem;">
+                                <!-- Diagnostics will be shown here -->
+                            </div>
                         </div>
                     </div>
                 </div>
