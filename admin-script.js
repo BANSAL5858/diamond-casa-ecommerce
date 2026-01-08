@@ -179,73 +179,134 @@ function setupLogin() {
 
 // Navigation
 function setupNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    const pageContents = document.querySelectorAll('.page-content');
-    const pageTitle = document.getElementById('pageTitle');
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
+    console.log('Setting up navigation...');
+    
+    // Wait for DOM to be ready
+    const initNav = () => {
+        const navItems = document.querySelectorAll('.nav-item');
+        const pageContents = document.querySelectorAll('.page-content');
+        const pageTitle = document.getElementById('pageTitle');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
 
-    navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = item.getAttribute('data-page');
+        if (!navItems || navItems.length === 0) {
+            console.error('Navigation items not found!');
+            return;
+        }
 
-            // Update active nav
-            navItems.forEach(nav => nav.classList.remove('active'));
-            item.classList.add('active');
+        console.log(`Found ${navItems.length} navigation items`);
 
-            // Show correct page
-            pageContents.forEach(content => content.classList.remove('active'));
-            const targetPage = document.getElementById(`${page}Page`);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                pageTitle.textContent = item.querySelector('span').textContent;
-                
-                // Load page-specific data
-                if (page === 'dashboard' && typeof loadDashboardData === 'function') {
-                    setTimeout(() => loadDashboardData(), 100);
-                } else if (page === 'products' && typeof loadProducts === 'function') {
-                    setTimeout(() => loadProducts(), 100);
-                } else if (page === 'orders' && typeof loadOrders === 'function') {
-                    setTimeout(() => loadOrders(), 100);
-                } else if (page === 'customers' && typeof loadCustomers === 'function') {
-                    setTimeout(() => loadCustomers(), 100);
-                } else if (page === 'categories' && typeof loadCategories === 'function') {
-                    setTimeout(() => loadCategories(), 100);
-                } else if (page === 'inventory' && typeof loadInventory === 'function') {
-                    setTimeout(() => loadInventory(), 100);
-                } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
-                    setTimeout(() => loadAnalytics(), 100);
-                } else if (page === 'promotions' && typeof loadPromotions === 'function') {
-                    setTimeout(() => loadPromotions(), 100);
-                } else if (page === 'content' && typeof loadBanners === 'function') {
-                    setTimeout(() => loadBanners(), 100);
-                } else if (page === 'users' && typeof loadUsers === 'function') {
-                    setTimeout(() => loadUsers(), 100);
-                } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
-                    setTimeout(() => loadPurchaseOrders(), 100);
-                } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
-                    setTimeout(() => loadSuppliers(), 100);
-                } else if (page === 'returns' && typeof loadReturns === 'function') {
-                    setTimeout(() => loadReturns(), 100);
-                } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
-                    setTimeout(() => loadStockTransfers(), 100);
-                } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
-                    setTimeout(() => {
-                        loadERPNextConfig();
-                        loadIntegrationLogs();
-                        loadErrorLogs();
-                        updateIntegrationStatus();
-                    }, 100);
-                }
-            }
+        // Remove any existing event listeners by cloning and replacing
+        navItems.forEach(item => {
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
         });
-    });
 
-    // Mobile menu toggle
-    menuToggle?.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
+        // Get fresh references after cloning
+        const freshNavItems = document.querySelectorAll('.nav-item');
+
+        freshNavItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const page = this.getAttribute('data-page');
+                console.log('Navigation clicked:', page);
+
+                if (!page) {
+                    console.error('No data-page attribute found on nav item');
+                    return;
+                }
+
+                // Update active nav
+                freshNavItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show correct page
+                if (pageContents && pageContents.length > 0) {
+                    pageContents.forEach(content => content.classList.remove('active'));
+                }
+                
+                const targetPage = document.getElementById(`${page}Page`);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    if (pageTitle) {
+                        const span = this.querySelector('span');
+                        if (span) {
+                            pageTitle.textContent = span.textContent;
+                        }
+                    }
+                    
+                    // Load page-specific data
+                    try {
+                        if (page === 'dashboard' && typeof loadDashboardData === 'function') {
+                            setTimeout(() => loadDashboardData(), 100);
+                        } else if (page === 'products' && typeof loadProducts === 'function') {
+                            setTimeout(() => loadProducts(), 100);
+                        } else if (page === 'orders' && typeof loadOrders === 'function') {
+                            setTimeout(() => loadOrders(), 100);
+                        } else if (page === 'customers' && typeof loadCustomers === 'function') {
+                            setTimeout(() => loadCustomers(), 100);
+                        } else if (page === 'categories' && typeof loadCategories === 'function') {
+                            setTimeout(() => loadCategories(), 100);
+                        } else if (page === 'inventory' && typeof loadInventory === 'function') {
+                            setTimeout(() => loadInventory(), 100);
+                        } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
+                            setTimeout(() => loadAnalytics(), 100);
+                        } else if (page === 'reports' && typeof generateReport === 'function') {
+                            // Reports page doesn't need loading, just show it
+                        } else if (page === 'promotions' && typeof loadPromotions === 'function') {
+                            setTimeout(() => loadPromotions(), 100);
+                        } else if (page === 'content' && typeof loadBanners === 'function') {
+                            setTimeout(() => loadBanners(), 100);
+                        } else if (page === 'settings') {
+                            // Settings page doesn't need loading
+                        } else if (page === 'users' && typeof loadUsers === 'function') {
+                            setTimeout(() => loadUsers(), 100);
+                        } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
+                            setTimeout(() => loadPurchaseOrders(), 100);
+                        } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
+                            setTimeout(() => loadSuppliers(), 100);
+                        } else if (page === 'returns' && typeof loadReturns === 'function') {
+                            setTimeout(() => loadReturns(), 100);
+                        } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
+                            setTimeout(() => loadStockTransfers(), 100);
+                        } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
+                            setTimeout(() => {
+                                loadERPNextConfig();
+                                if (typeof loadIntegrationLogs === 'function') loadIntegrationLogs();
+                                if (typeof loadErrorLogs === 'function') loadErrorLogs();
+                                if (typeof updateIntegrationStatus === 'function') updateIntegrationStatus();
+                            }, 100);
+                        }
+                    } catch (error) {
+                        console.error('Error loading page data:', error);
+                    }
+                } else {
+                    console.error(`Page element not found: ${page}Page`);
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        if (menuToggle && sidebar) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+
+        console.log('Navigation setup complete');
+    };
+
+    // Try immediately
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(initNav, 100);
+    } else {
+        document.addEventListener('DOMContentLoaded', initNav);
+    }
+    
+    // Also try after a delay as backup
+    setTimeout(initNav, 500);
 }
 
 // Dashboard
