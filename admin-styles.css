@@ -161,6 +161,9 @@ body {
     overflow-y: auto;
     transition: var(--transition);
     z-index: 1000;
+    pointer-events: auto;
+    left: 0;
+    top: 0;
 }
 
 .sidebar-header {
@@ -180,6 +183,7 @@ body {
 
 .sidebar-nav {
     padding: 1rem 0;
+    pointer-events: auto;
 }
 
 .nav-item {
@@ -190,6 +194,10 @@ body {
     text-decoration: none;
     transition: var(--transition);
     position: relative;
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .nav-item i {

@@ -181,36 +181,38 @@ function setupLogin() {
 function setupNavigation() {
     console.log('Setting up navigation...');
     
-    // Wait for DOM to be ready
-    const initNav = () => {
-        const navItems = document.querySelectorAll('.nav-item');
+    const attachNavHandlers = () => {
+        const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
         const pageContents = document.querySelectorAll('.page-content');
         const pageTitle = document.getElementById('pageTitle');
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.querySelector('.sidebar');
 
         if (!navItems || navItems.length === 0) {
-            console.error('Navigation items not found!');
+            console.error('Navigation items not found! Retrying...');
+            setTimeout(attachNavHandlers, 200);
             return;
         }
 
         console.log(`Found ${navItems.length} navigation items`);
 
-        // Remove any existing event listeners by cloning and replacing
-        navItems.forEach(item => {
-            const newItem = item.cloneNode(true);
-            item.parentNode.replaceChild(newItem, item);
-        });
-
-        // Get fresh references after cloning
-        const freshNavItems = document.querySelectorAll('.nav-item');
-
-        freshNavItems.forEach(item => {
-            item.addEventListener('click', function(e) {
+        // Use event delegation on the sidebar-nav container for better reliability
+        const sidebarNav = document.querySelector('.sidebar-nav');
+        if (sidebarNav) {
+            // Remove any existing listeners by removing and re-adding
+            const newNav = sidebarNav.cloneNode(true);
+            sidebarNav.parentNode.replaceChild(newNav, sidebarNav);
+            
+            // Attach single event listener to parent (event delegation)
+            newNav.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                const page = this.getAttribute('data-page');
+                // Find the clicked nav-item (could be the link or a child)
+                let navItem = e.target.closest('.nav-item');
+                if (!navItem) return;
+                
+                const page = navItem.getAttribute('data-page');
                 console.log('Navigation clicked:', page);
 
                 if (!page) {
@@ -219,19 +221,18 @@ function setupNavigation() {
                 }
 
                 // Update active nav
-                freshNavItems.forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                navItem.classList.add('active');
 
                 // Show correct page
-                if (pageContents && pageContents.length > 0) {
-                    pageContents.forEach(content => content.classList.remove('active'));
-                }
+                const allPages = document.querySelectorAll('.page-content');
+                allPages.forEach(content => content.classList.remove('active'));
                 
                 const targetPage = document.getElementById(`${page}Page`);
                 if (targetPage) {
                     targetPage.classList.add('active');
                     if (pageTitle) {
-                        const span = this.querySelector('span');
+                        const span = navItem.querySelector('span');
                         if (span) {
                             pageTitle.textContent = span.textContent;
                         }
@@ -285,12 +286,14 @@ function setupNavigation() {
                 } else {
                     console.error(`Page element not found: ${page}Page`);
                 }
-            });
-        });
+            }, true); // Use capture phase for better reliability
+        }
 
         // Mobile menu toggle
         if (menuToggle && sidebar) {
-            menuToggle.addEventListener('click', () => {
+            menuToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 sidebar.classList.toggle('active');
             });
         }
@@ -298,15 +301,17 @@ function setupNavigation() {
         console.log('Navigation setup complete');
     };
 
-    // Try immediately
+    // Multiple initialization attempts
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(initNav, 100);
+        attachNavHandlers();
     } else {
-        document.addEventListener('DOMContentLoaded', initNav);
+        document.addEventListener('DOMContentLoaded', attachNavHandlers);
     }
     
-    // Also try after a delay as backup
-    setTimeout(initNav, 500);
+    // Backup attempts
+    setTimeout(attachNavHandlers, 100);
+    setTimeout(attachNavHandlers, 500);
+    setTimeout(attachNavHandlers, 1000);
 }
 
 // Dashboard
