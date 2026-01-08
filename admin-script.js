@@ -1307,23 +1307,23 @@ async function testERPNextConnection() {
             }
             
             alert(errorMsg);
-    } catch (error) {
-        alert('❌ Connection Error\n\n' +
-              error.message + '\n\n' +
-              'Please check:\n' +
-              '• API URL is accessible (try opening in browser)\n' +
-              '• Network connection\n' +
-              '• ERPNext instance is running\n' +
-              '• CORS settings allow API access');
-    } finally {
-        // Restore original config
-        if (window.ERPNextIntegration && originalConfig) {
-            window.ERPNextIntegration.config = originalConfig;
+        } catch (error) {
+            alert('❌ Connection Error\n\n' +
+                  error.message + '\n\n' +
+                  'Please check:\n' +
+                  '• API URL is accessible (try opening in browser)\n' +
+                  '• Network connection\n' +
+                  '• ERPNext instance is running\n' +
+                  '• CORS settings allow API access');
+        } finally {
+            // Restore original config
+            if (window.ERPNextIntegration && originalConfig) {
+                window.ERPNextIntegration.config = originalConfig;
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
         }
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
     }
-}
 
 function updateIntegrationStatus() {
     if (!window.ERPNextIntegration) return;
