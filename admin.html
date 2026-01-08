@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Casa - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Diamond Casa</h1>
+                <h2>Admin Dashboard</h2>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="adminEmail" placeholder="admin@diamondcasa.in" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter your password" required>
+                    <a href="#" class="forgot-password">Forget password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+            <p class="login-footer">Let's get started</p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Diamond Casa</h2>
+                <p>Admin Panel</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#products" class="nav-item" data-page="products">
+                    <i class="fas fa-gem"></i>
+                    <span>Products</span>
+                    <span class="badge" id="productsBadge">0</span>
+                </a>
+                <a href="#orders" class="nav-item" data-page="orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                    <span class="badge" id="ordersBadge">0</span>
+                </a>
+                <a href="#customers" class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                    <span class="badge" id="customersBadge">0</span>
+                </a>
+                <a href="#categories" class="nav-item" data-page="categories">
+                    <i class="fas fa-tags"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#inventory" class="nav-item" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="#analytics" class="nav-item" data-page="analytics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#reports" class="nav-item" data-page="reports">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="#promotions" class="nav-item" data-page="promotions">
+                    <i class="fas fa-percent"></i>
+                    <span>Promotions</span>
+                </a>
+                <a href="#content" class="nav-item" data-page="content">
+                    <i class="fas fa-edit"></i>
+                    <span>Content Management</span>
+                </a>
+                <a href="#settings" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#users" class="nav-item" data-page="users">
+                    <i class="fas fa-user-shield"></i>
+                    <span>User Management</span>
+                </a>
+                <a href="#purchase-orders" class="nav-item" data-page="purchase-orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Purchase Orders</span>
+                </a>
+                <a href="#suppliers" class="nav-item" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Suppliers</span>
+                </a>
+                <a href="#returns" class="nav-item" data-page="returns">
+                    <i class="fas fa-undo"></i>
+                    <span>Returns & Refunds</span>
+                </a>
+                <a href="#stock-transfers" class="nav-item" data-page="stock-transfers">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Stock Transfers</span>
+                </a>
+                <a href="#erpnext" class="nav-item" data-page="erpnext">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>ERPNext Integration</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="top-bar-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-menu">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=d4af37&color=fff" alt="Admin" class="user-avatar">
+                        <span class="user-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="user-dropdown">
+                            <a href="#profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div class="page-content active" id="dashboardPage">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e3f2fd;">
+                            <i class="fas fa-rupee-sign" style="color: #2196f3;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Revenue</h3>
+                            <p class="stat-value">₹10,34,08,870</p>
+                            <span class="stat-change positive">+12.5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e5f5;">
+                            <i class="fas fa-shopping-cart" style="color: #9c27b0;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Orders</h3>
+                            <p class="stat-value">1,234</p>
+                            <span class="stat-change positive">+8.2%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e8f5e9;">
+                            <i class="fas fa-users" style="color: #4caf50;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Customers</h3>
+                            <p class="stat-value">5,678</p>
+                            <span class="stat-change positive">+15.3%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff3e0;">
+                            <i class="fas fa-gem" style="color: #ff9800;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Products</h3>
+                            <p class="stat-value">456</p>
+                            <span class="stat-change negative">-2.1%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>Sales Overview</h3>
+                            <select class="period-select">
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Last 3 months</option>
+                                <option>Last year</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>Top Products</h3>
+                        </div>
+                        <div class="top-products-list" id="topProductsList">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3>Recent Orders</h3>
+                            <a href="#orders" class="view-all">View All</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTable">
+                                    <!-- Will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3>Low Stock Alert</h3>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Stock</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lowStockTable">
+                                    <!-- Will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Page -->
+            <div class="page-content" id="productsPage">
+                <div class="page-header">
+                    <h2>Products</h2>
+                    <button class="btn btn-primary" id="addProductBtn">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+                <div class="filters-bar">
+                    <input type="text" placeholder="Search products..." class="search-input" id="productSearch">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="rings">Rings</option>
+                        <option value="earrings">Earrings</option>
+                        <option value="necklaces">Necklaces</option>
+                        <option value="bracelets">Bracelets</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Page -->
+            <div class="page-content" id="ordersPage">
+                <div class="page-header">
+                    <h2>Orders</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="filters-bar">
+                    <input type="text" placeholder="Search orders..." class="search-input" id="orderSearch">
+                    <select class="filter-select" id="orderStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="date" class="filter-select" id="dateFilter">
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Products</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Page -->
+            <div class="page-content" id="customersPage">
+                <div class="page-header">
+                    <h2>Customers</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Customer
+                    </button>
+                </div>
+                <div class="filters-bar">
+                    <input type="text" placeholder="Search customers..." class="search-input" id="customerSearch">
+                    <select class="filter-select" id="customerFilter">
+                        <option value="">All Customers</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="vip">VIP</option>
+                    </select>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Page -->
+            <div class="page-content" id="categoriesPage">
+                <div class="page-header">
+                    <h2>Categories</h2>
+                    <button class="btn btn-primary" id="addCategoryBtn">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Inventory Page -->
+            <div class="page-content" id="inventoryPage">
+                <div class="page-header">
+                    <h2>Inventory Management</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Stock
+                    </button>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>SKU</th>
+                                    <th>Current Stock</th>
+                                    <th>Low Stock Threshold</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div class="page-content" id="analyticsPage">
+                <div class="page-header">
+                    <h2>Analytics</h2>
+                    <select class="period-select">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 3 months</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+                <div class="analytics-grid">
+                    <div class="chart-card full-width">
+                        <div class="card-header">
+                            <h3>Revenue Analytics</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>Sales by Category</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>Customer Acquisition</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="customerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div class="page-content" id="reportsPage">
+                <div class="page-header">
+                    <h2>Reports</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download"></i> Generate Report
+                    </button>
+                </div>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <h3>Sales Report</h3>
+                        <p>Generate comprehensive sales reports</p>
+                        <button class="btn btn-secondary">Generate</button>
+                    </div>
+                    <div class="report-card">
+                        <i class="fas fa-box"></i>
+                        <h3>Inventory Report</h3>
+                        <p>View inventory status and stock levels</p>
+                        <button class="btn btn-secondary">Generate</button>
+                    </div>
+                    <div class="report-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Customer Report</h3>
+                        <p>Analyze customer behavior and trends</p>
+                        <button class="btn btn-secondary">Generate</button>
+                    </div>
+                    <div class="report-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Performance Report</h3>
+                        <p>Overall business performance metrics</p>
+                        <button class="btn btn-secondary">Generate</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promotions Page -->
+            <div class="page-content" id="promotionsPage">
+                <div class="page-header">
+                    <h2>Promotions & Discounts</h2>
+                    <button class="btn btn-primary" id="addPromotionBtn">
+                        <i class="fas fa-plus"></i> Create Promotion
+                    </button>
+                </div>
+                <div class="promotions-grid" id="promotionsGrid">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Content Management Page -->
+            <div class="page-content" id="contentPage">
+                <div class="page-header">
+                    <h2>Content Management</h2>
+                </div>
+                <div class="content-tabs">
+                    <button class="tab-btn active" data-tab="banners">Banners</button>
+                    <button class="tab-btn" data-tab="pages">Pages</button>
+                    <button class="tab-btn" data-tab="blog">Blog</button>
+                </div>
+                <div class="tab-content active" id="bannersTab">
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3>Homepage Banners</h3>
+                            <button class="btn btn-primary">Add Banner</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Banner</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Position</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bannersTable">
+                                    <!-- Will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page-content" id="settingsPage">
+                <div class="page-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="general">General</button>
+                    <button class="tab-btn" data-tab="payment">Payment</button>
+                    <button class="tab-btn" data-tab="shipping">Shipping</button>
+                    <button class="tab-btn" data-tab="gst">GST & Tax</button>
+                    <button class="tab-btn" data-tab="email">Email</button>
+                </div>
+                <div class="tab-content active" id="generalTab">
+                    <div class="settings-card">
+                        <h3>General Settings</h3>
+                        <div class="form-group">
+                            <label>Store Name</label>
+                            <input type="text" value="Diamond Casa" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Store Email</label>
+                            <input type="email" value="info@diamondcasa.in" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Store Phone</label>
+                            <input type="tel" value="+91 1800 123 4567" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp Number</label>
+                            <input type="tel" value="+91 98765 43210" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>GSTIN</label>
+                            <input type="text" value="27AABCD1234E1Z5" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Registered Address</label>
+                            <textarea class="form-control" rows="3">618, Omkar The Summit Business Bay, Andheri East, Mumbai - 400093, Maharashtra, India</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select class="form-control">
+                                <option selected>INR (₹) - Indian Rupee</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+                <div class="tab-content" id="paymentTab">
+                    <div class="settings-card">
+                        <h3>Payment Gateway Settings</h3>
+                        <div class="form-group">
+                            <label>Enable Payment Methods</label>
+                            <div style="margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> UPI (Unified Payments Interface)
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Credit/Debit Cards
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Net Banking
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Paytm
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> PhonePe
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Google Pay
+                                </label>
+                                <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Cash on Delivery (COD)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Razorpay API Key</label>
+                            <input type="text" placeholder="rzp_live_..." class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Paytm Merchant ID</label>
+                            <input type="text" placeholder="Enter Paytm Merchant ID" class="form-control">
+                        </div>
+                        <button class="btn btn-primary">Save Payment Settings</button>
+                    </div>
+                </div>
+                <div class="tab-content" id="shippingTab">
+                    <div class="settings-card">
+                        <h3>Shipping Settings</h3>
+                        <div class="form-group">
+                            <label>Free Shipping Threshold (₹)</label>
+                            <input type="number" value="50000" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Standard Shipping Rate (₹)</label>
+                            <input type="number" value="150" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Express Shipping Rate (₹)</label>
+                            <input type="number" value="500" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Cash on Delivery Available</label>
+                            <select class="form-control">
+                                <option selected>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>COD Charges (₹)</label>
+                            <input type="number" value="100" class="form-control">
+                        </div>
+                        <button class="btn btn-primary">Save Shipping Settings</button>
+                    </div>
+                </div>
+                <div class="tab-content" id="gstTab">
+                    <div class="settings-card">
+                        <h3>GST & Tax Settings</h3>
+                        <div class="form-group">
+                            <label>GSTIN</label>
+                            <input type="text" value="27AABCD1234E1Z5" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>GST Rate (%)</label>
+                            <input type="number" value="3" class="form-control" placeholder="GST rate for jewelry">
+                        </div>
+                        <div class="form-group">
+                            <label>Include GST in Prices</label>
+                            <select class="form-control">
+                                <option selected>Yes - Prices include GST</option>
+                                <option>No - GST will be added at checkout</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Generate GST Invoice</label>
+                            <select class="form-control">
+                                <option selected>Yes - Auto generate GST invoice</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CIN (Company Identification Number)</label>
+                            <input type="text" value="U74999MH1986PTC123456" class="form-control">
+                        </div>
+                        <button class="btn btn-primary">Save GST Settings</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERPNext Integration Page -->
+            <div class="page-content" id="erpnextPage">
+                <div class="page-header">
+                    <h2>ERPNext Integration</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" id="testConnectionBtn">
+                            <i class="fas fa-plug"></i> Test Connection
+                        </button>
+                        <button class="btn btn-primary" id="syncAllBtn">
+                            <i class="fas fa-sync"></i> Sync All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Integration Status -->
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e3f2fd;">
+                            <i class="fas fa-power-off" style="color: #2196f3;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Integration Status</h3>
+                            <p class="stat-value" id="integrationStatus">Disabled</p>
+                            <label class="switch" style="margin-top: 0.5rem;">
+                                <input type="checkbox" id="erpnextEnabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e5f5;">
+                            <i class="fas fa-box" style="color: #9c27b0;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Last Product Sync</h3>
+                            <p class="stat-value" id="lastProductSync">Never</p>
+                            <button class="btn btn-secondary btn-small" id="syncProductsBtn">Sync Products</button>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e8f5e9;">
+                            <i class="fas fa-warehouse" style="color: #4caf50;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Last Inventory Sync</h3>
+                            <p class="stat-value" id="lastInventorySync">Never</p>
+                            <button class="btn btn-secondary btn-small" id="syncInventoryBtn">Sync Inventory</button>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff3e0;">
+                            <i class="fas fa-shopping-cart" style="color: #ff9800;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Last Order Sync</h3>
+                            <p class="stat-value" id="lastOrderSync">Never</p>
+                            <span class="stat-change" id="syncInProgress" style="display: none;">Syncing...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuration -->
+                <div class="table-card">
+                    <div class="card-header">
+                        <h3>ERPNext Configuration</h3>
+                    </div>
+                    <div class="settings-card" style="box-shadow: none; padding: 1.5rem;">
+                        <div class="form-group">
+                            <label>ERPNext API URL</label>
+                            <input type="url" id="erpnextApiUrl" class="form-control" placeholder="https://erpnext.diamondcasa.in">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="text" id="erpnextApiKey" class="form-control" placeholder="Enter API Key">
+                            </div>
+                            <div class="form-group">
+                                <label>API Secret</label>
+                                <input type="password" id="erpnextApiSecret" class="form-control" placeholder="Enter API Secret">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Integration User</label>
+                            <input type="email" id="erpnextUser" class="form-control" value="integration@diamondcasa.in">
+                        </div>
+                        <div class="form-group">
+                            <label>Auto Sync Interval (minutes)</label>
+                            <input type="number" id="syncInterval" class="form-control" value="15" min="5">
+                        </div>
+                        <button class="btn btn-primary" id="saveErpnextConfigBtn">Save Configuration</button>
+                    </div>
+                </div>
+
+                <!-- Excel to ERPNext Upload -->
+                <div class="table-card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h3>Upload Products from Excel to ERPNext</h3>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            Upload products from Excel file (final data all in one.xlsx) directly to ERPNext. Supports images and videos via URLs.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Select Excel File (.xlsx or .xls)</label>
+                            <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control" style="padding: 0.5rem;">
+                            <small style="color: #666; display: block; margin-top: 0.5rem;">
+                                Supported formats: .xlsx, .xls
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Item Group</label>
+                            <select id="excelDefaultItemGroup" class="form-control">
+                                <option value="Jewelry" selected>Jewelry</option>
+                                <option value="Rings">Rings</option>
+                                <option value="Earrings">Earrings</option>
+                                <option value="Necklaces">Necklaces</option>
+                                <option value="Bracelets">Bracelets</option>
+                                <option value="Bangles">Bangles</option>
+                                <option value="Pendants">Pendants</option>
+                                <option value="Collections">Collections</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="excelUpdateExisting" checked>
+                                Update existing items (if Item Code exists)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="excelCreatePriceList" checked>
+                                Create Item Price in "Standard Selling" price list
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-lg" id="uploadExcelBtn" style="width: 100%;" disabled>
+                                <i class="fas fa-upload"></i> Upload to ERPNext
+                            </button>
+                        </div>
+                        <div id="excelUploadProgress" style="display: none; margin-top: 1rem;">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="excelUploadProgressBar" style="width: 0%;"></div>
+                            </div>
+                            <p id="excelUploadStatus" style="margin-top: 0.5rem; color: #666;">Processing...</p>
+                        </div>
+                        <div id="excelUploadResult" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                            <!-- Results will be shown here -->
+                        </div>
+                        <div id="excelPreview" style="display: none; margin-top: 1rem;">
+                            <h4>Excel Preview (First 5 rows)</h4>
+                            <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+                                <table class="data-table" id="excelPreviewTable">
+                                    <!-- Preview will be shown here -->
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Product Import -->
+                <div class="table-card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h3>Bulk Product Import (From ERPNext)</h3>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            Import all products from ERPNext with images and videos. Products must have attachments (images/videos) in ERPNext File doctype.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Item Group</label>
+                            <select id="bulkImportItemGroup" class="form-control">
+                                <option value="Jewelry" selected>Jewelry</option>
+                                <option value="Rings">Rings</option>
+                                <option value="Earrings">Earrings</option>
+                                <option value="Necklaces">Necklaces</option>
+                                <option value="Bracelets">Bracelets</option>
+                                <option value="Bangles">Bangles</option>
+                                <option value="Pendants">Pendants</option>
+                                <option value="Collections">Collections</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit (optional - leave empty for all products)</label>
+                            <input type="number" id="bulkImportLimit" class="form-control" placeholder="e.g., 100" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bulkImportUpdateExisting" checked>
+                                Update existing products
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-lg" id="bulkImportBtn" style="width: 100%;">
+                                <i class="fas fa-download"></i> Start Bulk Import
+                            </button>
+                        </div>
+                        <div id="bulkImportProgress" style="display: none; margin-top: 1rem;">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="bulkImportProgressBar" style="width: 0%;"></div>
+                            </div>
+                            <p id="bulkImportStatus" style="margin-top: 0.5rem; color: #666;">Initializing...</p>
+                        </div>
+                        <div id="bulkImportResult" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                            <!-- Results will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync Logs -->
+                <div class="table-card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h3>Integration Logs</h3>
+                        <button class="btn btn-secondary btn-small" id="clearLogsBtn">Clear Logs</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Level</th>
+                                    <th>Method</th>
+                                    <th>Endpoint</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="integrationLogsTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Errors -->
+                <div class="table-card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h3>Recent Errors</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Type</th>
+                                    <th>Error Message</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="errorLogsTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Page -->
+            <div class="page-content" id="usersPage">
+                <div class="page-header">
+                    <h2>User Management</h2>
+                    <button class="btn btn-primary" id="addUserBtn">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Orders Page -->
+            <div class="page-content" id="purchase-ordersPage">
+                <div class="page-header">
+                    <h2>Purchase Orders</h2>
+                    <button class="btn btn-primary" id="addPurchaseOrderBtn">
+                        <i class="fas fa-plus"></i> New Purchase Order
+                    </button>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>PO Number</th>
+                                    <th>Supplier</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="purchaseOrdersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suppliers Page -->
+            <div class="page-content" id="suppliersPage">
+                <div class="page-header">
+                    <h2>Suppliers</h2>
+                    <button class="btn btn-primary" id="addSupplierBtn">
+                        <i class="fas fa-plus"></i> Add Supplier
+                    </button>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Supplier Name</th>
+                                    <th>Contact Person</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Returns & Refunds Page -->
+            <div class="page-content" id="returnsPage">
+                <div class="page-header">
+                    <h2>Returns & Refunds</h2>
+                    <div class="filter-group">
+                        <select id="returnStatusFilter" class="form-control">
+                            <option value="all">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Return ID</th>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Reason</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="returnsTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Transfers Page -->
+            <div class="page-content" id="stock-transfersPage">
+                <div class="page-header">
+                    <h2>Stock Transfers</h2>
+                    <button class="btn btn-primary" id="newStockTransferBtn">
+                        <i class="fas fa-plus"></i> New Transfer
+                    </button>
+                </div>
+                <div class="table-card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Transfer ID</th>
+                                    <th>From Warehouse</th>
+                                    <th>To Warehouse</th>
+                                    <th>Items</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTransfersTable">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Add/Edit Product</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SKU *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select class="form-control" required>
+                                <option>Rings</option>
+                                <option>Earrings</option>
+                                <option>Necklaces</option>
+                                <option>Bracelets</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Brand</label>
+                            <select class="form-control">
+                                <option>BVLGARI</option>
+                                <option>Cartier</option>
+                                <option>Chaumet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price *</label>
+                            <input type="number" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Quantity *</label>
+                            <input type="number" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Images</label>
+                        <input type="file" multiple accept="image/*" class="form-control">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="erpnext-integration.js"></script>
+    <script src="admin-script.js"></script>
+</body>
+</html>

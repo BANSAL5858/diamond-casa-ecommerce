@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# ERPNext reference (submodule or reference code - exclude from main repo)
+erpnext/
+
+# Local storage backups
+*.backup
+*.bak
+
+# Excel files (optional - uncomment if you don't want to commit Excel files)
+# *.xlsx
+# *.xls
+
+# Large media files (optional)
+# *.mp4
+# *.mov
+# *.avi

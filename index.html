@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Casa - Luxury Jewelry</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="logo">
+                        <h1>Diamond Casa</h1>
+                    </div>
+                    <ul class="nav-menu" id="navMenu">
+                        <li><a href="#home" class="nav-link">Home</a></li>
+                        <li class="nav-item-dropdown">
+                            <a href="#products" class="nav-link">Products <span class="dropdown-arrow">▼</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#products" data-category="rings">Rings</a></li>
+                                <li><a href="#products" data-category="earrings">Earrings</a></li>
+                                <li><a href="#products" data-category="pendants">Pendants</a></li>
+                                <li><a href="#products" data-category="necklaces">Necklaces</a></li>
+                                <li><a href="#products" data-category="bracelets">Bracelets</a></li>
+                                <li><a href="#products" data-category="bangles">Bangles</a></li>
+                                <li><a href="#products" data-category="collections">Collections</a></li>
+                                <li><a href="#portuguese-cut" class="nav-link">Portuguese Cut Diamond</a></li>
+                                <li><a href="#titanium-collection" class="nav-link">Titanium Collection</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item-dropdown">
+                            <a href="#gifting" class="nav-link">Gifting <span class="dropdown-arrow">▼</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#gifting" data-gift="wedding">Wedding Gift</a></li>
+                                <li><a href="#gifting" data-gift="anniversary">Anniversary Gift</a></li>
+                                <li><a href="#gifting" data-gift="diwali">Diwali Gift</a></li>
+                                <li><a href="#gifting" data-gift="dussehra">Dussehra Gift</a></li>
+                                <li><a href="#gifting" data-gift="rakhi">Rakhi Gift</a></li>
+                                <li><a href="#gifting" data-gift="mom">Gift for Mom</a></li>
+                                <li><a href="#gifting" data-gift="him">Gift for Him</a></li>
+                                <li><a href="#gifting" data-gift="her">Gift for Her</a></li>
+                                <li><a href="#gifting" data-gift="valentine">Valentine Gift</a></li>
+                                <li><a href="#gifting" data-gift="wife">Gift for Wife</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#ready-to-ship" class="nav-link">Ready to Ship</a></li>
+                        <li><a href="#best-seller" class="nav-link">Best Sellers</a></li>
+                        <li><a href="#store-locator" class="nav-link">Store Locator</a></li>
+                        <li><a href="#policies" class="nav-link">Policies</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#brands" class="nav-link">Brands</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <div class="search-container">
+                            <button class="search-btn" aria-label="Search" id="searchBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </button>
+                            <div class="search-box" id="searchBox">
+                                <input type="text" placeholder="Search products..." id="searchInput">
+                                <div class="search-results" id="searchResults"></div>
+                            </div>
+                        </div>
+                        <button class="user-btn" id="userBtn" aria-label="User Account">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </button>
+                        <button class="wishlist-btn" id="wishlistBtn" aria-label="Wishlist">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            <span class="wishlist-count" id="wishlistCount">0</span>
+                        </button>
+                        <button class="cart-btn" id="cartBtn" aria-label="Shopping Cart">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2 class="hero-title">Timeless Elegance</h2>
+            <p class="hero-subtitle">Discover Our Exclusive Collection of Luxury Jewelry</p>
+            <a href="#products" class="btn btn-primary">Explore Collection</a>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Trending Now Section -->
+    <section id="trending-now" class="trending-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">TRENDING NOW</h2>
+            </div>
+            <div class="category-showcase">
+                <div class="category-card" data-category="rings">
+                    <div class="category-image">💍</div>
+                    <h3>RINGS OBSESSION</h3>
+                    <p class="product-count"><span id="ringsCount">0</span> Products</p>
+                </div>
+                <div class="category-card" data-category="earrings">
+                    <div class="category-image">💎</div>
+                    <h3>EARRINGS</h3>
+                    <p class="product-count"><span id="earringsCount">0</span> Products</p>
+                </div>
+                <div class="category-card" data-category="necklaces">
+                    <div class="category-image">👑</div>
+                    <h3>NECKLACES</h3>
+                    <p class="product-count"><span id="necklacesCount">0</span> Products</p>
+                </div>
+                <div class="category-card" data-category="bracelets">
+                    <div class="category-image">💫</div>
+                    <h3>BRACELETS</h3>
+                    <p class="product-count"><span id="braceletsCount">0</span> Products</p>
+                </div>
+                <div class="category-card" data-category="pendants">
+                    <div class="category-image">✨</div>
+                    <h3>PENDANTS</h3>
+                    <p class="product-count"><span id="pendantsCount">0</span> Products</p>
+                </div>
+                <div class="category-card" data-category="collections">
+                    <div class="category-image">💠</div>
+                    <h3>COLLECTIONS</h3>
+                    <p class="product-count"><span id="collectionsCount">0</span> Products</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rings Obsession Section -->
+    <section id="rings-obsession" class="rings-obsession-section">
+        <div class="container">
+            <h2 class="section-title">RINGS OBSESSION</h2>
+            <div class="products-grid" id="ringsObsessionGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Seller Section -->
+    <section id="best-seller" class="best-seller-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">BEST SELLER</h2>
+            </div>
+            <div class="products-grid" id="bestSellerGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- As Seen On Section -->
+    <section id="as-seen-on" class="as-seen-on-section">
+        <div class="container">
+            <h2 class="section-title">AS SEEN ON</h2>
+            <div class="celebrities-grid">
+                <div class="celebrity-card">
+                    <div class="celebrity-image">👸</div>
+                    <h3>Pooja Hegde</h3>
+                </div>
+                <div class="celebrity-card">
+                    <div class="celebrity-image">🌟</div>
+                    <h3>Tara Sutaria</h3>
+                </div>
+                <div class="celebrity-card">
+                    <div class="celebrity-image">💫</div>
+                    <h3>Trinetra Haldar</h3>
+                </div>
+                <div class="celebrity-card">
+                    <div class="celebrity-image">✨</div>
+                    <h3>Priya</h3>
+                </div>
+                <div class="celebrity-card">
+                    <div class="celebrity-image">👑</div>
+                    <h3>Ahsaas Channa</h3>
+                </div>
+                <div class="celebrity-card">
+                    <div class="celebrity-image">💎</div>
+                    <h3>Suchita Mukerji</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solitaires by Shape Section -->
+    <section id="solitaires-shape" class="solitaires-shape-section">
+        <div class="container">
+            <h2 class="section-title">SOLITAIRES BY SHAPE</h2>
+            <div class="shapes-grid">
+                <div class="shape-card" data-shape="round">
+                    <div class="shape-icon">⭕</div>
+                    <h3>Round</h3>
+                </div>
+                <div class="shape-card" data-shape="princess">
+                    <div class="shape-icon">💠</div>
+                    <h3>Princess</h3>
+                </div>
+                <div class="shape-card" data-shape="cushion">
+                    <div class="shape-icon">💎</div>
+                    <h3>Cushion</h3>
+                </div>
+                <div class="shape-card" data-shape="oval">
+                    <div class="shape-icon">🔵</div>
+                    <h3>Oval</h3>
+                </div>
+                <div class="shape-card" data-shape="emerald">
+                    <div class="shape-icon">💍</div>
+                    <h3>Emerald</h3>
+                </div>
+                <div class="shape-card" data-shape="radiant">
+                    <div class="shape-icon">✨</div>
+                    <h3>Radiant</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portuguese Cut Diamond Section -->
+    <section id="portuguese-cut" class="portuguese-cut-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Portuguese Cut Diamond</h2>
+                <p class="section-subtitle">Exquisite Portuguese cut diamonds with exceptional brilliance</p>
+            </div>
+            <div class="products-grid" id="portugueseCutGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Titanium Collection Section -->
+    <section id="titanium-collection" class="titanium-collection-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Titanium Collection</h2>
+                <p class="section-subtitle">Modern and durable titanium jewelry</p>
+            </div>
+            <div class="products-grid" id="titaniumCollectionGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Made with Mastery Section -->
+    <section id="made-with-mastery" class="made-with-mastery-section">
+        <div class="container">
+            <h2 class="section-title">MADE WITH MASTERY</h2>
+            <div class="mastery-content">
+                <p>Each piece is crafted with precision, passion, and decades of expertise. Our master craftsmen bring together traditional techniques and modern innovation to create jewelry that stands the test of time.</p>
+                <div class="mastery-features">
+                    <div class="mastery-feature">
+                        <h3>38+ Years</h3>
+                        <p>Of Excellence</p>
+                    </div>
+                    <div class="mastery-feature">
+                        <h3>Handcrafted</h3>
+                        <p>By Master Artisans</p>
+                    </div>
+                    <div class="mastery-feature">
+                        <h3>Certified</h3>
+                        <p>IGI & GIA Certified</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gifting Section -->
+    <section id="gifting" class="gifting-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Gifting</h2>
+                <p class="section-subtitle">Perfect gifts for every occasion</p>
+            </div>
+            <div class="gifting-categories">
+                <div class="gifting-card" data-gift="wedding">
+                    <h3>Wedding Gift</h3>
+                    <p>Celebrate love with our wedding collection</p>
+                </div>
+                <div class="gifting-card" data-gift="anniversary">
+                    <h3>Anniversary Gift</h3>
+                    <p>Mark milestones with timeless elegance</p>
+                </div>
+                <div class="gifting-card" data-gift="mom">
+                    <h3>Gift for Mom</h3>
+                    <p>Show your love with precious jewelry</p>
+                </div>
+                <div class="gifting-card" data-gift="him">
+                    <h3>Gift for Him</h3>
+                    <p>Sophisticated pieces for the special man</p>
+                </div>
+                <div class="gifting-card" data-gift="her">
+                    <h3>Gift for Her</h3>
+                    <p>Elegant jewelry for the special woman</p>
+                </div>
+                <div class="gifting-card" data-gift="valentine">
+                    <h3>Valentine Gift</h3>
+                    <p>Express your love this Valentine's</p>
+                </div>
+                <div class="gifting-card" data-gift="wife">
+                    <h3>Gift for Wife</h3>
+                    <p>Surprise your wife with luxury</p>
+                </div>
+                <div class="gifting-card" data-gift="diwali">
+                    <h3>Diwali Gift</h3>
+                    <p>Celebrate the festival of lights with precious jewelry</p>
+                </div>
+                <div class="gifting-card" data-gift="dussehra">
+                    <h3>Dussehra Gift</h3>
+                    <p>Mark victory of good over evil with elegant pieces</p>
+                </div>
+                <div class="gifting-card" data-gift="rakhi">
+                    <h3>Rakhi Gift</h3>
+                    <p>Perfect gifts for your sister on Raksha Bandhan</p>
+                </div>
+            </div>
+            <div class="products-grid" id="giftingGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Favorites Section -->
+    <section id="customer-favorites" class="customer-favorites-section">
+        <div class="container">
+            <h2 class="section-title">Customer Favorites</h2>
+            <div class="favorites-tabs">
+                <button class="favorite-tab active" data-tab="new-arrivals">New Arrivals</button>
+                <button class="favorite-tab" data-tab="cost-effective">Cost Effective Diamonds</button>
+                <button class="favorite-tab" data-tab="best-sellers">Best Sellers</button>
+            </div>
+            <div class="favorites-content">
+                <div class="favorite-panel active" id="new-arrivals-panel">
+                    <div class="products-grid" id="newArrivalsGrid"></div>
+                </div>
+                <div class="favorite-panel" id="cost-effective-panel">
+                    <div class="products-grid" id="costEffectiveGrid"></div>
+                </div>
+                <div class="favorite-panel" id="best-sellers-panel">
+                    <div class="products-grid" id="bestSellersFavoritesGrid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ready to Ship Section -->
+    <section id="ready-to-ship" class="ready-to-ship-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Ready to Ship</h2>
+                <p class="section-subtitle">Fast delivery on selected items</p>
+            </div>
+            <div class="products-grid" id="readyToShipGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Brands Section -->
+    <section id="brands" class="brands-section">
+        <div class="container">
+            <h2 class="section-title">Our Exclusive Brands</h2>
+            <div class="brands-grid">
+                <div class="brand-card">
+                    <div class="brand-logo">BVLGARI</div>
+                    <p class="brand-description">Italian luxury brand known for exquisite jewelry</p>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">Cartier</div>
+                    <p class="brand-description">French luxury goods manufacturer</p>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">Chaumet</div>
+                    <p class="brand-description">Parisian jeweler since 1780</p>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">Hermès</div>
+                    <p class="brand-description">French luxury manufacturer</p>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">Van Cleef & Arpels</div>
+                    <p class="brand-description">French high jewelry house</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section with Filters -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <h2 class="section-title">Our Products</h2>
+            
+            <!-- Filter Section -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label>Category:</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="rings">Rings</option>
+                        <option value="earrings">Earrings</option>
+                        <option value="pendants">Pendants</option>
+                        <option value="necklaces">Necklaces</option>
+                        <option value="bracelets">Bracelets</option>
+                        <option value="bangles">Bangles</option>
+                        <option value="collections">Collections</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Metal Type:</label>
+                    <select id="metalFilter" class="filter-select">
+                        <option value="all">All Metals</option>
+                        <option value="gold">Gold</option>
+                        <option value="platinum">Platinum</option>
+                        <option value="silver">Silver</option>
+                        <option value="rose-gold">Rose Gold</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Diamond Type:</label>
+                    <select id="diamondFilter" class="filter-select">
+                        <option value="all">All Types</option>
+                        <option value="solitaire">Solitaire</option>
+                        <option value="halo">Halo</option>
+                        <option value="vintage">Vintage</option>
+                        <option value="modern">Modern</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price Range:</label>
+                    <select id="priceFilter" class="filter-select">
+                        <option value="all">All Prices</option>
+                        <option value="0-500000">₹0 - ₹5,00,000</option>
+                        <option value="500000-1000000">₹5,00,000 - ₹10,00,000</option>
+                        <option value="1000000-2000000">₹10,00,000 - ₹20,00,000</option>
+                        <option value="2000000+">₹20,00,000+</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" id="clearFilters">Clear Filters</button>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Store Locator Section -->
+    <section id="store-locator" class="store-locator-section">
+        <div class="container">
+            <h2 class="section-title">Store Locator</h2>
+            <div class="store-locator-content">
+                <div class="stores-list">
+                    <div class="store-item">
+                    <h3>Diamond Casa Head Office - Mumbai</h3>
+                    <p>618, Omkar The Summit Business Bay,<br>
+                    Next to Western Express Highway Metro Station,<br>
+                    Andheri East, Mumbai - 400093<br>
+                    Maharashtra, India</p>
+                    <p><strong>Phone:</strong> +91 22 6789 1234</p>
+                    <p><strong>Email:</strong> mumbai@diamondcasa.in</p>
+                </div>
+                <div class="store-item">
+                    <h3>Diamond Casa Mumbai Store (Dadar West)</h3>
+                    <p>902, Kohinoor Square, Shivaji Park,<br>
+                    Dadar West, Mumbai - 400028<br>
+                    Maharashtra, India</p>
+                    <p><strong>Phone:</strong> +91 22 2435 6789</p>
+                    <p><strong>Email:</strong> dadar@diamondcasa.in</p>
+                </div>
+                <div class="store-item">
+                    <h3>Diamond Casa Mumbai Store (Goregaon East)</h3>
+                    <p>S-33, Second Floor, Oberoi Mall,<br>
+                    Goregaon East, Mumbai - 400063<br>
+                    Maharashtra, India</p>
+                    <p><strong>Phone:</strong> +91 22 2847 1234</p>
+                    <p><strong>Email:</strong> goregaon@diamondcasa.in</p>
+                </div>
+                <div class="store-item">
+                    <h3>Diamond Casa Delhi Store</h3>
+                    <p>Shop No. 34, Wave One Mall,<br>
+                    Sector 18, Noida - 201301<br>
+                    Uttar Pradesh, India</p>
+                    <p><strong>Phone:</strong> +91 120 4567 890</p>
+                    <p><strong>Email:</strong> delhi@diamondcasa.in</p>
+                </div>
+                <div class="store-item">
+                    <h3>Diamond Casa Bangalore Store</h3>
+                    <p>Phoenix Marketcity Mall,<br>
+                    Whitefield Main Road,<br>
+                    Bangalore - 560048, Karnataka, India</p>
+                    <p><strong>Phone:</strong> +91 80 6789 0123</p>
+                    <p><strong>Email:</strong> bangalore@diamondcasa.in</p>
+                </div>
+                <div class="store-item">
+                    <h3>Diamond Casa Hyderabad Store</h3>
+                    <p>L2-38, Second Floor, Lakeshore Mall,<br>
+                    Kukatpally, Hyderabad - 500072<br>
+                    Telangana, India</p>
+                    <p><strong>Phone:</strong> +91 40 2345 6789</p>
+                    <p><strong>Email:</strong> hyderabad@diamondcasa.in</p>
+                </div>
+                </div>
+                <div class="store-map">
+                    <div class="map-placeholder">
+                        <p>📍 Store Locations Map</p>
+                        <p>Interactive map would be integrated here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diamond Casa Promise / FAQ Section -->
+    <section id="diamond-promise" class="diamond-promise-section">
+        <div class="container">
+            <h2 class="section-title">DIAMOND CASA PROMISE</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What are lab grown diamonds?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Lab-grown diamonds are diamonds created in a laboratory setting using advanced technological processes that mimic the natural diamond-growing environment. They have the same chemical composition, physical properties and optical characteristics as natural diamonds but are ethically and sustainably produced.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How lab grown diamonds are made?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Lab-grown diamonds are created using two primary methods: High Pressure High Temperature (HPHT) and Chemical Vapor Deposition (CVD). In HPHT, carbon is subjected to high pressure and temperature, mimicking natural diamond formation. CVD involves introducing a carbon-containing gas into a chamber, where it breaks down and deposits diamond material onto a substrate.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What is the price and budget of lab-grown diamonds compared to natural diamonds?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The price of lab-grown diamonds is generally lower compared to natural diamonds of similar quality. Lab-grown diamonds offer a more affordable option due to their controlled production process and avoidance of mining expenses.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Are lab diamonds real?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, lab diamonds are identical to earth mined diamonds. There is no difference between the two except to their origin. They are certified & graded by the same international agencies that certify Mined diamonds (IGI or GIA).</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How can I make out difference between a lab diamond and an earth mined diamond?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You cannot. 8 billion people in the world, NO ONE, not even superman can make out difference between lab and earth diamonds. Only machine testing can point that out. They are chemically & optically identical.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Do you give a certificate of authentication?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, all solitaire diamonds above 0.50 carats come with a unique IGI certificate. The certificate number is in-scripted on the diamond girdle with a laser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Policies Section -->
+    <section id="policies" class="policies-section">
+        <div class="container">
+            <h2 class="section-title">Our Policies</h2>
+            <div class="policies-grid">
+                <div class="policy-card">
+                    <h3>Old Gold Exchange Policy</h3>
+                    <p>Exchange your old gold jewelry for new pieces with attractive exchange rates.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Lifetime Warranty Policy</h3>
+                    <p>All our jewelry comes with a lifetime warranty covering manufacturing defects.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Lifetime Exchange Policy</h3>
+                    <p>Exchange your jewelry anytime with our lifetime exchange guarantee.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Lifetime Buyback Policy</h3>
+                    <p>We offer lifetime buyback on all our jewelry pieces at competitive rates.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Return Policy</h3>
+                    <p>30-day return policy on all purchases. Terms and conditions apply.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Shipping Policy</h3>
+                    <p>Free shipping on orders above ₹50,000. Express delivery available across India. Cash on Delivery (COD) available.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>GST & Tax Information</h3>
+                    <p>All prices include GST. We provide GST invoice with every purchase. GSTIN: 27AABCD1234E1Z5</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Payment Methods</h3>
+                    <p>We accept UPI, Credit/Debit Cards, Net Banking, Paytm, PhonePe, Google Pay, and Cash on Delivery.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Reverse Shipping</h3>
+                    <p>Free reverse shipping for returns and exchanges.</p>
+                </div>
+                <div class="policy-card">
+                    <h3>Surprise Proposal Policy</h3>
+                    <p>Special arrangements for surprise proposals and engagements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">Our Legacy</h2>
+                    <p class="about-description">
+                        With over 38 years of excellence, Diamond Casa has established itself as a premier destination 
+                        for luxury jewelry across India. We curate the finest collections from the world's most 
+                        prestigious brands, bringing timeless elegance to our discerning clientele. From traditional 
+                        Indian designs to contemporary international styles, we serve customers in Mumbai, Delhi, 
+                        Bangalore, and Hyderabad with unmatched quality and service.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3 class="stat-number">38+</h3>
+                            <p class="stat-label">Years of Excellence</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-number">5</h3>
+                            <p class="stat-label">Exclusive Brands</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-number">1000+</h3>
+                            <p class="stat-label">Happy Customers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Visit Us</h3>
+                    <p>Mumbai, Delhi, Bangalore, Hyderabad</p>
+                    <p>Multiple locations across India</p>
+                    <h3>Contact Information</h3>
+                    <p><strong>Email:</strong> info@diamondcasa.in</p>
+                    <p><strong>Phone:</strong> +91 1800 123 4567 (Toll Free)</p>
+                    <p><strong>WhatsApp:</strong> +91 98765 43210</p>
+                    <p><strong>GSTIN:</strong> 27AABCD1234E1Z5</p>
+                    <p><strong>Business Hours:</strong> Mon-Sat: 10:00 AM - 8:00 PM<br>Sunday: 11:00 AM - 7:00 PM</p>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Diamond Casa</h3>
+                    <p>Luxury jewelry for over 38 years</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#ready-to-ship">Ready to Ship</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#products" data-category="rings">Rings</a></li>
+                        <li><a href="#products" data-category="earrings">Earrings</a></li>
+                        <li><a href="#products" data-category="necklaces">Necklaces</a></li>
+                        <li><a href="#products" data-category="bracelets">Bracelets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop by Gender</h4>
+                    <ul>
+                        <li><a href="#products" data-gender="women">Rings for Women</a></li>
+                        <li><a href="#products" data-gender="women">Pendants for Women</a></li>
+                        <li><a href="#products" data-gender="women">Bangles for Women</a></li>
+                        <li><a href="#products" data-gender="men">Rings for Men</a></li>
+                        <li><a href="#products" data-gender="men">Bracelets for Men</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Jewelry</h4>
+                    <ul>
+                        <li><a href="#products" data-filter="solitaire">Solitaire</a></li>
+                        <li><a href="#products" data-filter="rose-gold">Rose Gold</a></li>
+                        <li><a href="#products" data-filter="white-gold">White Gold</a></li>
+                        <li><a href="#products" data-filter="yellow-gold">Yellow Gold</a></li>
+                        <li><a href="#products" data-filter="1-carat">1 Carat Diamond</a></li>
+                        <li><a href="#products" data-filter="2-carat">2 Carat Diamond</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Policies</h4>
+                    <ul>
+                        <li><a href="#policies">Lifetime Warranty</a></li>
+                        <li><a href="#policies">Lifetime Exchange</a></li>
+                        <li><a href="#policies">Return Policy</a></li>
+                        <li><a href="#policies">Shipping Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">Facebook</a>
+                        <a href="#" aria-label="Instagram">Instagram</a>
+                        <a href="#" aria-label="Twitter">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Diamond Casa. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    <strong>GSTIN:</strong> 27AABCD1234E1Z5 | 
+                    <strong>Registered Office:</strong> Mumbai, Maharashtra, India | 
+                    <strong>CIN:</strong> U74999MH1986PTC123456
+                </p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">
+                    We accept: UPI | Credit/Debit Cards | Net Banking | Paytm | PhonePe | Google Pay | Cash on Delivery
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/919876543210" class="floating-btn whatsapp-btn" target="_blank" aria-label="WhatsApp Chat">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .96 4.534.96 10.09c0 1.792.473 3.47 1.3 4.925L.06 23.21l8.254-2.143a11.667 11.667 0 003.736.616h.005c6.554 0 11.89-5.335 11.89-11.89a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            <span>WhatsApp</span>
+        </a>
+        <a href="tel:+9118001234567" class="floating-btn call-btn" aria-label="Call Now">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span>Call</span>
+        </a>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLoginModal">&times;</span>
+            <h2>Login / Register</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="modal-switch">Don't have an account? <a href="#" id="showRegister">Register</a></p>
+            </form>
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="modal-switch">Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content cart-modal-content">
+            <span class="close-modal" id="closeCartModal">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div class="cart-items" id="cartItems">
+                <p class="empty-cart">Your cart is empty</p>
+            </div>
+            <div class="cart-footer" id="cartFooter" style="display: none;">
+                <div class="cart-total">
+                    <strong>Total: <span id="cartTotal">$0</span></strong>
+                </div>
+                <button class="btn btn-primary" id="checkoutBtn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content product-modal-content">
+            <span class="close-modal" id="closeProductModal">&times;</span>
+            <div class="product-detail" id="productDetail">
+                <!-- Product details will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div class="modal" id="compareModal">
+        <div class="modal-content compare-modal-content">
+            <span class="close-modal" id="closeCompareModal">&times;</span>
+            <h2>Compare Products</h2>
+            <div class="compare-items" id="compareItems">
+                <p class="empty-compare">No products to compare. Add products to compare.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal" id="wishlistModal">
+        <div class="modal-content wishlist-modal-content">
+            <span class="close-modal" id="closeWishlistModal">&times;</span>
+            <h2>My Wishlist</h2>
+            <div class="wishlist-items" id="wishlistItems">
+                <p class="empty-wishlist">Your wishlist is empty</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Account / Customer Portal Modal -->
+    <div class="modal" id="accountModal">
+        <div class="modal-content account-modal-content">
+            <span class="close-modal" id="closeAccountModal">&times;</span>
+            <h2>My Account</h2>
+            <div class="account-tabs">
+                <button class="tab-btn active" data-tab="orders">My Orders</button>
+                <button class="tab-btn" data-tab="tracking">Track Order</button>
+                <button class="tab-btn" data-tab="returns">Returns</button>
+                <button class="tab-btn" data-tab="profile">Profile</button>
+            </div>
+            
+            <!-- Orders Tab -->
+            <div class="tab-content active" id="ordersTab">
+                <div class="orders-list" id="ordersList">
+                    <p class="loading">Loading orders...</p>
+                </div>
+            </div>
+            
+            <!-- Tracking Tab -->
+            <div class="tab-content" id="trackingTab">
+                <div class="tracking-form">
+                    <input type="text" id="trackingNumber" placeholder="Enter Order ID or Tracking Number">
+                    <button class="btn btn-primary" id="trackOrderBtn">Track Order</button>
+                </div>
+                <div class="tracking-result" id="trackingResult"></div>
+            </div>
+            
+            <!-- Returns Tab -->
+            <div class="tab-content" id="returnsTab">
+                <div class="returns-list" id="returnsList">
+                    <p>No returns yet</p>
+                </div>
+                <button class="btn btn-primary" id="newReturnBtn">Request Return</button>
+            </div>
+            
+            <!-- Profile Tab -->
+            <div class="tab-content" id="profileTab">
+                <form class="profile-form" id="profileForm">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profileEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="profilePhone" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Request Modal -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content return-modal-content">
+            <span class="close-modal" id="closeReturnModal">&times;</span>
+            <h2>Request Return</h2>
+            <form id="returnForm">
+                <div class="form-group">
+                    <label>Select Order</label>
+                    <select id="returnOrderSelect" required>
+                        <option value="">Select an order...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Items</label>
+                    <div id="returnItemsList"></div>
+                </div>
+                <div class="form-group">
+                    <label>Return Reason</label>
+                    <select id="returnReason" required>
+                        <option value="">Select reason...</option>
+                        <option value="Defective">Defective Product</option>
+                        <option value="Wrong Size">Wrong Size</option>
+                        <option value="Not as Described">Not as Described</option>
+                        <option value="Changed Mind">Changed Mind</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <textarea id="returnNotes" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Return Request</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="erpnext-integration.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
