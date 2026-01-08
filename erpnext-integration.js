@@ -786,7 +786,7 @@ class ERPNextIntegration {
     }
 
     /**
-     * Test ERPNext Connection with Detailed Diagnostics
+     * Test ERPNext Connection with Detailed Diagnostics and Auto-Fix
      */
     async testConnection() {
         const diagnostics = {
@@ -794,27 +794,52 @@ class ERPNextIntegration {
             apiEndpoint: false,
             credentialsValid: false,
             userPermissions: false,
-            errors: []
+            errors: [],
+            fixes: []
         };
 
         try {
-            // Step 1: Validate URL format
+            // Step 1: Validate and clean URL format
             if (!this.config.apiUrl) {
                 throw new Error('API URL is not set');
             }
 
-            if (!this.config.apiUrl.startsWith('http://') && !this.config.apiUrl.startsWith('https://')) {
-                throw new Error('API URL must start with http:// or https://');
+            // Auto-fix URL: Remove trailing slashes, /app/home, etc.
+            let cleanUrl = this.config.apiUrl.trim();
+            
+            // Remove /app/home or /app
+            cleanUrl = cleanUrl.replace(/\/app\/home.*$/, '');
+            cleanUrl = cleanUrl.replace(/\/app\/.*$/, '');
+            
+            // Remove trailing slash
+            cleanUrl = cleanUrl.replace(/\/$/, '');
+            
+            // Ensure it starts with http:// or https://
+            if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+                // Try to fix by adding https://
+                if (cleanUrl.includes('frappe.cloud') || cleanUrl.includes('erpnext')) {
+                    cleanUrl = 'https://' + cleanUrl;
+                    diagnostics.fixes.push('Added https:// to URL');
+                } else {
+                    throw new Error('API URL must start with http:// or https://');
+                }
+            }
+            
+            // Update config with cleaned URL
+            if (cleanUrl !== this.config.apiUrl) {
+                this.config.apiUrl = cleanUrl;
+                diagnostics.fixes.push(`Cleaned URL: ${this.config.apiUrl} → ${cleanUrl}`);
             }
 
             // Step 2: Test if URL is reachable (basic connectivity)
             try {
-                const testUrl = this.config.apiUrl.replace(/\/$/, '') + '/api/method/ping';
+                const testUrl = cleanUrl + '/api/method/ping';
                 const pingResponse = await fetch(testUrl, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
-                    }
+                    },
+                    mode: 'cors'
                 });
                 
                 if (pingResponse.ok || pingResponse.status === 200) {
@@ -823,64 +848,98 @@ class ERPNextIntegration {
                     diagnostics.errors.push(`URL reachable but returned status: ${pingResponse.status}`);
                 }
             } catch (pingError) {
-                diagnostics.errors.push(`URL not reachable: ${pingError.message}`);
-                // Continue testing anyway - might be CORS issue
+                // CORS errors are common - continue testing
+                if (pingError.message.includes('CORS') || pingError.message.includes('Failed to fetch')) {
+                    diagnostics.errors.push(`CORS or network issue detected (this is common - continuing test)`);
+                } else {
+                    diagnostics.errors.push(`URL not reachable: ${pingError.message}`);
+                }
+                // Continue testing anyway - might be CORS issue but API might still work
             }
 
-            // Step 3: Test API endpoint with credentials
-            try {
-                const response = await this.apiRequest('GET', 'User?limit_page_length=1');
-                diagnostics.apiEndpoint = true;
-                diagnostics.credentialsValid = true;
-                
-                // Step 4: Test if user has proper permissions
-                if (response && response.data) {
-                    diagnostics.userPermissions = true;
-                }
-                
-                return { 
-                    success: true, 
-                    message: 'Connection successful',
-                    diagnostics: diagnostics
-                };
-            } catch (apiError) {
-                diagnostics.errors.push(`API Error: ${apiError.message}`);
-                
-                // Try alternative endpoint
+            // Step 3: Test API endpoint with credentials (try multiple endpoints)
+            const endpointsToTry = [
+                'User?limit_page_length=1',
+                'Item?limit_page_length=1',
+                'DocType/User'
+            ];
+            
+            let lastError = null;
+            
+            for (const endpoint of endpointsToTry) {
                 try {
-                    const altResponse = await this.apiRequest('GET', 'Item?limit_page_length=1');
+                    const response = await this.apiRequest('GET', endpoint);
                     diagnostics.apiEndpoint = true;
                     diagnostics.credentialsValid = true;
+                    
+                    // Test if user has proper permissions
+                    if (response && (response.data || response.name)) {
+                        diagnostics.userPermissions = true;
+                    }
+                    
                     return { 
                         success: true, 
-                        message: 'Connection successful (using alternative endpoint)',
-                        diagnostics: diagnostics
+                        message: 'Connection successful',
+                        diagnostics: diagnostics,
+                        endpoint: endpoint
                     };
-                } catch (altError) {
-                    diagnostics.errors.push(`Alternative endpoint also failed: ${altError.message}`);
+                } catch (apiError) {
+                    lastError = apiError;
+                    diagnostics.errors.push(`Endpoint ${endpoint} failed: ${apiError.message}`);
+                    // Continue to next endpoint
                 }
+            }
 
-                // Provide specific error messages
-                let errorMessage = apiError.message;
-                if (apiError.message.includes('401') || apiError.message.includes('Unauthorized')) {
-                    errorMessage = 'Authentication failed. Please check your API Key and Secret.';
-                } else if (apiError.message.includes('403') || apiError.message.includes('Forbidden')) {
-                    errorMessage = 'Access forbidden. User may not have proper permissions.';
-                } else if (apiError.message.includes('404') || apiError.message.includes('Not Found')) {
-                    errorMessage = 'API endpoint not found. Please check your API URL.';
-                } else if (apiError.message.includes('CORS') || apiError.message.includes('NetworkError')) {
-                    errorMessage = 'CORS error or network issue. ERPNext may need CORS configuration.';
-                } else if (apiError.message.includes('Failed to fetch')) {
-                    errorMessage = 'Cannot reach ERPNext server. Check URL and network connection.';
+            // All endpoints failed - provide specific error messages
+            if (lastError) {
+                let errorMessage = lastError.message;
+                let suggestions = [];
+                
+                if (lastError.message.includes('401') || lastError.message.includes('Unauthorized') || lastError.message.includes('Authentication')) {
+                    errorMessage = 'Authentication failed (401). Your API Key or Secret is incorrect.';
+                    suggestions.push('1. Verify API Key: f70126362d822ce');
+                    suggestions.push('2. Verify API Secret: 077025b26');
+                    suggestions.push('3. Regenerate keys in ERPNext if needed');
+                    suggestions.push('4. Ensure no extra spaces in credentials');
+                } else if (lastError.message.includes('403') || lastError.message.includes('Forbidden')) {
+                    errorMessage = 'Access forbidden (403). User lacks required permissions.';
+                    suggestions.push('1. Check user roles in ERPNext (Sales User, Stock User, Item Manager)');
+                    suggestions.push('2. Enable API access for user');
+                    suggestions.push('3. Ensure user account is active');
+                } else if (lastError.message.includes('404') || lastError.message.includes('Not Found')) {
+                    errorMessage = 'API endpoint not found (404). Check your API URL.';
+                    suggestions.push(`1. Verify URL: ${cleanUrl}`);
+                    suggestions.push('2. Test ping: ' + cleanUrl + '/api/method/ping');
+                    suggestions.push('3. Ensure ERPNext API is enabled');
+                } else if (lastError.message.includes('CORS') || lastError.message.includes('Failed to fetch') || lastError.message.includes('NetworkError')) {
+                    errorMessage = 'CORS or network error. Cannot reach ERPNext server.';
+                    suggestions.push('1. Configure CORS in ERPNext (Settings → System Settings → CORS)');
+                    suggestions.push('2. Add "*" or your domain to allowed origins');
+                    suggestions.push('3. Check network connection');
+                    suggestions.push('4. Verify ERPNext instance is running');
+                } else if (lastError.message.includes('Cannot reach')) {
+                    errorMessage = 'Cannot reach ERPNext server.';
+                    suggestions.push('1. Verify URL is correct: ' + cleanUrl);
+                    suggestions.push('2. Try opening URL in browser');
+                    suggestions.push('3. Check if ERPNext instance is running');
+                    suggestions.push('4. Check network/firewall settings');
                 }
 
                 return { 
                     success: false, 
                     message: errorMessage,
-                    error: apiError.message,
-                    diagnostics: diagnostics
+                    error: lastError.message,
+                    diagnostics: diagnostics,
+                    suggestions: suggestions
                 };
             }
+
+            return {
+                success: false,
+                message: 'All connection attempts failed',
+                diagnostics: diagnostics
+            };
+
         } catch (error) {
             diagnostics.errors.push(`Connection test failed: ${error.message}`);
             return { 

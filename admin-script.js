@@ -918,15 +918,43 @@ async function testERPNextConnection() {
                   '2. Upload products from Excel\n' +
                   '3. Sync products to website');
         } else {
-            alert('❌ Connection Failed\n\n' +
-                  (result.message || result.error || 'Unknown error') + '\n\n' +
-                  'Please check:\n' +
-                  '• API URL is correct and accessible\n' +
-                  '• API Key and Secret are valid\n' +
-                  '• ERPNext instance is running\n' +
-                  '• User has proper permissions\n' +
-                  '• Network connection is working');
-        }
+            let errorMsg = '❌ Connection Failed\n\n' +
+                  'Error: ' + (result.message || result.error || 'Unknown error') + '\n\n';
+            
+            // Add auto-fixes if any
+            if (result.diagnostics && result.diagnostics.fixes.length > 0) {
+                errorMsg += 'Auto-fixes applied:\n';
+                result.diagnostics.fixes.forEach(fix => {
+                    errorMsg += '• ' + fix + '\n';
+                });
+                errorMsg += '\n';
+            }
+            
+            // Add specific suggestions
+            if (result.suggestions && result.suggestions.length > 0) {
+                errorMsg += 'Suggested fixes:\n';
+                result.suggestions.forEach(suggestion => {
+                    errorMsg += suggestion + '\n';
+                });
+                errorMsg += '\n';
+            }
+            
+            // Add diagnostics
+            if (result.diagnostics && result.diagnostics.errors.length > 0) {
+                errorMsg += 'Diagnostics:\n';
+                result.diagnostics.errors.slice(0, 3).forEach(err => {
+                    errorMsg += '• ' + err + '\n';
+                });
+                errorMsg += '\n';
+            }
+            
+            errorMsg += 'Quick checks:\n' +
+                  '1. URL: https://diamondcasa.frappe.cloud (no /app/home)\n' +
+                  '2. API Key: f70126362d822ce (no spaces)\n' +
+                  '3. API Secret: 077025b26 (no spaces)\n' +
+                  '4. Open browser console (F12) for detailed errors';
+            
+            alert(errorMsg);
     } catch (error) {
         alert('❌ Connection Error\n\n' +
               error.message + '\n\n' +
