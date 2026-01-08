@@ -73,177 +73,80 @@ function initializeAdmin() {
 
 // Login Functionality
 function setupLogin() {
-    const loginForm = document.getElementById('loginForm');
-    const loginPage = document.getElementById('loginPage');
     const adminDashboard = document.getElementById('adminDashboard');
 
-    // Debug: Check if elements exist
-    if (!loginForm) {
-        console.error('Login form not found! Check HTML structure.');
-        return;
-    }
-    if (!loginPage) {
-        console.error('Login page not found! Check HTML structure.');
-        return;
-    }
+    // Debug: Check if dashboard exists
     if (!adminDashboard) {
         console.error('Admin dashboard not found! Check HTML structure.');
         return;
     }
 
-    // Define handleLogin function first (before using it)
-    function handleLogin() {
-        const emailInput = document.getElementById('adminEmail');
-        const passwordInput = document.getElementById('adminPassword');
-        
-        if (!emailInput || !passwordInput) {
-            alert('Error: Login form fields not found. Please refresh the page.');
-            console.error('Email or password input not found');
-            return;
-        }
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-
-        // Check if fields are empty
-        if (!email || !password) {
-            alert('Please enter both email and password');
-            return;
-        }
-
-        // Default admin credentials (in production, this would be server-side authentication)
-        const validCredentials = [
-            { email: 'admin@diamondcasa.com', password: 'admin123' },
-            { email: 'admin@diamondcasa.in', password: 'admin123' },
-            { email: 'admin', password: 'admin' },
-            { email: 'admin', password: 'admin123' },
-            { email: 'test@diamondcasa.com', password: 'test123' }
-        ];
-
-        const isValid = validCredentials.some(cred => 
-            cred.email.toLowerCase() === email.toLowerCase() && cred.password === password
-        );
-
-        // For demo: accept any credentials if both fields are filled
-        try {
-            localStorage.setItem('adminLoggedIn', 'true');
-            localStorage.setItem('adminEmail', email);
-            
-            if (loginPage) {
-                loginPage.style.display = 'none';
-            }
-            if (adminDashboard) {
-                adminDashboard.style.display = 'flex';
-                
-                // Ensure dashboard page is visible
-                const dashboardPage = document.getElementById('dashboardPage');
-                if (dashboardPage) {
-                    // Hide all pages first
-                    document.querySelectorAll('.page-content').forEach(page => {
-                        page.classList.remove('active');
-                    });
-                    // Show dashboard
-                    dashboardPage.classList.add('active');
-                }
-                
-                // Set active navigation
-                const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
-                if (dashboardNav) {
-                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                    dashboardNav.classList.add('active');
-                }
-                
-                // Update page title
-                const pageTitle = document.getElementById('pageTitle');
-                if (pageTitle) {
-                    pageTitle.textContent = 'Dashboard';
-                }
-            }
-            
-            // Load dashboard data if function exists
-            // Multiple delays to ensure everything is ready
-            setTimeout(() => {
-                try {
-                    if (typeof loadDashboardData === 'function') {
-                        loadDashboardData();
-                    } else {
-                        console.warn('loadDashboardData function not found, using fallback');
-                        // Fallback initialization
-                        if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
-                        if (typeof updateBadges === 'function') updateBadges();
-                        if (typeof loadRecentOrders === 'function') loadRecentOrders();
-                        if (typeof loadTopProducts === 'function') loadTopProducts();
-                        if (typeof loadLowStock === 'function') loadLowStock();
-                    }
-                } catch (error) {
-                    console.error('Error in dashboard initialization:', error);
-                }
-            }, 500);
-            
-            // Also try after longer delay as backup
-            setTimeout(() => {
-                try {
-                    if (typeof loadDashboardData === 'function') {
-                        loadDashboardData();
-                    }
-                } catch (error) {
-                    console.error('Error in backup dashboard initialization:', error);
-                }
-            }, 1000);
-            
-            console.log('Login successful:', email);
-        } catch (error) {
-            console.error('Login error:', error);
-            alert('Error during login: ' + error.message);
-        }
+    // Ensure dashboard is visible (login page removed)
+    adminDashboard.style.display = 'flex';
+    localStorage.setItem('adminLoggedIn', 'true');
+    if (!localStorage.getItem('adminEmail')) {
+        localStorage.setItem('adminEmail', 'admin@diamondcasa.com');
     }
-
-    // Add multiple event handlers to ensure button works
-    const signInBtn = document.getElementById('signInBtn') || loginForm.querySelector('button[type="submit"]');
     
-    // Method 1: Direct onclick (most reliable)
-    if (signInBtn) {
-        signInBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Sign In button clicked (onclick)');
-            handleLogin();
-            return false;
-        };
+    // Initialize dashboard immediately
+    function initializeDashboard() {
+        // Ensure dashboard page is visible
+        const dashboardPage = document.getElementById('dashboardPage');
+        if (dashboardPage) {
+            // Hide all pages first
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            // Show dashboard
+            dashboardPage.classList.add('active');
+        }
+        
+        // Set active navigation
+        const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
+        if (dashboardNav) {
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            dashboardNav.classList.add('active');
+        }
+        
+        // Update page title
+        const pageTitle = document.getElementById('pageTitle');
+        if (pageTitle) {
+            pageTitle.textContent = 'Dashboard';
+        }
+        
+        // Load dashboard data if function exists
+        setTimeout(() => {
+            try {
+                if (typeof loadDashboardData === 'function') {
+                    loadDashboardData();
+                } else {
+                    console.warn('loadDashboardData function not found, using fallback');
+                    // Fallback initialization
+                    if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
+                    if (typeof updateBadges === 'function') updateBadges();
+                    if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                    if (typeof loadTopProducts === 'function') loadTopProducts();
+                    if (typeof loadLowStock === 'function') loadLowStock();
+                }
+            } catch (error) {
+                console.error('Error in dashboard initialization:', error);
+            }
+        }, 500);
+        
+        // Also try after longer delay as backup
+        setTimeout(() => {
+            try {
+                if (typeof loadDashboardData === 'function') {
+                    loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Error in backup dashboard initialization:', error);
+            }
+        }, 1000);
     }
-
-    // Method 2: AddEventListener for click
-    if (signInBtn) {
-        signInBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Sign In button clicked (addEventListener)');
-            handleLogin();
-            return false;
-        }, true);
-    }
-
-    // Method 3: Form submit handler
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Form submitted');
-            handleLogin();
-            return false;
-        }, true);
-    }
-
-    // Make handleLogin globally accessible (primary login function)
-    // Only override if not already set (to preserve immediate login function)
-    if (!window.handleLogin || typeof window.handleLogin !== 'function') {
-        window.handleLogin = handleLogin;
-    }
-    if (!window.adminLogin || typeof window.adminLogin !== 'function') {
-        window.adminLogin = handleLogin; // Alias for compatibility
-    }
-
-    // Auto-login: Show dashboard directly (login page removed)
+    
+    // Initialize dashboard
+    initializeDashboard();
     if (adminDashboard) {
         adminDashboard.style.display = 'flex';
         // Set logged in state
