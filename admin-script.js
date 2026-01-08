@@ -234,12 +234,9 @@ function setupLogin() {
         }, true);
     }
 
-    // Method 4: Make handleLogin globally accessible
+    // Make handleLogin globally accessible (primary login function)
     window.handleLogin = handleLogin;
-    window.adminLogin = function() {
-        console.log('adminLogin called directly');
-        handleLogin();
-    };
+    window.adminLogin = handleLogin; // Alias for compatibility
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {

@@ -1299,131 +1299,45 @@
     <script src="erpnext-integration.js"></script>
     <script src="admin-script.js"></script>
     <script>
-        // Emergency login function - Available immediately
-        function emergencyLogin() {
-            try {
-                const emailInput = document.getElementById('adminEmail');
-                const passwordInput = document.getElementById('adminPassword');
-                
-                const email = emailInput ? emailInput.value.trim() : 'admin@diamondcasa.com';
-                const password = passwordInput ? passwordInput.value.trim() : 'admin123';
-                
-                if (!email || !password) {
-                    alert('Please enter both email and password');
-                    return false;
-                }
-                
-                localStorage.setItem('adminLoggedIn', 'true');
-                localStorage.setItem('adminEmail', email);
-                
-                const loginPage = document.getElementById('loginPage');
-                const adminDashboard = document.getElementById('adminDashboard');
-                
-                if (loginPage) loginPage.style.display = 'none';
-                if (adminDashboard) {
-                    adminDashboard.style.display = 'flex';
-                }
-                
-                // Ensure dashboard page is visible
-                const dashboardPage = document.getElementById('dashboardPage');
-                if (dashboardPage) {
-                    document.querySelectorAll('.page-content').forEach(page => {
-                        page.classList.remove('active');
-                    });
-                    dashboardPage.classList.add('active');
-                }
-                
-                // Set active navigation
-                const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
-                if (dashboardNav) {
-                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                    dashboardNav.classList.add('active');
-                }
-                
-                // Update page title
-                const pageTitle = document.getElementById('pageTitle');
-                if (pageTitle) {
-                    pageTitle.textContent = 'Dashboard';
-                }
-                
-                // Initialize dashboard with multiple delays
-                setTimeout(() => {
-                    try {
-                        if (typeof loadDashboardData === 'function') {
-                            loadDashboardData();
-                        } else if (typeof syncDataFromWebsite === 'function') {
-                            syncDataFromWebsite();
-                            if (typeof updateBadges === 'function') updateBadges();
-                            if (typeof loadRecentOrders === 'function') loadRecentOrders();
-                            if (typeof loadTopProducts === 'function') loadTopProducts();
-                            if (typeof loadLowStock === 'function') loadLowStock();
-                        }
-                    } catch (error) {
-                        console.error('Dashboard initialization error:', error);
-                    }
-                }, 500);
-                
-                // Backup initialization
-                setTimeout(() => {
-                    try {
-                        if (typeof loadDashboardData === 'function') {
-                            loadDashboardData();
-                        }
-                    } catch (error) {
-                        console.error('Backup initialization error:', error);
-                    }
-                }, 1500);
-                
-                console.log('Emergency login successful:', email);
-                return true;
-            } catch (error) {
-                console.error('Emergency login error:', error);
-                alert('Login error: ' + error.message);
-                return false;
-            }
-        }
-        
-        // Make it globally accessible
-        window.emergencyLogin = emergencyLogin;
-        window.handleLogin = emergencyLogin; // Fallback until main script loads
-        
-        // Auto-attach to button when DOM is ready
-        function attachLoginHandlers() {
-            const btn = document.getElementById('signInBtn');
-            if (btn) {
-                // Remove existing onclick first
-                btn.removeAttribute('onclick');
-                
-                // Add new handler
-                btn.onclick = function(e) {
+        // Normal login form handler - waits for admin-script.js to load
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const signInBtn = document.getElementById('signInBtn');
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    e.stopPropagation();
                     
-                    // Try main login function first
+                    // Use the main login function from admin-script.js
                     if (typeof window.handleLogin === 'function') {
                         window.handleLogin();
                     } else if (typeof window.adminLogin === 'function') {
                         window.adminLogin();
                     } else {
-                        // Fallback to emergency login
-                        emergencyLogin();
+                        alert('Login function not loaded. Please refresh the page.');
+                        console.error('Login functions not available');
                     }
                     return false;
-                };
-                
-                console.log('Login button handler attached');
+                });
             }
-        }
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', attachLoginHandlers);
-        } else {
-            attachLoginHandlers();
-        }
-        
-        // Also try after delays in case script loads late
-        setTimeout(attachLoginHandlers, 500);
-        setTimeout(attachLoginHandlers, 1500);
+            
+            // Also attach to button click as backup
+            if (signInBtn) {
+                signInBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (typeof window.handleLogin === 'function') {
+                        window.handleLogin();
+                    } else if (typeof window.adminLogin === 'function') {
+                        window.adminLogin();
+                    } else {
+                        alert('Login function not loaded. Please refresh the page.');
+                        console.error('Login functions not available');
+                    }
+                    return false;
+                });
+            }
+        });
     </script>
 </body>
 </html>
