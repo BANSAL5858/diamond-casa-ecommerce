@@ -1608,9 +1608,11 @@ async function uploadExcelToERPNext(file) {
                 alert('Upload failed: ' + error.message);
             } finally {
                 uploadBtn.disabled = false;
-                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload to ERPNext';
-                progressBar.style.width = '100%';
-                statusText.textContent = 'Upload complete!';
+                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload All Products to ERPNext';
+                // Keep progress visible to show results
+                if (!resultDiv || resultDiv.style.display === 'none' || !resultDiv.innerHTML) {
+                    progressDiv.style.display = 'none';
+                }
             }
         };
         reader.readAsArrayBuffer(file);
@@ -1618,7 +1620,7 @@ async function uploadExcelToERPNext(file) {
         console.error('Error reading file:', error);
         alert('Error reading file: ' + error.message);
         uploadBtn.disabled = false;
-        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload to ERPNext';
+        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload All Products to ERPNext';
     }
 }
 
