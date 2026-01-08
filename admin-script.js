@@ -177,6 +177,95 @@ function setupLogin() {
     });
 }
 
+// Global navigation handler (available immediately - works even if script loads late)
+window.handleNavClick = function(e, page) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    console.log('Navigation clicked:', page);
+    
+    if (!page) {
+        console.error('No page specified');
+        return;
+    }
+    
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    const clickedItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (clickedItem) {
+        clickedItem.classList.add('active');
+    }
+    
+    // Show correct page
+    const allPages = document.querySelectorAll('.page-content');
+    allPages.forEach(content => content.classList.remove('active'));
+    
+    const targetPage = document.getElementById(`${page}Page`);
+    const pageTitle = document.getElementById('pageTitle');
+    
+    if (targetPage) {
+        targetPage.classList.add('active');
+        if (pageTitle && clickedItem) {
+            const span = clickedItem.querySelector('span');
+            if (span) {
+                pageTitle.textContent = span.textContent;
+            }
+        }
+        
+        console.log(`Switched to ${page} page`);
+        
+        // Load page-specific data
+        try {
+            if (page === 'dashboard' && typeof loadDashboardData === 'function') {
+                setTimeout(() => loadDashboardData(), 100);
+            } else if (page === 'products' && typeof loadProducts === 'function') {
+                setTimeout(() => loadProducts(), 100);
+            } else if (page === 'orders' && typeof loadOrders === 'function') {
+                setTimeout(() => loadOrders(), 100);
+            } else if (page === 'customers' && typeof loadCustomers === 'function') {
+                setTimeout(() => loadCustomers(), 100);
+            } else if (page === 'categories' && typeof loadCategories === 'function') {
+                setTimeout(() => loadCategories(), 100);
+            } else if (page === 'inventory' && typeof loadInventory === 'function') {
+                setTimeout(() => loadInventory(), 100);
+            } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
+                setTimeout(() => loadAnalytics(), 100);
+            } else if (page === 'reports' && typeof generateReport === 'function') {
+                // Reports page doesn't need loading
+            } else if (page === 'promotions' && typeof loadPromotions === 'function') {
+                setTimeout(() => loadPromotions(), 100);
+            } else if (page === 'content' && typeof loadBanners === 'function') {
+                setTimeout(() => loadBanners(), 100);
+            } else if (page === 'settings') {
+                // Settings page doesn't need loading
+            } else if (page === 'users' && typeof loadUsers === 'function') {
+                setTimeout(() => loadUsers(), 100);
+            } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
+                setTimeout(() => loadPurchaseOrders(), 100);
+            } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
+                setTimeout(() => loadSuppliers(), 100);
+            } else if (page === 'returns' && typeof loadReturns === 'function') {
+                setTimeout(() => loadReturns(), 100);
+            } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
+                setTimeout(() => loadStockTransfers(), 100);
+            } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
+                setTimeout(() => {
+                    loadERPNextConfig();
+                    if (typeof loadIntegrationLogs === 'function') loadIntegrationLogs();
+                    if (typeof loadErrorLogs === 'function') loadErrorLogs();
+                    if (typeof updateIntegrationStatus === 'function') updateIntegrationStatus();
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Error loading page data:', error);
+        }
+    } else {
+        console.error(`Page element not found: ${page}Page`);
+    }
+};
+
 // Navigation - Direct event handlers for reliability
 function setupNavigation() {
     console.log('Setting up navigation...');
