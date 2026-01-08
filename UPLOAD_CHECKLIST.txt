@@ -1,0 +1,104 @@
+═══════════════════════════════════════════════════════════════
+   PRODUCT UPLOAD CHECKLIST - 378 Products
+═══════════════════════════════════════════════════════════════
+
+BEFORE UPLOAD
+───────────────────────────────────────────────────────────────
+
+[ ] Admin Dashboard open (admin.html)
+[ ] Logged in (admin / admin123)
+[ ] ERPNext Integration page open
+[ ] Credentials configured:
+    [ ] API URL: https://diamondcasa.frappe.cloud
+    [ ] API Key: f70126362d822ce
+    [ ] API Secret: 077025b26
+[ ] Connection tested successfully
+[ ] Integration enabled (toggle switch)
+[ ] Excel file ready: final data all in one.xlsx
+[ ] Excel file contains 378 products
+
+───────────────────────────────────────────────────────────────
+
+UPLOAD PROCESS
+───────────────────────────────────────────────────────────────
+
+[ ] Scrolled to "Upload Products from Excel to ERPNext"
+[ ] Clicked "Choose File"
+[ ] Selected Excel file
+[ ] Default Item Group: Jewelry
+[ ] Update existing items: ✅ Checked
+[ ] Create Item Price: ✅ Checked
+[ ] Clicked "Upload to ERPNext"
+[ ] Upload started (progress bar showing)
+[ ] Monitoring progress (don't close browser!)
+
+───────────────────────────────────────────────────────────────
+
+DURING UPLOAD (10-30 minutes)
+───────────────────────────────────────────────────────────────
+
+[ ] Progress bar updating
+[ ] Status messages showing
+[ ] No critical errors
+[ ] Browser tab open (not closed)
+[ ] Waiting for completion...
+
+───────────────────────────────────────────────────────────────
+
+AFTER UPLOAD
+───────────────────────────────────────────────────────────────
+
+[ ] Upload completed (100%)
+[ ] Results displayed:
+    [ ] Total: 378
+    [ ] Created: ___
+    [ ] Updated: ___
+    [ ] Failed: ___ (review if > 0)
+[ ] "Products automatically synced" message shown
+[ ] Products verified on website (index.html)
+[ ] Images displaying correctly
+[ ] Videos playing (if available)
+[ ] All specifications visible
+
+───────────────────────────────────────────────────────────────
+
+VERIFICATION
+───────────────────────────────────────────────────────────────
+
+[ ] Open index.html
+[ ] Products appear in sections:
+    [ ] Main Products Grid
+    [ ] Ready to Ship
+    [ ] Trending Now
+    [ ] Best Sellers
+[ ] Click "View Details" on a product
+[ ] Verify:
+    [ ] Image gallery (5 images)
+    [ ] Video player (if available)
+    [ ] All specifications
+    [ ] Price and availability
+
+───────────────────────────────────────────────────────────────
+
+SUCCESS CRITERIA
+───────────────────────────────────────────────────────────────
+
+✅ Upload completed
+✅ Created + Updated = 378 (or close)
+✅ Products on website
+✅ Images/videos displaying
+✅ All features working
+
+═══════════════════════════════════════════════════════════════
+
+QUICK REFERENCE
+───────────────────────────────────────────────────────────────
+
+Admin Dashboard: admin.html
+Login: admin / admin123
+Section: ERPNext Integration
+Excel File: final data all in one.xlsx
+Upload Time: 10-30 minutes
+Auto-Sync: Yes (automatic after upload)
+
+═══════════════════════════════════════════════════════════════
