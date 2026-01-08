@@ -1430,10 +1430,25 @@ function setupExcelUpload() {
         }
     });
 
-    // Upload button click
+    // Preview button
+    const previewBtn = document.getElementById('previewExcelBtn');
+    if (previewBtn) {
+        previewBtn.addEventListener('click', () => {
+            if (fileInput.files.length > 0) {
+                previewExcelFile(fileInput.files[0]);
+            } else {
+                alert('Please select an Excel file first');
+            }
+        });
+    }
+
+    // Upload button click with confirmation
     uploadBtn.addEventListener('click', () => {
         if (fileInput.files.length > 0) {
-            uploadExcelToERPNext(fileInput.files[0]);
+            const fileName = fileInput.files[0].name;
+            if (confirm(`Ready to upload all products from "${fileName}"?\n\nThis will:\n- Create/update products in ERPNext\n- Upload images and videos\n- Sync products to website\n\nEstimated time: 10-30 minutes\n\nContinue?`)) {
+                uploadExcelToERPNext(fileInput.files[0]);
+            }
         }
     });
 }
