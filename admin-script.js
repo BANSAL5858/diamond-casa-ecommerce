@@ -254,10 +254,98 @@ function setupDashboard() {
 }
 
 function loadDashboardData() {
-    updateBadges();
-    loadRecentOrders();
-    loadTopProducts();
-    loadLowStock();
+    console.log('Loading dashboard data...');
+    try {
+        // Sync data from website (localStorage)
+        syncDataFromWebsite();
+        
+        // Update dashboard
+        updateBadges();
+        loadRecentOrders();
+        loadTopProducts();
+        loadLowStock();
+        
+        // Load charts if available
+        if (typeof loadCharts === 'function') {
+            loadCharts();
+        }
+        
+        console.log('Dashboard data loaded successfully');
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+    }
+}
+
+// Sync data from website localStorage
+function syncDataFromWebsite() {
+    try {
+        // Sync orders from website
+        const websiteOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+        if (websiteOrders.length > 0) {
+            // Merge with admin orders
+            const existingOrderIds = new Set(adminData.orders.map(o => o.id));
+            websiteOrders.forEach(order => {
+                if (!existingOrderIds.has(order.id)) {
+                    adminData.orders.push({
+                        id: order.id || Date.now(),
+                        customer: order.customerName || order.email || 'Guest',
+                        product: order.items?.map(i => i.name).join(', ') || 'Multiple items',
+                        amount: order.total || order.grandTotal || 0,
+                        status: order.status || 'Pending',
+                        date: order.date || new Date().toLocaleDateString()
+                    });
+                }
+            });
+            localStorage.setItem('adminOrders', JSON.stringify(adminData.orders));
+        }
+        
+        // Sync products from website
+        const websiteProducts = JSON.parse(localStorage.getItem('products') || '[]');
+        if (websiteProducts.length > 0) {
+            // Merge with admin products
+            const existingProductIds = new Set(adminData.products.map(p => p.id));
+            websiteProducts.forEach(product => {
+                if (!existingProductIds.has(product.id)) {
+                    adminData.products.push({
+                        id: product.id,
+                        name: product.name,
+                        category: product.category,
+                        price: product.price,
+                        stock: product.stock || 0,
+                        status: product.status || 'active'
+                    });
+                }
+            });
+            localStorage.setItem('adminProducts', JSON.stringify(adminData.products));
+        }
+        
+        // Sync customers from website
+        const websiteCustomers = JSON.parse(localStorage.getItem('customers') || '[]');
+        if (websiteCustomers.length > 0) {
+            const existingCustomerEmails = new Set(adminData.customers.map(c => c.email));
+            websiteCustomers.forEach(customer => {
+                if (!existingCustomerEmails.has(customer.email)) {
+                    adminData.customers.push({
+                        id: Date.now(),
+                        name: customer.name,
+                        email: customer.email,
+                        phone: customer.phone,
+                        status: 'active',
+                        orders: 0
+                    });
+                }
+            });
+            localStorage.setItem('adminCustomers', JSON.stringify(adminData.customers));
+        }
+        
+        console.log('Data synced from website:', {
+            orders: adminData.orders.length,
+            products: adminData.products.length,
+            customers: adminData.customers.length
+        });
+    } catch (error) {
+        console.error('Error syncing data from website:', error);
+    }
 }
 
 function updateBadges() {

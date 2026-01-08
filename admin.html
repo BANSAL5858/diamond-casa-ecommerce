@@ -1327,9 +1327,18 @@
                     adminDashboard.style.display = 'flex';
                 }
                 
-                if (typeof loadDashboardData === 'function') {
-                    loadDashboardData();
-                }
+                // Initialize dashboard
+                setTimeout(() => {
+                    if (typeof loadDashboardData === 'function') {
+                        loadDashboardData();
+                    } else if (typeof syncDataFromWebsite === 'function') {
+                        syncDataFromWebsite();
+                        if (typeof updateBadges === 'function') updateBadges();
+                        if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                        if (typeof loadTopProducts === 'function') loadTopProducts();
+                        if (typeof loadLowStock === 'function') loadLowStock();
+                    }
+                }, 300);
                 
                 console.log('Emergency login successful:', email);
                 return true;
