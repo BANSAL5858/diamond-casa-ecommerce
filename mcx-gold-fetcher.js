@@ -15,43 +15,91 @@ class MCXGoldFetcher {
     /**
      * Fetch MCX Gold price from the website
      * Note: Due to CORS restrictions, this uses a proxy approach
+     * For production, implement a backend API endpoint to avoid CORS issues
      */
     async fetchMCXGoldPrice() {
-        try {
-            // Method 1: Try using a CORS proxy (for development/testing)
-            // In production, use a backend proxy to avoid CORS issues
-            const proxyUrl = 'https://api.allorigins.win/get?url=';
-            const targetUrl = encodeURIComponent('https://mcxlive.org/');
-            
-            const response = await fetch(`${proxyUrl}${targetUrl}`);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            const htmlContent = data.contents;
-            
-            // Parse the HTML to extract MCX Gold price
-            const goldPrice = this.parseGoldPriceFromHTML(htmlContent);
-            
-            if (goldPrice) {
-                this.currentPrice = goldPrice;
-                this.updatePriceHistory(goldPrice);
-                this.notifyListeners(goldPrice);
-                return goldPrice;
-            } else {
-                throw new Error('Could not parse gold price from page');
-            }
-        } catch (error) {
-            console.error('Error fetching MCX Gold price:', error);
-            
-            // Fallback: Try alternative method using regex on response
+        // List of CORS proxy services to try (in order)
+        const proxyServices = [
+            'https://api.allorigins.win/get?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+        
+        const targetUrl = 'https://mcxlive.org/';
+        
+        // Try each proxy service
+        for (let i = 0; i < proxyServices.length; i++) {
             try {
-                return await this.fetchGoldPriceAlternative();
-            } catch (fallbackError) {
-                console.error('Fallback method also failed:', fallbackError);
-                throw new Error('Unable to fetch MCX Gold price. Please check your internet connection or use a backend proxy.');
+                let response;
+                let htmlContent;
+                
+                if (proxyServices[i].includes('allorigins.win')) {
+                    // AllOrigins returns JSON with contents field
+                    const proxyUrl = proxyServices[i] + encodeURIComponent(targetUrl);
+                    response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    htmlContent = data.contents;
+                } else if (proxyServices[i].includes('codetabs.com')) {
+                    // CodeTabs proxy
+                    const proxyUrl = proxyServices[i] + encodeURIComponent(targetUrl);
+                    response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    htmlContent = await response.text();
+                } else {
+                    // Standard CORS proxy
+                    const proxyUrl = proxyServices[i] + targetUrl;
+                    response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    htmlContent = await response.text();
+                }
+                
+                // Parse the HTML to extract MCX Gold price
+                const goldPrice = this.parseGoldPriceFromHTML(htmlContent);
+                
+                if (goldPrice) {
+                    this.currentPrice = goldPrice;
+                    this.updatePriceHistory(goldPrice);
+                    this.notifyListeners(goldPrice);
+                    return goldPrice;
+                } else {
+                    throw new Error('Could not parse gold price from page');
+                }
+            } catch (error) {
+                console.warn(`Proxy service ${i + 1} failed:`, error.message);
+                
+                // If this is the last proxy, throw the error
+                if (i === proxyServices.length - 1) {
+                    console.error('All proxy services failed. Consider using a backend API proxy for production.');
+                    throw new Error('Unable to fetch MCX Gold price. All proxy services failed. For production, implement a backend API endpoint.');
+                }
+                // Otherwise, try next proxy
+                continue;
             }
         }
     }
@@ -90,62 +138,73 @@ class MCXGoldFetcher {
             
             // Look for MCX Gold in the table
             // The table structure from the website shows MCX Gold with Last price
-            const rows = doc.querySelectorAll('table tr, .table tr');
+            const tables = doc.querySelectorAll('table');
             
-            for (let row of rows) {
-                const cells = row.querySelectorAll('td');
-                if (cells.length >= 2) {
-                    const symbolCell = cells[0];
-                    const priceCell = cells[1];
-                    
-                    // Check if this row contains MCX Gold
-                    if (symbolCell && symbolCell.textContent.includes('MCX Gold')) {
-                        // Get the last price from the second column
-                        const priceText = priceCell.textContent.trim();
-                        const price = this.extractPrice(priceText);
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 2) {
+                        const symbolCell = cells[0];
+                        const linkCell = symbolCell ? symbolCell.querySelector('a') : null;
+                        const symbolText = (linkCell ? linkCell.textContent : (symbolCell ? symbolCell.textContent : '')).trim();
                         
-                        if (price) {
-                            // Also try to get additional info
-                            const changeCell = cells[2];
-                            const changePercentCell = cells[3];
-                            const closeCell = cells[4];
-                            const highCell = cells[5];
-                            const lowCell = cells[6];
-                            
-                            return {
-                                symbol: 'MCX Gold',
-                                lastPrice: price,
-                                change: changeCell ? this.extractPrice(changeCell.textContent) : null,
-                                changePercent: changePercentCell ? this.extractChangePercent(changePercentCell.textContent) : null,
-                                close: closeCell ? this.extractPrice(closeCell.textContent) : null,
-                                high: highCell ? this.extractPrice(highCell.textContent) : null,
-                                low: lowCell ? this.extractPrice(lowCell.textContent) : null,
-                                timestamp: new Date().toISOString()
-                            };
+                        // Check if this row contains MCX Gold (not Gold Mini)
+                        if (symbolText && symbolText.includes('MCX Gold') && !symbolText.includes('Mini') && !symbolText.includes('Micro')) {
+                            // Extract all data from cells
+                            // Structure: Symbol | Last | Change | Change % | Close | High | Low | Last Trade
+                            if (cells.length >= 7) {
+                                const lastPrice = this.extractPrice(cells[1].textContent);
+                                const change = this.extractPrice(cells[2].textContent);
+                                const changePercent = this.extractChangePercent(cells[3].textContent);
+                                const close = this.extractPrice(cells[4].textContent);
+                                const high = this.extractPrice(cells[5].textContent);
+                                const low = this.extractPrice(cells[6].textContent);
+                                
+                                if (lastPrice !== null) {
+                                    return {
+                                        symbol: 'MCX Gold',
+                                        lastPrice: lastPrice,
+                                        change: change,
+                                        changePercent: changePercent,
+                                        close: close,
+                                        high: high,
+                                        low: low,
+                                        timestamp: new Date().toISOString()
+                                    };
+                                }
+                            }
                         }
                     }
                 }
             }
             
-            // Alternative: Try to find using regex pattern
-            const goldRegex = /MCX Gold[^<]*<td[^>]*>[\s\S]*?<td[^>]*>([\d,]+\.\d{2})/i;
-            const match = html.match(goldRegex);
+            // Alternative: Try regex pattern matching (more robust for different HTML structures)
+            // Pattern: MCX Gold followed by price data in table format
+            const goldRowPattern = /MCX Gold[^<]*<\/a>[^<]*<\/td>[^<]*<td[^>]*>([\d,]+\.\d{2})[^<]*<\/td>[^<]*<td[^>]*>([+-]?[\d,]+\.\d{2})[^<]*<\/td>[^<]*<td[^>]*>([+-]?[\d.]+%)[^<]*<\/td>[^<]*<td[^>]*>([\d,]+\.\d{2})[^<]*<\/td>[^<]*<td[^>]*>([\d,]+\.\d{2})[^<]*<\/td>[^<]*<td[^>]*>([\d,]+\.\d{2})/i;
             
-            if (match && match[1]) {
-                const price = parseFloat(match[1].replace(/,/g, ''));
+            const match = html.match(goldRowPattern);
+            
+            if (match && match.length >= 7) {
                 return {
                     symbol: 'MCX Gold',
-                    lastPrice: price,
+                    lastPrice: parseFloat(match[1].replace(/,/g, '')),
+                    change: parseFloat(match[2].replace(/,/g, '')),
+                    changePercent: parseFloat(match[3].replace(/%/g, '')),
+                    close: parseFloat(match[4].replace(/,/g, '')),
+                    high: parseFloat(match[5].replace(/,/g, '')),
+                    low: parseFloat(match[6].replace(/,/g, '')),
                     timestamp: new Date().toISOString()
                 };
             }
             
-            // Another regex pattern
-            const pricePattern = /MCX Gold[\s\S]{0,500}?(\d{1,3}(?:,\d{3})*\.\d{2})/i;
-            const priceMatch = html.match(pricePattern);
+            // Simpler regex pattern for just the price
+            const simplePricePattern = /MCX Gold[\s\S]{0,1000}?<td[^>]*>[\s\S]*?<td[^>]*>([\d,]+\.\d{2})/i;
+            const simpleMatch = html.match(simplePricePattern);
             
-            if (priceMatch && priceMatch[1]) {
-                const price = parseFloat(priceMatch[1].replace(/,/g, ''));
+            if (simpleMatch && simpleMatch[1]) {
+                const price = parseFloat(simpleMatch[1].replace(/,/g, ''));
                 return {
                     symbol: 'MCX Gold',
                     lastPrice: price,
