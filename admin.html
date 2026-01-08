@@ -28,7 +28,7 @@
                     <input type="password" id="adminPassword" placeholder="Enter your password" value="admin123" required>
                     <a href="#" class="forgot-password" onclick="alert('Default password: admin123'); return false;">Forget password?</a>
                 </div>
-                <button type="button" class="btn btn-primary" id="signInBtn" onclick="if(typeof handleLogin==='function'){handleLogin();}else if(typeof adminLogin==='function'){adminLogin();}else{alert('Login function not loaded. Please refresh the page.');}">Sign In</button>
+                <button type="button" class="btn btn-primary" id="signInBtn" onclick="if(typeof window.handleLogin==='function'){window.handleLogin();}else if(typeof window.adminLogin==='function'){window.adminLogin();}else if(typeof emergencyLogin==='function'){emergencyLogin();}else{alert('Login function not loaded. Press F12 and check console, or refresh the page.');}">Sign In</button>
             </form>
             <p class="login-footer">
                 Default: admin@diamondcasa.com / admin123<br>

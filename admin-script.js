@@ -182,7 +182,8 @@ function setupLogin() {
         }, true);
     }
 
-    // Method 4: Global function for direct access
+    // Method 4: Make handleLogin globally accessible
+    window.handleLogin = handleLogin;
     window.adminLogin = function() {
         console.log('adminLogin called directly');
         handleLogin();
