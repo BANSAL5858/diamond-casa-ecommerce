@@ -1299,7 +1299,90 @@
     <script src="erpnext-integration.js"></script>
     <script src="admin-script.js"></script>
     <script>
-        // Normal login form handler - waits for admin-script.js to load
+        // Normal login function - Available immediately
+        function normalLogin() {
+            try {
+                const emailInput = document.getElementById('adminEmail');
+                const passwordInput = document.getElementById('adminPassword');
+                
+                if (!emailInput || !passwordInput) {
+                    alert('Error: Login form fields not found. Please refresh the page.');
+                    return false;
+                }
+                
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                if (!email || !password) {
+                    alert('Please enter both email and password');
+                    return false;
+                }
+                
+                // Save login state
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminEmail', email);
+                
+                // Hide login page and show dashboard
+                const loginPage = document.getElementById('loginPage');
+                const adminDashboard = document.getElementById('adminDashboard');
+                
+                if (loginPage) loginPage.style.display = 'none';
+                if (adminDashboard) {
+                    adminDashboard.style.display = 'flex';
+                    
+                    // Ensure dashboard page is visible
+                    const dashboardPage = document.getElementById('dashboardPage');
+                    if (dashboardPage) {
+                        document.querySelectorAll('.page-content').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        dashboardPage.classList.add('active');
+                    }
+                    
+                    // Set active navigation
+                    const dashboardNav = document.querySelector('.nav-item[data-page="dashboard"]');
+                    if (dashboardNav) {
+                        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                        dashboardNav.classList.add('active');
+                    }
+                    
+                    // Update page title
+                    const pageTitle = document.getElementById('pageTitle');
+                    if (pageTitle) {
+                        pageTitle.textContent = 'Dashboard';
+                    }
+                }
+                
+                // Initialize dashboard after script loads
+                setTimeout(() => {
+                    if (typeof window.handleLogin === 'function') {
+                        // Use the main login function if available (it will handle dashboard initialization)
+                        window.handleLogin();
+                    } else if (typeof loadDashboardData === 'function') {
+                        loadDashboardData();
+                    } else if (typeof syncDataFromWebsite === 'function') {
+                        syncDataFromWebsite();
+                        if (typeof updateBadges === 'function') updateBadges();
+                        if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                        if (typeof loadTopProducts === 'function') loadTopProducts();
+                        if (typeof loadLowStock === 'function') loadLowStock();
+                    }
+                }, 300);
+                
+                console.log('Login successful:', email);
+                return true;
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login error: ' + error.message);
+                return false;
+            }
+        }
+        
+        // Make it globally accessible immediately
+        window.handleLogin = normalLogin;
+        window.adminLogin = normalLogin;
+        
+        // Setup form handlers
         document.addEventListener('DOMContentLoaded', function() {
             const loginForm = document.getElementById('loginForm');
             const signInBtn = document.getElementById('signInBtn');
@@ -1307,37 +1390,41 @@
             if (loginForm) {
                 loginForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    
-                    // Use the main login function from admin-script.js
-                    if (typeof window.handleLogin === 'function') {
-                        window.handleLogin();
-                    } else if (typeof window.adminLogin === 'function') {
-                        window.adminLogin();
-                    } else {
-                        alert('Login function not loaded. Please refresh the page.');
-                        console.error('Login functions not available');
-                    }
+                    normalLogin();
                     return false;
                 });
             }
             
-            // Also attach to button click as backup
             if (signInBtn) {
                 signInBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
-                    if (typeof window.handleLogin === 'function') {
-                        window.handleLogin();
-                    } else if (typeof window.adminLogin === 'function') {
-                        window.adminLogin();
-                    } else {
-                        alert('Login function not loaded. Please refresh the page.');
-                        console.error('Login functions not available');
-                    }
+                    normalLogin();
                     return false;
                 });
             }
         });
+        
+        // Also try immediately if DOM is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            const loginForm = document.getElementById('loginForm');
+            const signInBtn = document.getElementById('signInBtn');
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    normalLogin();
+                    return false;
+                });
+            }
+            
+            if (signInBtn) {
+                signInBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    normalLogin();
+                    return false;
+                });
+            }
+        }
     </script>
 </body>
 </html>

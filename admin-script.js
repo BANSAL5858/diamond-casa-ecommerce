@@ -235,8 +235,13 @@ function setupLogin() {
     }
 
     // Make handleLogin globally accessible (primary login function)
-    window.handleLogin = handleLogin;
-    window.adminLogin = handleLogin; // Alias for compatibility
+    // Only override if not already set (to preserve immediate login function)
+    if (!window.handleLogin || typeof window.handleLogin !== 'function') {
+        window.handleLogin = handleLogin;
+    }
+    if (!window.adminLogin || typeof window.adminLogin !== 'function') {
+        window.adminLogin = handleLogin; // Alias for compatibility
+    }
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
