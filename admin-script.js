@@ -948,11 +948,33 @@ async function testERPNextConnection() {
                 errorMsg += '\n';
             }
             
+            // Check for CORS error specifically
+            const isCorsError = (result.message && result.message.includes('CORS')) || 
+                               (result.error && result.error.includes('CORS')) ||
+                               (result.message && result.message.includes('Failed to fetch')) ||
+                               (result.message && result.message.includes('CORS_ERROR'));
+            
+            if (isCorsError) {
+                errorMsg += '🔴 CORS ERROR DETECTED\n\n';
+                errorMsg += 'To fix CORS error:\n';
+                errorMsg += '1. Login to https://diamondcasa.frappe.cloud\n';
+                errorMsg += '2. Go to: Settings → System Settings\n';
+                errorMsg += '3. Find "CORS" or "Allowed Origins" field\n';
+                errorMsg += '4. Add: * (for testing) or your domain\n';
+                errorMsg += '5. Save and test again\n\n';
+                errorMsg += '📖 See FIX_CORS_ERROR.md for detailed instructions\n\n';
+            }
+            
             errorMsg += 'Quick checks:\n' +
                   '1. URL: https://diamondcasa.frappe.cloud (no /app/home)\n' +
                   '2. API Key: f70126362d822ce (no spaces)\n' +
-                  '3. API Secret: 077025b26 (no spaces)\n' +
-                  '4. Open browser console (F12) for detailed errors';
+                  '3. API Secret: 077025b26 (no spaces)\n';
+            
+            if (isCorsError) {
+                errorMsg += '4. CORS configured in ERPNext (REQUIRED - see above)\n';
+            } else {
+                errorMsg += '4. Open browser console (F12) for detailed errors';
+            }
             
             alert(errorMsg);
     } catch (error) {
