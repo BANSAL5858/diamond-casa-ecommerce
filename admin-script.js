@@ -297,6 +297,44 @@ function setupNavigation() {
             if (targetPage) {
                 targetPage.classList.add('active');
                 pageTitle.textContent = item.querySelector('span').textContent;
+                
+                // Load page-specific data
+                if (page === 'dashboard' && typeof loadDashboardData === 'function') {
+                    setTimeout(() => loadDashboardData(), 100);
+                } else if (page === 'products' && typeof loadProducts === 'function') {
+                    setTimeout(() => loadProducts(), 100);
+                } else if (page === 'orders' && typeof loadOrders === 'function') {
+                    setTimeout(() => loadOrders(), 100);
+                } else if (page === 'customers' && typeof loadCustomers === 'function') {
+                    setTimeout(() => loadCustomers(), 100);
+                } else if (page === 'categories' && typeof loadCategories === 'function') {
+                    setTimeout(() => loadCategories(), 100);
+                } else if (page === 'inventory' && typeof loadInventory === 'function') {
+                    setTimeout(() => loadInventory(), 100);
+                } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
+                    setTimeout(() => loadAnalytics(), 100);
+                } else if (page === 'promotions' && typeof loadPromotions === 'function') {
+                    setTimeout(() => loadPromotions(), 100);
+                } else if (page === 'content' && typeof loadBanners === 'function') {
+                    setTimeout(() => loadBanners(), 100);
+                } else if (page === 'users' && typeof loadUsers === 'function') {
+                    setTimeout(() => loadUsers(), 100);
+                } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
+                    setTimeout(() => loadPurchaseOrders(), 100);
+                } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
+                    setTimeout(() => loadSuppliers(), 100);
+                } else if (page === 'returns' && typeof loadReturns === 'function') {
+                    setTimeout(() => loadReturns(), 100);
+                } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
+                    setTimeout(() => loadStockTransfers(), 100);
+                } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
+                    setTimeout(() => {
+                        loadERPNextConfig();
+                        loadIntegrationLogs();
+                        loadErrorLogs();
+                        updateIntegrationStatus();
+                    }, 100);
+                }
             }
         });
     });
