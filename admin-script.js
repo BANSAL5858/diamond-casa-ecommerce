@@ -21,11 +21,34 @@ let adminData = {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    initializeAdmin();
+    console.log('Admin script loaded, initializing...');
+    try {
+        initializeAdmin();
+        console.log('Admin initialized successfully');
+    } catch (error) {
+        console.error('Error initializing admin:', error);
+        alert('Error loading admin dashboard. Please refresh the page. Error: ' + error.message);
+    }
+});
+
+// Also try on window load as backup
+window.addEventListener('load', () => {
+    if (!document.getElementById('adminDashboard') || document.getElementById('adminDashboard').style.display === 'none') {
+        console.log('Window loaded, checking login state...');
+        if (typeof setupLogin === 'function') {
+            setupLogin();
+        }
+    }
 });
 
 function initializeAdmin() {
-    setupLogin();
+    console.log('Setting up admin functions...');
+    // Setup login first
+    if (typeof setupLogin === 'function') {
+        setupLogin();
+    } else {
+        console.error('setupLogin function not found!');
+    }
     setupNavigation();
     setupDashboard();
     setupProducts();
