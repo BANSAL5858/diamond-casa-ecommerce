@@ -42,7 +42,13 @@ class ERPNextIntegration {
      * ERPNext API Client
      */
     async apiRequest(method, endpoint, data = null, idempotencyKey = null) {
-        const url = `${this.config.apiUrl}/api/resource/${endpoint}`;
+        // Clean API URL (remove trailing slash, /app/home, etc.)
+        let cleanUrl = (this.config.apiUrl || '').trim();
+        cleanUrl = cleanUrl.replace(/\/app\/home.*$/i, '');
+        cleanUrl = cleanUrl.replace(/\/app\/.*$/i, '');
+        cleanUrl = cleanUrl.replace(/\/$/, '');
+        
+        const url = `${cleanUrl}/api/resource/${endpoint}`;
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `token ${this.config.apiKey}:${this.config.apiSecret}`,
