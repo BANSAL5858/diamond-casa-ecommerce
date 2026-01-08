@@ -133,11 +133,20 @@ function setupLogin() {
             }
             
             // Load dashboard data if function exists
-            if (typeof loadDashboardData === 'function') {
-                loadDashboardData();
-            } else {
-                console.warn('loadDashboardData function not found');
-            }
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof loadDashboardData === 'function') {
+                    loadDashboardData();
+                } else {
+                    console.warn('loadDashboardData function not found');
+                    // Fallback initialization
+                    if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
+                    if (typeof updateBadges === 'function') updateBadges();
+                    if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                    if (typeof loadTopProducts === 'function') loadTopProducts();
+                    if (typeof loadLowStock === 'function') loadLowStock();
+                }
+            }, 300);
             
             console.log('Login successful:', email);
         } catch (error) {
@@ -194,9 +203,19 @@ function setupLogin() {
         if (loginPage) loginPage.style.display = 'none';
         if (adminDashboard) {
             adminDashboard.style.display = 'flex';
-            if (typeof loadDashboardData === 'function') {
-                loadDashboardData();
-            }
+            // Initialize dashboard after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof loadDashboardData === 'function') {
+                    loadDashboardData();
+                } else {
+                    // Fallback initialization
+                    if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
+                    if (typeof updateBadges === 'function') updateBadges();
+                    if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                    if (typeof loadTopProducts === 'function') loadTopProducts();
+                    if (typeof loadLowStock === 'function') loadLowStock();
+                }
+            }, 300);
         }
     } else {
         // Ensure login page is visible
