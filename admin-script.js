@@ -52,15 +52,59 @@ function setupLogin() {
     const loginPage = document.getElementById('loginPage');
     const adminDashboard = document.getElementById('adminDashboard');
 
-    loginForm?.addEventListener('submit', (e) => {
+    // Debug: Check if elements exist
+    if (!loginForm) {
+        console.error('Login form not found! Check HTML structure.');
+        return;
+    }
+    if (!loginPage) {
+        console.error('Login page not found! Check HTML structure.');
+        return;
+    }
+    if (!adminDashboard) {
+        console.error('Admin dashboard not found! Check HTML structure.');
+        return;
+    }
+
+    // Add click handler as backup
+    const signInBtn = loginForm.querySelector('button[type="submit"]');
+    if (signInBtn) {
+        signInBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleLogin();
+        });
+    }
+
+    loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = document.getElementById('adminEmail').value;
-        const password = document.getElementById('adminPassword').value;
+        handleLogin();
+    });
+
+    function handleLogin() {
+        const emailInput = document.getElementById('adminEmail');
+        const passwordInput = document.getElementById('adminPassword');
+        
+        if (!emailInput || !passwordInput) {
+            alert('Error: Login form fields not found. Please refresh the page.');
+            console.error('Email or password input not found');
+            return;
+        }
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // Check if fields are empty
+        if (!email || !password) {
+            alert('Please enter both email and password');
+            return;
+        }
 
         // Default admin credentials (in production, this would be server-side authentication)
         const validCredentials = [
             { email: 'admin@diamondcasa.com', password: 'admin123' },
+            { email: 'admin@diamondcasa.in', password: 'admin123' },
             { email: 'admin', password: 'admin' },
+            { email: 'admin', password: 'admin123' },
             { email: 'test@diamondcasa.com', password: 'test123' }
         ];
 
@@ -68,32 +112,43 @@ function setupLogin() {
             cred.email.toLowerCase() === email.toLowerCase() && cred.password === password
         );
 
-        if (isValid || (email && password)) {
-            // Allow any email/password for demo purposes, but show message for default credentials
-            if (isValid) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                localStorage.setItem('adminEmail', email);
-                loginPage.style.display = 'none';
+        // For demo: accept any credentials if both fields are filled
+        try {
+            localStorage.setItem('adminLoggedIn', 'true');
+            localStorage.setItem('adminEmail', email);
+            
+            if (loginPage) loginPage.style.display = 'none';
+            if (adminDashboard) {
                 adminDashboard.style.display = 'flex';
+            }
+            
+            // Load dashboard data if function exists
+            if (typeof loadDashboardData === 'function') {
                 loadDashboardData();
             } else {
-                // For demo: accept any credentials
-                localStorage.setItem('adminLoggedIn', 'true');
-                localStorage.setItem('adminEmail', email);
-                loginPage.style.display = 'none';
-                adminDashboard.style.display = 'flex';
-                loadDashboardData();
+                console.warn('loadDashboardData function not found');
             }
-        } else {
-            alert('Please enter email and password');
+            
+            console.log('Login successful:', email);
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Error during login: ' + error.message);
         }
-    });
+    }
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
-        loginPage.style.display = 'none';
-        adminDashboard.style.display = 'flex';
-        loadDashboardData();
+        if (loginPage) loginPage.style.display = 'none';
+        if (adminDashboard) {
+            adminDashboard.style.display = 'flex';
+            if (typeof loadDashboardData === 'function') {
+                loadDashboardData();
+            }
+        }
+    } else {
+        // Ensure login page is visible
+        if (loginPage) loginPage.style.display = 'flex';
+        if (adminDashboard) adminDashboard.style.display = 'none';
     }
 
     // Logout
