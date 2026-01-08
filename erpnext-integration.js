@@ -69,7 +69,19 @@ class ERPNextIntegration {
         }
 
         try {
-            const response = await fetch(url, options);
+            let response;
+            try {
+                response = await fetch(url, options);
+            } catch (fetchError) {
+                // Check if it's a CORS error
+                if (fetchError.message.includes('CORS') || 
+                    fetchError.message.includes('Failed to fetch') ||
+                    fetchError.name === 'TypeError' ||
+                    fetchError.message.includes('NetworkError')) {
+                    throw new Error('CORS_ERROR: Cannot reach ERPNext server. CORS may not be configured. Please configure CORS in ERPNext Settings → System Settings → CORS. Add "*" or your domain to allowed origins.');
+                }
+                throw fetchError;
+            }
             
             // Handle non-JSON responses
             let result;

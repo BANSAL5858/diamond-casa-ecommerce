@@ -825,6 +825,17 @@
                             <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">
                                 <strong>Connection issues?</strong> See <a href="CONNECTION_TROUBLESHOOTING.md" target="_blank" style="color: #1976d2;">Troubleshooting Guide</a> or check browser console (F12) for detailed errors.
                             </p>
+                            <div style="background: #ffebee; padding: 1rem; border-radius: 6px; margin-top: 1rem; border-left: 4px solid #f44336;">
+                                <strong>🔴 CORS Error?</strong>
+                                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">
+                                    If you see CORS error, you need to configure CORS in ERPNext:<br>
+                                    1. Login to <a href="https://diamondcasa.frappe.cloud" target="_blank" style="color: #1976d2;">ERPNext</a><br>
+                                    2. Go to: Settings → System Settings → CORS<br>
+                                    3. Add: <code>*</code> (for testing) or your domain<br>
+                                    4. Save and test again<br>
+                                    <a href="FIX_CORS_ERROR.md" target="_blank" style="color: #1976d2; font-weight: bold;">📖 See Complete CORS Fix Guide</a>
+                                </p>
+                            </div>
                         </div>
                         <div id="connectionDiagnostics" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-top: 1rem; border: 1px solid #dee2e6;">
                             <strong>🔍 Connection Diagnostics:</strong>
