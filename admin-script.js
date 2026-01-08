@@ -66,20 +66,7 @@ function setupLogin() {
         return;
     }
 
-    // Add click handler as backup
-    const signInBtn = loginForm.querySelector('button[type="submit"]');
-    if (signInBtn) {
-        signInBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleLogin();
-        });
-    }
-
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        handleLogin();
-    });
-
+    // Define handleLogin function first (before using it)
     function handleLogin() {
         const emailInput = document.getElementById('adminEmail');
         const passwordInput = document.getElementById('adminPassword');
@@ -135,6 +122,48 @@ function setupLogin() {
             alert('Error during login: ' + error.message);
         }
     }
+
+    // Add multiple event handlers to ensure button works
+    const signInBtn = document.getElementById('signInBtn') || loginForm.querySelector('button[type="submit"]');
+    
+    // Method 1: Direct onclick (most reliable)
+    if (signInBtn) {
+        signInBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Sign In button clicked (onclick)');
+            handleLogin();
+            return false;
+        };
+    }
+
+    // Method 2: AddEventListener for click
+    if (signInBtn) {
+        signInBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Sign In button clicked (addEventListener)');
+            handleLogin();
+            return false;
+        }, true);
+    }
+
+    // Method 3: Form submit handler
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Form submitted');
+            handleLogin();
+            return false;
+        }, true);
+    }
+
+    // Method 4: Global function for direct access
+    window.adminLogin = function() {
+        console.log('adminLogin called directly');
+        handleLogin();
+    };
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
