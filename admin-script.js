@@ -243,36 +243,34 @@ function setupLogin() {
         window.adminLogin = handleLogin; // Alias for compatibility
     }
 
-    // Check if already logged in
-    if (localStorage.getItem('adminLoggedIn') === 'true') {
-        if (loginPage) loginPage.style.display = 'none';
-        if (adminDashboard) {
-            adminDashboard.style.display = 'flex';
-            // Initialize dashboard after a short delay to ensure DOM is ready
-            setTimeout(() => {
-                if (typeof loadDashboardData === 'function') {
-                    loadDashboardData();
-                } else {
-                    // Fallback initialization
-                    if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
-                    if (typeof updateBadges === 'function') updateBadges();
-                    if (typeof loadRecentOrders === 'function') loadRecentOrders();
-                    if (typeof loadTopProducts === 'function') loadTopProducts();
-                    if (typeof loadLowStock === 'function') loadLowStock();
-                }
-            }, 300);
-        }
-    } else {
-        // Ensure login page is visible
-        if (loginPage) loginPage.style.display = 'flex';
-        if (adminDashboard) adminDashboard.style.display = 'none';
+    // Auto-login: Show dashboard directly (login page removed)
+    if (adminDashboard) {
+        adminDashboard.style.display = 'flex';
+        // Set logged in state
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('adminEmail', 'admin@diamondcasa.com');
+        
+        // Initialize dashboard after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            if (typeof loadDashboardData === 'function') {
+                loadDashboardData();
+            } else {
+                // Fallback initialization
+                if (typeof syncDataFromWebsite === 'function') syncDataFromWebsite();
+                if (typeof updateBadges === 'function') updateBadges();
+                if (typeof loadRecentOrders === 'function') loadRecentOrders();
+                if (typeof loadTopProducts === 'function') loadTopProducts();
+                if (typeof loadLowStock === 'function') loadLowStock();
+            }
+        }, 300);
     }
 
-    // Logout
+    // Logout (reloads page to show dashboard again since login is removed)
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         localStorage.removeItem('adminLoggedIn');
-        loginPage.style.display = 'flex';
-        adminDashboard.style.display = 'none';
+        localStorage.removeItem('adminEmail');
+        // Reload page to refresh dashboard
+        window.location.reload();
     });
 }
 
