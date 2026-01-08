@@ -2118,19 +2118,13 @@ async function uploadExcelToERPNext(file) {
                         <p style="margin: 0.5rem 0; color: #0c5460;">
                             <i class="fas fa-images"></i> <strong>Media:</strong> Images and videos are automatically uploaded from Excel URLs (Rendering, Photograph, Recommended Products 1-3, Video columns)
                         </p>
-                        ${result.errors.length > 0 ? `
-                            <details style="margin-top: 1rem;">
-                                <summary style="cursor: pointer; font-weight: 600;">View Errors (${result.errors.length})</summary>
-                                <div style="margin-top: 0.5rem; max-height: 200px; overflow-y: auto;">
-                                    ${result.errors.map(err => {
-                                        const itemCodePart = err.item_code ? ` (${err.item_code})` : '';
-                                        return `<div style="padding: 0.5rem; background: #fff; margin: 0.25rem 0; border-radius: 4px;">
-                                            <strong>Row ${err.row}</strong>${itemCodePart}: ${err.error}
-                                        </div>`;
-                                    }).join('')}
-                                </div>
-                            </details>
-                        ` : ''}
+                        ${result.errors && result.errors.length > 0 ? (() => {
+                            const errorItems = result.errors.map(err => {
+                                const itemCodePart = err.item_code ? ' (' + err.item_code + ')' : '';
+                                return '<div style="padding: 0.5rem; background: #fff; margin: 0.25rem 0; border-radius: 4px;"><strong>Row ' + err.row + '</strong>' + itemCodePart + ': ' + err.error + '</div>';
+                            }).join('');
+                            return '<details style="margin-top: 1rem;"><summary style="cursor: pointer; font-weight: 600;">View Errors (' + result.errors.length + ')</summary><div style="margin-top: 0.5rem; max-height: 200px; overflow-y: auto;">' + errorItems + '</div></details>';
+                        })() : ''}
                     </div>
                 `;
 
