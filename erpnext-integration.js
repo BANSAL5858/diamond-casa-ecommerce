@@ -1664,6 +1664,34 @@ class ERPNextIntegration {
                 // Create or update item
                 await this.createItemInERPNext(itemData);
 
+                // Upload media files from URLs if provided
+                // Images and video URLs are extracted from Excel columns
+                if (itemData.images && itemData.images.length > 0 || itemData.video) {
+                    try {
+                        const imageUrls = itemData.images || [];
+                        const videoUrl = itemData.video || null;
+                        
+                        // Upload images and video from URLs
+                        const mediaResult = await this.uploadMediaFilesToERPNext(
+                            itemData.item_code,
+                            imageUrls, // Array of URLs
+                            videoUrl   // Single URL or null
+                        );
+                        
+                        // Update itemData with uploaded file URLs
+                        itemData.images = mediaResult.images;
+                        itemData.video = mediaResult.video;
+                        
+                        if (mediaResult.errors.length > 0) {
+                            console.warn(`Media upload errors for ${itemData.item_code}:`, mediaResult.errors);
+                            // Log errors but don't fail the item creation
+                        }
+                    } catch (mediaError) {
+                        console.warn(`Failed to upload media for ${itemData.item_code}:`, mediaError);
+                        // Continue even if media upload fails - item is still created
+                    }
+                }
+
                 if (itemExists) {
                     results.updated++;
                 } else {
@@ -1691,9 +1719,131 @@ class ERPNextIntegration {
     }
 
     /**
+     * Download file from URL and convert to File object
+     */
+    async downloadFileFromURL(url, fileName) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to download ${url}: ${response.statusText}`);
+            }
+            const blob = await response.blob();
+            return new File([blob], fileName || url.split('/').pop() || 'file', { type: blob.type });
+        } catch (error) {
+            console.warn(`Failed to download file from ${url}:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Upload File to ERPNext
+     * Uploads a file (File object or URL) and attaches it to an Item
+     */
+    async uploadFileToERPNext(fileOrUrl, itemCode, fileType = 'image') {
+        if (!this.config.enabled) {
+            throw new Error('ERPNext integration is disabled');
+        }
+
+        try {
+            let file;
+            let fileName;
+
+            // Handle URL or File object
+            if (typeof fileOrUrl === 'string') {
+                // It's a URL - download it first
+                fileName = fileOrUrl.split('/').pop() || `image_${Date.now()}.jpg`;
+                file = await this.downloadFileFromURL(fileOrUrl, fileName);
+            } else {
+                // It's a File object
+                file = fileOrUrl;
+                fileName = file.name;
+            }
+
+            // Convert file to base64
+            const base64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64String = reader.result.split(',')[1];
+                    resolve(base64String);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+
+            // Create file in ERPNext
+            const fileData = {
+                file_name: fileName,
+                file_url: `/files/${fileName}`,
+                is_private: 0,
+                content: base64
+            };
+
+            // Upload file
+            const fileResult = await this.apiRequest('POST', 'File', { data: fileData });
+
+            // Attach file to Item
+            if (fileResult.data && fileResult.data.name) {
+                await this.apiRequest('POST', 'File', {
+                    data: {
+                        attached_to_doctype: 'Item',
+                        attached_to_name: itemCode,
+                        file_name: fileName,
+                        file_url: fileResult.data.file_url || `/files/${fileName}`,
+                        is_private: 0
+                    }
+                });
+            }
+
+            return fileResult;
+        } catch (error) {
+            console.warn(`Failed to upload file:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Upload Multiple Files to ERPNext Item
+     * Uploads up to 5 images and 1 video
+     * Supports both File objects and URLs (strings)
+     */
+    async uploadMediaFilesToERPNext(itemCode, imageFilesOrUrls = [], videoFileOrUrl = null) {
+        const results = {
+            images: [],
+            video: null,
+            errors: []
+        };
+
+        // Upload images (max 5)
+        for (let i = 0; i < Math.min(imageFilesOrUrls.length, 5); i++) {
+            try {
+                const image = imageFilesOrUrls[i];
+                const result = await this.uploadFileToERPNext(image, itemCode, 'image');
+                const fileUrl = result.data?.file_url || result.data?.name || (typeof image === 'string' ? image : image.name);
+                results.images.push(fileUrl);
+            } catch (error) {
+                const fileName = typeof imageFilesOrUrls[i] === 'string' ? imageFilesOrUrls[i] : imageFilesOrUrls[i].name;
+                results.errors.push({ file: fileName, error: error.message });
+            }
+        }
+
+        // Upload video (max 1)
+        if (videoFileOrUrl) {
+            try {
+                const result = await this.uploadFileToERPNext(videoFileOrUrl, itemCode, 'video');
+                results.video = result.data?.file_url || result.data?.name || (typeof videoFileOrUrl === 'string' ? videoFileOrUrl : videoFileOrUrl.name);
+            } catch (error) {
+                const fileName = typeof videoFileOrUrl === 'string' ? videoFileOrUrl : videoFileOrUrl.name;
+                results.errors.push({ file: fileName, error: error.message });
+            }
+        }
+
+        return results;
+    }
+
+    /**
      * Map Excel Row to ERPNext Item Format
      * Supports flexible column mapping including jewelry-specific fields
-     * Handles the "final data all in one.xlsx" format
+     * Handles the "final data all in one.xlsx" format with all columns
      */
     mapExcelRowToItem(row, defaultItemGroup) {
         // Flexible column name mapping (case-insensitive, handles spaces/underscores)
@@ -1712,30 +1862,49 @@ class ERPNextIntegration {
         };
 
         // Extract image URLs from Rendering, Photograph, or Recommended Products columns
+        // Supports up to 5 images per product
         const getImages = () => {
             const images = [];
             
-            // Try Rendering column
+            // Priority 1: Rendering column (main product image)
             const rendering = getValue(['Rendering', 'rendering']);
-            if (rendering && rendering.trim()) images.push(rendering.trim());
+            if (rendering && rendering.trim() && rendering !== 'na' && rendering !== 'NA') {
+                images.push(rendering.trim());
+            }
             
-            // Try Photograph column
+            // Priority 2: Photograph column
             const photograph = getValue(['Photograph', 'photograph']);
-            if (photograph && photograph.trim()) images.push(photograph.trim());
+            if (photograph && photograph.trim() && photograph !== 'na' && photograph !== 'NA') {
+                const photoUrl = photograph.trim();
+                if (!images.includes(photoUrl)) images.push(photoUrl);
+            }
             
-            // Try Recommended Products columns (1, 2, 3)
+            // Priority 3: Recommended Products columns (1, 2, 3)
             for (let i = 1; i <= 3; i++) {
-                const rec = getValue([`${i}`, `Recommended Products ${i}`, `recommendedproducts${i}`]);
-                if (rec && rec.trim() && !images.includes(rec.trim())) images.push(rec.trim());
+                const rec = getValue([
+                    `Recommended Products ${i}`, `recommendedproducts${i}`,
+                    `${i}`, `Recommended${i}`, `recommended${i}`
+                ]);
+                if (rec && rec.trim() && rec !== 'na' && rec !== 'NA') {
+                    const recUrl = rec.trim();
+                    if (!images.includes(recUrl)) images.push(recUrl);
+                }
             }
             
-            // Try Image1-5 columns (fallback)
+            // Priority 4: Image1-5 columns (fallback)
             for (let i = 1; i <= 5; i++) {
-                const img = getValue([`Image${i}`, `image${i}`, `Photo${i}`, `photo${i}`]);
-                if (img && img.trim() && !images.includes(img.trim())) images.push(img.trim());
+                const img = getValue([
+                    `Image${i}`, `image${i}`, 
+                    `Photo${i}`, `photo${i}`,
+                    `Img${i}`, `img${i}`
+                ]);
+                if (img && img.trim() && img !== 'na' && img !== 'NA') {
+                    const imgUrl = img.trim();
+                    if (!images.includes(imgUrl) && images.length < 5) images.push(imgUrl);
+                }
             }
             
-            return images.slice(0, 5); // Limit to 5
+            return images.slice(0, 5); // Limit to 5 images
         };
 
         // Extract video URL
@@ -1759,43 +1928,83 @@ class ERPNextIntegration {
         const description = getValue(['Description', 'description', 'Desc', 'desc']) || '';
         
         // Calculate price from Solitaire/Diamond/Color Stone Price columns
+        // Handles the complex structure with separate sections
         const calculatePrice = () => {
             let maxPrice = 0;
             
-            // Try Solitaire Price in K (multiply by 1000 to convert K to actual price)
-            const solitairePriceK = getValue(['Solitaire', 'solitaire']) ? 
-                (parseFloat(getValue(['Price in K', 'priceink']) || 0) * 1000) : 0;
-            if (solitairePriceK > maxPrice) maxPrice = solitairePriceK;
+            // Try Solitaire Price in K (look for "Solitaire" section with "Price in K")
+            // The Excel has: Solitaire section with columns: Stone, Color/Clarity, No. of Pcs, Wt in Ct, Price in K
+            const solitairePriceK = parseFloat(getValue([
+                'Solitaire Price in K', 'solitairepriceink', 
+                'Price in K', 'priceink'
+            ]) || 0);
+            if (solitairePriceK > 0) {
+                const price = solitairePriceK * 1000; // Convert K to actual price
+                if (price > maxPrice) maxPrice = price;
+            }
             
-            // Try Diamond Price in K
-            const diamondPriceK = getValue(['Diamond', 'diamond']) ? 
-                (parseFloat(getValue(['Price in K', 'priceink']) || 0) * 1000) : 0;
-            if (diamondPriceK > maxPrice) maxPrice = diamondPriceK;
+            // Try Diamond Price in K (Diamond section)
+            const diamondPriceK = parseFloat(getValue([
+                'Diamond Price in K', 'diamondpriceink',
+                'Price in K', 'priceink'
+            ]) || 0);
+            if (diamondPriceK > 0) {
+                const price = diamondPriceK * 1000;
+                if (price > maxPrice) maxPrice = price;
+            }
             
             // Try Color Stone Price (direct price, not in K)
-            const colorStonePrice = parseFloat(getValue(['Price', 'price']) || 0);
+            const colorStonePrice = parseFloat(getValue([
+                'Color Stone Price', 'colorstoneprice',
+                'Price', 'price'
+            ]) || 0);
             if (colorStonePrice > maxPrice) maxPrice = colorStonePrice;
             
             return Math.round(maxPrice);
         };
         
         // Get weight (prefer Net Wt 18Kt, fallback to others)
+        // Handles: Gross Wt in Grams (14Kt, 18Kt, 9Kt) and Net Wt in Grams (14Kt, 18Kt, 9Kt)
         const getWeight = () => {
-            // Try Net Wt in Grams - 18Kt column (most common)
-            const netWt18K = parseFloat(getValue(['Net Wt in Grams', 'netwtingrams']) || 
-                getValue(['18Kt', '18kt']) || 0);
+            // Priority 1: Net Wt in Grams - 18Kt (most common)
+            const netWt18K = parseFloat(getValue([
+                'Net Wt in Grams (18Kt)', 'netwtingrams18kt', 'netwtingrams18',
+                '18Kt', '18kt'
+            ]) || 0);
+            if (netWt18K > 0) return netWt18K;
             
-            // Try Net Wt 14Kt
-            const netWt14K = parseFloat(getValue(['14Kt', '14kt']) || 0);
+            // Priority 2: Net Wt in Grams - 14Kt
+            const netWt14K = parseFloat(getValue([
+                'Net Wt in Grams (14Kt)', 'netwtingrams14kt', 'netwtingrams14',
+                '14Kt', '14kt'
+            ]) || 0);
+            if (netWt14K > 0) return netWt14K;
             
-            // Try Net Wt 9Kt
-            const netWt9K = parseFloat(getValue(['9Kt', '9kt']) || 0);
+            // Priority 3: Net Wt in Grams - 9Kt
+            const netWt9K = parseFloat(getValue([
+                'Net Wt in Grams (9Kt)', 'netwtingrams9kt', 'netwtingrams9',
+                '9Kt', '9kt'
+            ]) || 0);
+            if (netWt9K > 0) return netWt9K;
             
-            // Try Gross Wt 18Kt
-            const grossWt18K = parseFloat(getValue(['Gross Wt in Grams', 'grosswtingrams']) || 0);
+            // Priority 4: Gross Wt in Grams - 18Kt
+            const grossWt18K = parseFloat(getValue([
+                'Gross Wt in Grams (18Kt)', 'grosswtingrams18kt', 'grosswtingrams18'
+            ]) || 0);
+            if (grossWt18K > 0) return grossWt18K;
             
-            // Return first available weight (prefer Net Wt 18Kt)
-            return netWt18K || netWt14K || netWt9K || grossWt18K || 0;
+            // Priority 5: Gross Wt in Grams - 14Kt
+            const grossWt14K = parseFloat(getValue([
+                'Gross Wt in Grams (14Kt)', 'grosswtingrams14kt', 'grosswtingrams14'
+            ]) || 0);
+            if (grossWt14K > 0) return grossWt14K;
+            
+            // Priority 6: Gross Wt in Grams - 9Kt
+            const grossWt9K = parseFloat(getValue([
+                'Gross Wt in Grams (9Kt)', 'grosswtingrams9kt', 'grosswtingrams9'
+            ]) || 0);
+            
+            return grossWt9K || 0;
         };
         
         // Get metal purity from Kt column or infer from weight columns
@@ -1829,16 +2038,29 @@ class ERPNextIntegration {
         };
         
         // Get diamond/solitaire details
+        // Handles complex structure: Solitaire, Diamond, and Color Stone sections with multiple sub-columns
         const getDiamondDetails = () => {
             const parts = [];
             
-            // Solitaire section
-            const solitaireStone = getValue(['Solitaire', 'solitaire']);
+            // Solitaire section - columns: Stone, Color/Clarity, No. of Pcs, Wt in Ct, Price in K
+            const solitaireStone = getValue(['Solitaire', 'solitaire', 'Stone', 'stone']);
             if (solitaireStone) {
-                const solColorClarity = getValue(['Color/Clarity', 'colorclarity']);
-                const solNoOfPcs = getValue(['No. of Pcs', 'noofpcs']);
-                const solWtInCt = getValue(['Wt in Ct', 'wtinct']);
-                const solPriceK = getValue(['Price in K', 'priceink']);
+                const solColorClarity = getValue([
+                    'Solitaire Color/Clarity', 'solitairecolorclarity',
+                    'Color/Clarity', 'colorclarity'
+                ]);
+                const solNoOfPcs = getValue([
+                    'Solitaire No. of Pcs', 'solitairenoofpcs',
+                    'No. of Pcs', 'noofpcs'
+                ]);
+                const solWtInCt = getValue([
+                    'Solitaire Wt in Ct', 'solitairewtinct',
+                    'Wt in Ct', 'wtinct'
+                ]);
+                const solPriceK = getValue([
+                    'Solitaire Price in K', 'solitairepriceink',
+                    'Price in K', 'priceink'
+                ]);
                 
                 let solDetails = `Solitaire: ${solitaireStone}`;
                 if (solColorClarity) solDetails += `, Color/Clarity: ${solColorClarity}`;
@@ -1848,12 +2070,24 @@ class ERPNextIntegration {
                 parts.push(solDetails);
             }
             
-            // Diamond section
-            const diamondColorClarity = getValue(['Diamond', 'diamond']) ? getValue(['Color/Clarity', 'colorclarity']) : null;
+            // Diamond section - columns: Color/Clarity, No. of Pcs, Wt in Ct, Price in K
+            const diamondColorClarity = getValue([
+                'Diamond Color/Clarity', 'diamondcolorclarity',
+                'Color/Clarity', 'colorclarity'
+            ]);
             if (diamondColorClarity) {
-                const diaNoOfPcs = getValue(['No. of Pcs', 'noofpcs']);
-                const diaWtInCt = getValue(['Wt in Ct', 'wtinct']);
-                const diaPriceK = getValue(['Price in K', 'priceink']);
+                const diaNoOfPcs = getValue([
+                    'Diamond No. of Pcs', 'diamondnoofpcs',
+                    'No. of Pcs', 'noofpcs'
+                ]);
+                const diaWtInCt = getValue([
+                    'Diamond Wt in Ct', 'diamondwtinct',
+                    'Wt in Ct', 'wtinct'
+                ]);
+                const diaPriceK = getValue([
+                    'Diamond Price in K', 'diamondpriceink',
+                    'Price in K', 'priceink'
+                ]);
                 
                 let diaDetails = `Diamond: Color/Clarity: ${diamondColorClarity}`;
                 if (diaNoOfPcs) diaDetails += `, Pcs: ${diaNoOfPcs}`;
@@ -1862,15 +2096,27 @@ class ERPNextIntegration {
                 parts.push(diaDetails);
             }
             
-            // Color Stone section
-            const colorStone = getValue(['Color Stone', 'colorstone']);
-            if (colorStone) {
-                const csColorDesc = getValue(['Color/Description', 'colordescription']);
-                const csNoOfPcs = getValue(['No. of Pcs', 'noofpcs']);
-                const csWtInCt = getValue(['Wt in Ct', 'wtinct']);
-                const csPrice = getValue(['Price', 'price']);
+            // Color Stone section - columns: Color/Description, No. of Pcs, Wt in Ct, Price
+            const colorStoneColorDesc = getValue([
+                'Color Stone Color/Description', 'colorstonecolordescription',
+                'Color/Description', 'colordescription',
+                'Color Stone', 'colorstone'
+            ]);
+            if (colorStoneColorDesc) {
+                const csNoOfPcs = getValue([
+                    'Color Stone No. of Pcs', 'colorstonenofpcs',
+                    'No. of Pcs', 'noofpcs'
+                ]);
+                const csWtInCt = getValue([
+                    'Color Stone Wt in Ct', 'colorstonewtinct',
+                    'Wt in Ct', 'wtinct'
+                ]);
+                const csPrice = getValue([
+                    'Color Stone Price', 'colorstoneprice',
+                    'Price', 'price'
+                ]);
                 
-                let csDetails = `Color Stone: ${csColorDesc || colorStone}`;
+                let csDetails = `Color Stone: ${colorStoneColorDesc}`;
                 if (csNoOfPcs) csDetails += `, Pcs: ${csNoOfPcs}`;
                 if (csWtInCt) csDetails += `, Weight: ${csWtInCt} Ct`;
                 if (csPrice) csDetails += `, Price: ${csPrice}`;

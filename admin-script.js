@@ -1486,6 +1486,7 @@ async function uploadExcelToERPNext(file) {
                 statusText.textContent = `Found ${jsonData.length} rows. Starting upload...`;
 
                 // Upload to ERPNext
+                let mediaUploadCount = 0;
                 const result = await window.ERPNextIntegration.bulkUploadItemsFromExcel(jsonData, {
                     updateExisting: updateExisting,
                     createPriceList: createPriceList,
@@ -1493,7 +1494,13 @@ async function uploadExcelToERPNext(file) {
                     onProgress: (progress) => {
                         const percentage = Math.round((progress.current / progress.total) * 100);
                         progressBar.style.width = percentage + '%';
-                        statusText.textContent = progress.status || `Processing ${progress.current} of ${progress.total}...`;
+                        
+                        // Enhanced status message
+                        let statusMsg = progress.status || `Processing ${progress.current} of ${progress.total}...`;
+                        if (progress.status && progress.status.includes('media') || progress.status.includes('image') || progress.status.includes('video')) {
+                            statusMsg += ' (Uploading media files...)';
+                        }
+                        statusText.textContent = statusMsg;
                     }
                 });
 
@@ -1508,6 +1515,9 @@ async function uploadExcelToERPNext(file) {
                         <p style="margin: 0.5rem 0;"><strong>Created:</strong> ${result.created}</p>
                         <p style="margin: 0.5rem 0;"><strong>Updated:</strong> ${result.updated}</p>
                         <p style="margin: 0.5rem 0;"><strong>Failed:</strong> ${result.failed}</p>
+                        <p style="margin: 0.5rem 0; color: #0c5460;">
+                            <i class="fas fa-images"></i> <strong>Media:</strong> Images and videos are automatically uploaded from Excel URLs (Rendering, Photograph, Recommended Products 1-3, Video columns)
+                        </p>
                         ${result.errors.length > 0 ? `
                             <details style="margin-top: 1rem;">
                                 <summary style="cursor: pointer; font-weight: 600;">View Errors (${result.errors.length})</summary>

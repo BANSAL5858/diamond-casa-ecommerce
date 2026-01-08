@@ -813,8 +813,22 @@
                     <div class="card-header">
                         <h3>Upload Products from Excel to ERPNext</h3>
                         <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
-                            Upload products from Excel file (final data all in one.xlsx) directly to ERPNext. Supports images and videos via URLs.
+                            Upload products from Excel file (final data all in one.xlsx) directly to ERPNext. 
+                            <strong>Automatically uploads 5 images and 1 video per product</strong> from URLs in Excel columns (Rendering, Photograph, Recommended Products 1-3, Video).
                         </p>
+                        <div style="background: #e3f2fd; padding: 1rem; border-radius: 6px; margin-top: 1rem;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #1976d2;">📋 Supported Excel Columns:</h4>
+                            <ul style="margin: 0; padding-left: 1.5rem; color: #555;">
+                                <li><strong>Product Data:</strong> SKU, Product Title, Description, Primary Category, SubCategory</li>
+                                <li><strong>Weights:</strong> Gross/Net Wt in Grams (14Kt, 18Kt, 9Kt)</li>
+                                <li><strong>Solitaire:</strong> Stone, Color/Clarity, No. of Pcs, Wt in Ct, Price in K</li>
+                                <li><strong>Diamond:</strong> Color/Clarity, No. of Pcs, Wt in Ct, Price in K</li>
+                                <li><strong>Color Stone:</strong> Color/Description, No. of Pcs, Wt in Ct, Price</li>
+                                <li><strong>Images (5):</strong> Rendering, Photograph, Recommended Products 1, 2, 3</li>
+                                <li><strong>Video (1):</strong> Video column</li>
+                                <li><strong>Other:</strong> Kt, Color, Quantity, Size, Collection, Diamond Shape, Folder Name</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
