@@ -964,16 +964,20 @@ body {
 
 .form-control {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.95rem;
     transition: var(--transition);
+    background: var(--white);
+    font-weight: 500;
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    background: var(--white);
 }
 
 .form-row {
