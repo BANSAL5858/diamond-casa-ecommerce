@@ -107,7 +107,7 @@
                 <div class="top-bar-right">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search...">
+                        <input type="text" id="topSearch" name="topSearch" placeholder="Search...">
                     </div>
                     <div class="notifications">
                         <i class="fas fa-bell"></i>
@@ -175,7 +175,7 @@
                     <div class="chart-card">
                         <div class="card-header">
                             <h3>Sales Overview</h3>
-                            <select class="period-select">
+                            <select class="period-select" id="dashboardPeriod" name="dashboardPeriod">
                                 <option>Last 7 days</option>
                                 <option>Last 30 days</option>
                                 <option>Last 3 months</option>
@@ -421,7 +421,7 @@
             <div class="page-content" id="analyticsPage">
                 <div class="page-header">
                     <h2>Analytics</h2>
-                    <select class="period-select">
+                    <select class="period-select" id="analyticsPeriod" name="analyticsPeriod">
                         <option>Last 7 days</option>
                         <option>Last 30 days</option>
                         <option>Last 3 months</option>
@@ -558,31 +558,31 @@
                         <h3>General Settings</h3>
                         <div class="form-group">
                             <label>Store Name</label>
-                            <input type="text" value="Diamond Casa" class="form-control">
+                            <input type="text" id="storeName" name="storeName" value="Diamond Casa" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Store Email</label>
-                            <input type="email" value="info@diamondcasa.in" class="form-control">
+                            <input type="email" id="storeEmail" name="storeEmail" value="info@diamondcasa.in" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Store Phone</label>
-                            <input type="tel" value="+91 1800 123 4567" class="form-control">
+                            <input type="tel" id="storePhone" name="storePhone" value="+91 1800 123 4567" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>WhatsApp Number</label>
-                            <input type="tel" value="+91 98765 43210" class="form-control">
+                            <input type="tel" id="whatsappNumber" name="whatsappNumber" value="+91 98765 43210" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>GSTIN</label>
-                            <input type="text" value="27AABCD1234E1Z5" class="form-control">
+                            <input type="text" id="storeGstin" name="storeGstin" value="27AABCD1234E1Z5" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Registered Address</label>
-                            <textarea class="form-control" rows="3">618, Omkar The Summit Business Bay, Andheri East, Mumbai - 400093, Maharashtra, India</textarea>
+                            <textarea id="registeredAddress" name="registeredAddress" class="form-control" rows="3">618, Omkar The Summit Business Bay, Andheri East, Mumbai - 400093, Maharashtra, India</textarea>
                         </div>
                         <div class="form-group">
                             <label>Currency</label>
-                            <select class="form-control">
+                            <select id="currency" name="currency" class="form-control">
                                 <option selected>INR (₹) - Indian Rupee</option>
                             </select>
                         </div>
@@ -596,35 +596,35 @@
                             <label>Enable Payment Methods</label>
                             <div style="margin-top: 0.5rem;">
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> UPI (Unified Payments Interface)
+                                    <input type="checkbox" id="paymentMethodUpi" name="paymentMethodUpi" checked style="margin-right: 0.5rem;"> UPI (Unified Payments Interface)
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Credit/Debit Cards
+                                    <input type="checkbox" id="paymentMethodCards" name="paymentMethodCards" checked style="margin-right: 0.5rem;"> Credit/Debit Cards
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Net Banking
+                                    <input type="checkbox" id="paymentMethodNetbanking" name="paymentMethodNetbanking" checked style="margin-right: 0.5rem;"> Net Banking
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Paytm
+                                    <input type="checkbox" id="paymentMethodPaytm" name="paymentMethodPaytm" checked style="margin-right: 0.5rem;"> Paytm
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> PhonePe
+                                    <input type="checkbox" id="paymentMethodPhonepe" name="paymentMethodPhonepe" checked style="margin-right: 0.5rem;"> PhonePe
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Google Pay
+                                    <input type="checkbox" id="paymentMethodGooglepay" name="paymentMethodGooglepay" checked style="margin-right: 0.5rem;"> Google Pay
                                 </label>
                                 <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <input type="checkbox" checked style="margin-right: 0.5rem;"> Cash on Delivery (COD)
+                                    <input type="checkbox" id="paymentMethodCod" name="paymentMethodCod" checked style="margin-right: 0.5rem;"> Cash on Delivery (COD)
                                 </label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Razorpay API Key</label>
-                            <input type="text" placeholder="rzp_live_..." class="form-control">
+                            <input type="text" id="razorpayApiKey" name="razorpayApiKey" placeholder="rzp_live_..." class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Paytm Merchant ID</label>
-                            <input type="text" placeholder="Enter Paytm Merchant ID" class="form-control">
+                            <input type="text" id="paytmMerchantId" name="paytmMerchantId" placeholder="Enter Paytm Merchant ID" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save Payment Settings</button>
                     </div>
@@ -634,26 +634,26 @@
                         <h3>Shipping Settings</h3>
                         <div class="form-group">
                             <label>Free Shipping Threshold (₹)</label>
-                            <input type="number" value="50000" class="form-control">
+                            <input type="number" id="freeShippingThreshold" name="freeShippingThreshold" value="50000" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Standard Shipping Rate (₹)</label>
-                            <input type="number" value="150" class="form-control">
+                            <input type="number" id="standardShippingRate" name="standardShippingRate" value="150" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Express Shipping Rate (₹)</label>
-                            <input type="number" value="500" class="form-control">
+                            <input type="number" id="expressShippingRate" name="expressShippingRate" value="500" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Cash on Delivery Available</label>
-                            <select class="form-control">
+                            <select id="codAvailable" name="codAvailable" class="form-control">
                                 <option selected>Yes</option>
                                 <option>No</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>COD Charges (₹)</label>
-                            <input type="number" value="100" class="form-control">
+                            <input type="number" id="codCharges" name="codCharges" value="100" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save Shipping Settings</button>
                     </div>
@@ -663,29 +663,29 @@
                         <h3>GST & Tax Settings</h3>
                         <div class="form-group">
                             <label>GSTIN</label>
-                            <input type="text" value="27AABCD1234E1Z5" class="form-control">
+                            <input type="text" id="gstGstin" name="gstGstin" value="27AABCD1234E1Z5" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>GST Rate (%)</label>
-                            <input type="number" value="3" class="form-control" placeholder="GST rate for jewelry">
+                            <input type="number" id="gstRate" name="gstRate" value="3" class="form-control" placeholder="GST rate for jewelry">
                         </div>
                         <div class="form-group">
                             <label>Include GST in Prices</label>
-                            <select class="form-control">
+                            <select id="includeGstInPrices" name="includeGstInPrices" class="form-control">
                                 <option selected>Yes - Prices include GST</option>
                                 <option>No - GST will be added at checkout</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Generate GST Invoice</label>
-                            <select class="form-control">
+                            <select id="generateGstInvoice" name="generateGstInvoice" class="form-control">
                                 <option selected>Yes - Auto generate GST invoice</option>
                                 <option>No</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>CIN (Company Identification Number)</label>
-                            <input type="text" value="U74999MH1986PTC123456" class="form-control">
+                            <input type="text" id="cin" name="cin" value="U74999MH1986PTC123456" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save GST Settings</button>
                     </div>
@@ -1214,17 +1214,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Product Name *</label>
-                            <input type="text" class="form-control" required>
+                            <input type="text" id="productName" name="productName" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>SKU *</label>
-                            <input type="text" class="form-control" required>
+                            <input type="text" id="productSku" name="productSku" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Category *</label>
-                            <select class="form-control" required>
+                            <select id="productCategory" name="productCategory" class="form-control" required>
                                 <option>Rings</option>
                                 <option>Earrings</option>
                                 <option>Necklaces</option>
@@ -1233,7 +1233,7 @@
                         </div>
                         <div class="form-group">
                             <label>Brand</label>
-                            <select class="form-control">
+                            <select id="productBrand" name="productBrand" class="form-control">
                                 <option>BVLGARI</option>
                                 <option>Cartier</option>
                                 <option>Chaumet</option>
@@ -1243,20 +1243,20 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Price *</label>
-                            <input type="number" class="form-control" required>
+                            <input type="number" id="productPrice" name="productPrice" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>Stock Quantity *</label>
-                            <input type="number" class="form-control" required>
+                            <input type="number" id="productStock" name="productStock" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea class="form-control" rows="4"></textarea>
+                        <textarea id="productDescription" name="productDescription" class="form-control" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Product Images</label>
-                        <input type="file" multiple accept="image/*" class="form-control">
+                        <input type="file" id="productImages" name="productImages" multiple accept="image/*" class="form-control">
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary close-modal">Cancel</button>
