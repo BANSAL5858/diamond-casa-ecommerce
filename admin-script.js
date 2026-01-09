@@ -2041,6 +2041,12 @@ function setupExcelUpload() {
 
 // Preview Excel File
 function previewExcelFile(file) {
+    if (typeof XLSX === 'undefined') {
+        alert('XLSX library not loaded. Please ensure the SheetJS library is included in the page.');
+        console.error('XLSX library not found');
+        return;
+    }
+    
     const reader = new FileReader();
     reader.onload = (e) => {
         try {
@@ -2085,6 +2091,12 @@ function previewExcelFile(file) {
 
 // Upload Excel to ERPNext
 async function uploadExcelToERPNext(file) {
+    if (typeof XLSX === 'undefined') {
+        alert('XLSX library not loaded. Please ensure the SheetJS library is included in the page.');
+        console.error('XLSX library not found');
+        return;
+    }
+    
     if (!window.ERPNextIntegration) {
         alert('ERPNext Integration module not loaded');
         return;
