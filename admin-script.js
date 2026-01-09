@@ -1240,6 +1240,32 @@ function setupExcelUpload() {
     });
 }
 
+// Purchase Orders Setup - Defined early to ensure availability
+function setupPurchaseOrders() {
+    loadPurchaseOrders();
+    document.getElementById('addPurchaseOrderBtn')?.addEventListener('click', openPurchaseOrderModal);
+}
+
+// Suppliers Setup - Defined early to ensure availability
+function setupSuppliers() {
+    loadSuppliers();
+    document.getElementById('addSupplierBtn')?.addEventListener('click', openSupplierModal);
+}
+
+// Returns Setup - Defined early to ensure availability
+function setupReturns() {
+    loadReturns();
+}
+
+// Stock Transfers Setup - Defined early to ensure availability
+function setupStockTransfers() {
+    loadStockTransfers();
+    const btn = document.getElementById('addStockTransferBtn') || document.getElementById('newStockTransferBtn');
+    if (btn) {
+        btn.addEventListener('click', openStockTransferModal);
+    }
+}
+
 // ERPNext Integration Setup
 function setupERPNext() {
     // Ensure ERPNext Integration module is loaded
@@ -1647,12 +1673,6 @@ function clearIntegrationLogs() {
     }
 }
 
-// Purchase Orders Management
-function setupPurchaseOrders() {
-    loadPurchaseOrders();
-    document.getElementById('addPurchaseOrderBtn')?.addEventListener('click', openPurchaseOrderModal);
-}
-
 function loadPurchaseOrders() {
     const table = document.getElementById('purchaseOrdersTable');
     if (!table) return;
@@ -1713,12 +1733,6 @@ async function openPurchaseOrderModal() {
     const suppliers = await loadSuppliersForSelect();
     // Open modal (implementation would go here)
     alert('Purchase Order modal - Implementation in progress');
-}
-
-// Suppliers Management
-function setupSuppliers() {
-    loadSuppliers();
-    document.getElementById('addSupplierBtn')?.addEventListener('click', openSupplierModal);
 }
 
 async function loadSuppliers() {
@@ -1793,15 +1807,15 @@ function openSupplierModal() {
     alert('Supplier modal - Implementation in progress');
 }
 
-// Returns & Refunds Management
-function setupReturns() {
-    loadReturns();
-    document.getElementById('returnStatusFilter')?.addEventListener('change', (e) => {
-        loadReturns(e.target.value);
-    });
-}
-
 function loadReturns(statusFilter = 'all') {
+    // Setup return status filter listener
+    const statusFilterEl = document.getElementById('returnStatusFilter');
+    if (statusFilterEl && !statusFilterEl.hasAttribute('data-listener-attached')) {
+        statusFilterEl.addEventListener('change', (e) => {
+            loadReturns(e.target.value);
+        });
+        statusFilterEl.setAttribute('data-listener-attached', 'true');
+    }
     const table = document.getElementById('returnsTable');
     if (!table) return;
 
@@ -1883,12 +1897,6 @@ function rejectReturn(returnId) {
         loadReturns();
         alert('Return rejected');
     }
-}
-
-// Stock Transfers Management
-function setupStockTransfers() {
-    loadStockTransfers();
-    document.getElementById('newStockTransferBtn')?.addEventListener('click', openStockTransferModal);
 }
 
 function loadStockTransfers() {
