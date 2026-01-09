@@ -2408,13 +2408,24 @@ class ERPNextIntegration {
 }
 
 // Initialize ERPNext Integration Module
-if (typeof window !== 'undefined') {
-    // Create global instance
-    window.ERPNextIntegration = new ERPNextIntegration();
-    console.log('ERPNext Integration module initialized:', window.ERPNextIntegration);
-} else {
-    console.error('Window object not available - cannot initialize ERPNext Integration');
-}
+(function() {
+    try {
+        const erpnextIntegration = new ERPNextIntegration();
+        window.ERPNextIntegration = erpnextIntegration;
+        console.log('✅ ERPNext Integration module initialized successfully');
+        console.log('ERPNext Integration instance:', erpnextIntegration);
+    } catch (error) {
+        console.error('❌ Error initializing ERPNext Integration:', error);
+        // Create a placeholder object to prevent errors
+        window.ERPNextIntegration = {
+            config: { enabled: false },
+            integrationLogs: [],
+            syncStatus: { errors: [] },
+            updateConfig: function() { console.warn('ERPNext Integration not initialized'); },
+            testConnection: function() { return Promise.reject('Module not initialized'); }
+        };
+    }
+})();
 
 // Initialize ERPNext Integration
 const erpnextIntegration = new ERPNextIntegration();
