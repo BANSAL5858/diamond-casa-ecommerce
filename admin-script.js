@@ -1200,6 +1200,46 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Excel Upload Setup - Defined early to ensure availability
+function setupExcelUpload() {
+    const fileInput = document.getElementById('excelFileInput');
+    const uploadBtn = document.getElementById('uploadExcelBtn');
+    
+    if (!fileInput || !uploadBtn) return;
+
+    // Enable upload button when file is selected
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            uploadBtn.disabled = false;
+            previewExcelFile(e.target.files[0]);
+        } else {
+            uploadBtn.disabled = true;
+        }
+    });
+
+    // Preview button
+    const previewBtn = document.getElementById('previewExcelBtn');
+    if (previewBtn) {
+        previewBtn.addEventListener('click', () => {
+            if (fileInput.files.length > 0) {
+                previewExcelFile(fileInput.files[0]);
+            } else {
+                alert('Please select an Excel file first');
+            }
+        });
+    }
+
+    // Upload button click with confirmation
+    uploadBtn.addEventListener('click', () => {
+        if (fileInput.files.length > 0) {
+            const fileName = fileInput.files[0].name;
+            if (confirm(`Ready to upload all products from "${fileName}"?\n\nThis will:\n- Create/update products in ERPNext\n- Upload images and videos\n- Sync products to website\n\nEstimated time: 10-30 minutes\n\nContinue?`)) {
+                uploadExcelToERPNext(fileInput.files[0]);
+            }
+        }
+    });
+}
+
 // ERPNext Integration Setup
 function setupERPNext() {
     // Ensure ERPNext Integration module is loaded
@@ -1258,18 +1298,7 @@ function setupERPNext() {
     document.getElementById('bulkImportBtn')?.addEventListener('click', () => startBulkImport());
     
     // Excel upload
-    if (typeof setupExcelUpload === 'function') {
-        setupExcelUpload();
-    } else {
-        console.warn('setupExcelUpload function not yet defined, will load when available');
-        setTimeout(() => {
-            if (typeof setupExcelUpload === 'function') {
-                setupExcelUpload();
-            } else {
-                console.error('setupExcelUpload function still not available after retry');
-            }
-        }, 100);
-    }
+    setupExcelUpload();
 
     // Auto-refresh status every 30 seconds
     if (typeof updateIntegrationStatus === 'function') {
@@ -1998,46 +2027,6 @@ async function startBulkImport() {
         progressBar.style.width = '100%';
         statusText.textContent = 'Import complete!';
     }
-}
-
-// Excel Upload Setup
-function setupExcelUpload() {
-    const fileInput = document.getElementById('excelFileInput');
-    const uploadBtn = document.getElementById('uploadExcelBtn');
-    
-    if (!fileInput || !uploadBtn) return;
-
-    // Enable upload button when file is selected
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            uploadBtn.disabled = false;
-            previewExcelFile(e.target.files[0]);
-        } else {
-            uploadBtn.disabled = true;
-        }
-    });
-
-    // Preview button
-    const previewBtn = document.getElementById('previewExcelBtn');
-    if (previewBtn) {
-        previewBtn.addEventListener('click', () => {
-            if (fileInput.files.length > 0) {
-                previewExcelFile(fileInput.files[0]);
-            } else {
-                alert('Please select an Excel file first');
-            }
-        });
-    }
-
-    // Upload button click with confirmation
-    uploadBtn.addEventListener('click', () => {
-        if (fileInput.files.length > 0) {
-            const fileName = fileInput.files[0].name;
-            if (confirm(`Ready to upload all products from "${fileName}"?\n\nThis will:\n- Create/update products in ERPNext\n- Upload images and videos\n- Sync products to website\n\nEstimated time: 10-30 minutes\n\nContinue?`)) {
-                uploadExcelToERPNext(fileInput.files[0]);
-            }
-        }
-    });
 }
 
 // Preview Excel File
