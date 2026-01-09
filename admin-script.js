@@ -1218,9 +1218,30 @@ function setupERPNext() {
     console.log('Setting up ERPNext integration...', window.ERPNextIntegration);
     
     loadERPNextConfig();
-    loadIntegrationLogs();
-    loadErrorLogs();
-    updateIntegrationStatus();
+    if (typeof loadIntegrationLogs === 'function') {
+        loadIntegrationLogs();
+    } else {
+        console.warn('loadIntegrationLogs function not yet defined, will load when available');
+        setTimeout(() => {
+            if (typeof loadIntegrationLogs === 'function') loadIntegrationLogs();
+        }, 100);
+    }
+    if (typeof loadErrorLogs === 'function') {
+        loadErrorLogs();
+    } else {
+        console.warn('loadErrorLogs function not yet defined, will load when available');
+        setTimeout(() => {
+            if (typeof loadErrorLogs === 'function') loadErrorLogs();
+        }, 100);
+    }
+    if (typeof updateIntegrationStatus === 'function') {
+        updateIntegrationStatus();
+    } else {
+        console.warn('updateIntegrationStatus function not yet defined, will load when available');
+        setTimeout(() => {
+            if (typeof updateIntegrationStatus === 'function') updateIntegrationStatus();
+        }, 100);
+    }
 
     // Configuration
     document.getElementById('saveErpnextConfigBtn')?.addEventListener('click', saveERPNextConfig);
