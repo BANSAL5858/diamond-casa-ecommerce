@@ -557,31 +557,31 @@
                     <div class="settings-card">
                         <h3>General Settings</h3>
                         <div class="form-group">
-                            <label>Store Name</label>
+                            <label for="storeName">Store Name</label>
                             <input type="text" id="storeName" name="storeName" value="Diamond Casa" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Store Email</label>
+                            <label for="storeEmail">Store Email</label>
                             <input type="email" id="storeEmail" name="storeEmail" value="info@diamondcasa.in" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Store Phone</label>
+                            <label for="storePhone">Store Phone</label>
                             <input type="tel" id="storePhone" name="storePhone" value="+91 1800 123 4567" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>WhatsApp Number</label>
+                            <label for="whatsappNumber">WhatsApp Number</label>
                             <input type="tel" id="whatsappNumber" name="whatsappNumber" value="+91 98765 43210" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>GSTIN</label>
+                            <label for="storeGstin">GSTIN</label>
                             <input type="text" id="storeGstin" name="storeGstin" value="27AABCD1234E1Z5" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Registered Address</label>
+                            <label for="registeredAddress">Registered Address</label>
                             <textarea id="registeredAddress" name="registeredAddress" class="form-control" rows="3">618, Omkar The Summit Business Bay, Andheri East, Mumbai - 400093, Maharashtra, India</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Currency</label>
+                            <label for="currency">Currency</label>
                             <select id="currency" name="currency" class="form-control">
                                 <option selected>INR (₹) - Indian Rupee</option>
                             </select>
@@ -619,11 +619,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Razorpay API Key</label>
+                            <label for="razorpayApiKey">Razorpay API Key</label>
                             <input type="text" id="razorpayApiKey" name="razorpayApiKey" placeholder="rzp_live_..." class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Paytm Merchant ID</label>
+                            <label for="paytmMerchantId">Paytm Merchant ID</label>
                             <input type="text" id="paytmMerchantId" name="paytmMerchantId" placeholder="Enter Paytm Merchant ID" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save Payment Settings</button>
@@ -633,26 +633,26 @@
                     <div class="settings-card">
                         <h3>Shipping Settings</h3>
                         <div class="form-group">
-                            <label>Free Shipping Threshold (₹)</label>
+                            <label for="freeShippingThreshold">Free Shipping Threshold (₹)</label>
                             <input type="number" id="freeShippingThreshold" name="freeShippingThreshold" value="50000" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Standard Shipping Rate (₹)</label>
+                            <label for="standardShippingRate">Standard Shipping Rate (₹)</label>
                             <input type="number" id="standardShippingRate" name="standardShippingRate" value="150" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Express Shipping Rate (₹)</label>
+                            <label for="expressShippingRate">Express Shipping Rate (₹)</label>
                             <input type="number" id="expressShippingRate" name="expressShippingRate" value="500" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Cash on Delivery Available</label>
+                            <label for="codAvailable">Cash on Delivery Available</label>
                             <select id="codAvailable" name="codAvailable" class="form-control">
                                 <option selected>Yes</option>
                                 <option>No</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>COD Charges (₹)</label>
+                            <label for="codCharges">COD Charges (₹)</label>
                             <input type="number" id="codCharges" name="codCharges" value="100" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save Shipping Settings</button>
@@ -662,29 +662,29 @@
                     <div class="settings-card">
                         <h3>GST & Tax Settings</h3>
                         <div class="form-group">
-                            <label>GSTIN</label>
+                            <label for="gstGstin">GSTIN</label>
                             <input type="text" id="gstGstin" name="gstGstin" value="27AABCD1234E1Z5" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>GST Rate (%)</label>
+                            <label for="gstRate">GST Rate (%)</label>
                             <input type="number" id="gstRate" name="gstRate" value="3" class="form-control" placeholder="GST rate for jewelry">
                         </div>
                         <div class="form-group">
-                            <label>Include GST in Prices</label>
+                            <label for="includeGstInPrices">Include GST in Prices</label>
                             <select id="includeGstInPrices" name="includeGstInPrices" class="form-control">
                                 <option selected>Yes - Prices include GST</option>
                                 <option>No - GST will be added at checkout</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Generate GST Invoice</label>
+                            <label for="generateGstInvoice">Generate GST Invoice</label>
                             <select id="generateGstInvoice" name="generateGstInvoice" class="form-control">
                                 <option selected>Yes - Auto generate GST invoice</option>
                                 <option>No</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>CIN (Company Identification Number)</label>
+                            <label for="cin">CIN (Company Identification Number)</label>
                             <input type="text" id="cin" name="cin" value="U74999MH1986PTC123456" class="form-control">
                         </div>
                         <button class="btn btn-primary">Save GST Settings</button>
@@ -760,25 +760,25 @@
                     </div>
                     <div class="settings-card" style="box-shadow: none; padding: 1.5rem;">
                         <div class="form-group">
-                            <label>ERPNext API URL</label>
+                            <label for="erpnextApiUrl">ERPNext API URL</label>
                             <input type="url" id="erpnextApiUrl" class="form-control" placeholder="https://erpnext.diamondcasa.in">
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>API Key</label>
+                                <label for="erpnextApiKey">API Key</label>
                                 <input type="text" id="erpnextApiKey" class="form-control" placeholder="Enter API Key">
                             </div>
                             <div class="form-group">
-                                <label>API Secret</label>
+                                <label for="erpnextApiSecret">API Secret</label>
                                 <input type="password" id="erpnextApiSecret" class="form-control" placeholder="Enter API Secret">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Integration User</label>
+                            <label for="erpnextUser">Integration User</label>
                             <input type="email" id="erpnextUser" class="form-control" value="integration@diamondcasa.in">
                         </div>
                         <div class="form-group">
-                            <label>Auto Sync Interval (minutes)</label>
+                            <label for="syncInterval">Auto Sync Interval (minutes)</label>
                             <input type="number" id="syncInterval" class="form-control" value="15" min="5">
                         </div>
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
@@ -857,14 +857,14 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Select Excel File (.xlsx or .xls)</label>
+                            <label for="excelFileInput">Select Excel File (.xlsx or .xls)</label>
                             <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="form-control" style="padding: 0.5rem;">
                             <small style="color: #666; display: block; margin-top: 0.5rem;">
                                 Supported formats: .xlsx, .xls
                             </small>
                         </div>
                         <div class="form-group">
-                            <label>Default Item Group</label>
+                            <label for="excelDefaultItemGroup">Default Item Group</label>
                             <select id="excelDefaultItemGroup" class="form-control">
                                 <option value="Jewelry" selected>Jewelry</option>
                                 <option value="Rings">Rings</option>
@@ -956,7 +956,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Item Group</label>
+                            <label for="bulkImportItemGroup">Item Group</label>
                             <select id="bulkImportItemGroup" class="form-control">
                                 <option value="Jewelry" selected>Jewelry</option>
                                 <option value="Rings">Rings</option>
@@ -969,7 +969,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Limit (optional - leave empty for all products)</label>
+                            <label for="bulkImportLimit">Limit (optional - leave empty for all products)</label>
                             <input type="number" id="bulkImportLimit" class="form-control" placeholder="e.g., 100" min="1">
                         </div>
                         <div class="form-group">
@@ -1213,17 +1213,17 @@
                 <form id="productForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Product Name *</label>
+                            <label for="productName">Product Name *</label>
                             <input type="text" id="productName" name="productName" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>SKU *</label>
+                            <label for="productSku">SKU *</label>
                             <input type="text" id="productSku" name="productSku" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Category *</label>
+                            <label for="productCategory">Category *</label>
                             <select id="productCategory" name="productCategory" class="form-control" required>
                                 <option>Rings</option>
                                 <option>Earrings</option>
@@ -1232,7 +1232,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Brand</label>
+                            <label for="productBrand">Brand</label>
                             <select id="productBrand" name="productBrand" class="form-control">
                                 <option>BVLGARI</option>
                                 <option>Cartier</option>
@@ -1242,20 +1242,20 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Price *</label>
+                            <label for="productPrice">Price *</label>
                             <input type="number" id="productPrice" name="productPrice" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Stock Quantity *</label>
+                            <label for="productStock">Stock Quantity *</label>
                             <input type="number" id="productStock" name="productStock" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label for="productDescription">Description</label>
                         <textarea id="productDescription" name="productDescription" class="form-control" rows="4"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Product Images</label>
+                        <label for="productImages">Product Images</label>
                         <input type="file" id="productImages" name="productImages" multiple accept="image/*" class="form-control">
                     </div>
                     <div class="form-actions">
