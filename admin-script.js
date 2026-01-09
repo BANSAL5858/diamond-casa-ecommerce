@@ -1397,8 +1397,7 @@ function setupERPNext() {
 
     // Configuration
     document.getElementById('saveErpnextConfigBtn')?.addEventListener('click', saveERPNextConfig);
-    const erpnextEnabled = document.getElementById('erpnextEnabled');
-    if (erpnextEnabled) {addEventListener('change', toggleERPNext);
+    document.getElementById('erpnextEnabled')?.addEventListener('change', toggleERPNext);
     
     // Sync buttons
     document.getElementById('syncProductsBtn')?.addEventListener('click', () => syncERPNextProducts());
