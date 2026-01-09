@@ -511,13 +511,13 @@ body {
 
 /* Page Content */
 .page-content {
-    display: none;
+    display: none !important;
     padding: 2.5rem;
     animation: fadeIn 0.3s ease-in;
 }
 
 .page-content.active {
-    display: block;
+    display: block !important;
 }
 
 @keyframes fadeIn {
