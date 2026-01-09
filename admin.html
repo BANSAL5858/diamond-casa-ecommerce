@@ -1297,6 +1297,25 @@
                 }, 1000);
             }
         })();
+        
+        // Ensure handleNavClick is available immediately for inline onclick handlers
+        window.handleNavClick = window.handleNavClick || function(e, page) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (!page && e && e.currentTarget) {
+                page = e.currentTarget.getAttribute('data-page');
+            }
+            if (!page && e && e.target) {
+                const navItem = e.target.closest('.nav-item');
+                if (navItem) {
+                    page = navItem.getAttribute('data-page');
+                }
+            }
+            console.log('Navigation clicked (inline handler):', page);
+            // The full implementation will be in admin-script.js
+        };
     </script>
     <script src="admin-script.js"></script>
     <script>

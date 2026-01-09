@@ -266,13 +266,103 @@ window.handleNavClick = function(e, page) {
     }
 };
 
-// Navigation - Direct event handlers for reliability
+// Global navigation handler - MUST be available immediately
+window.handleNavClick = function(e, page) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // If page is not provided, get it from the element
+    if (!page && e && e.currentTarget) {
+        page = e.currentTarget.getAttribute('data-page');
+    }
+    
+    if (!page) {
+        console.error('No page specified for navigation');
+        return;
+    }
+    
+    console.log('Navigation clicked:', page);
+
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    const clickedNavItem = e && e.currentTarget ? e.currentTarget : document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (clickedNavItem) {
+        clickedNavItem.classList.add('active');
+    }
+
+    // Show correct page
+    const allPages = document.querySelectorAll('.page-content');
+    allPages.forEach(content => content.classList.remove('active'));
+    
+    const targetPage = document.getElementById(`${page}Page`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        const pageTitle = document.getElementById('pageTitle');
+        if (pageTitle && clickedNavItem) {
+            const span = clickedNavItem.querySelector('span');
+            if (span) {
+                pageTitle.textContent = span.textContent;
+            }
+        }
+        
+        // Load page-specific data
+        try {
+            if (page === 'dashboard' && typeof loadDashboardData === 'function') {
+                setTimeout(() => loadDashboardData(), 100);
+            } else if (page === 'products' && typeof loadProducts === 'function') {
+                setTimeout(() => loadProducts(), 100);
+            } else if (page === 'orders' && typeof loadOrders === 'function') {
+                setTimeout(() => loadOrders(), 100);
+            } else if (page === 'customers' && typeof loadCustomers === 'function') {
+                setTimeout(() => loadCustomers(), 100);
+            } else if (page === 'categories' && typeof loadCategories === 'function') {
+                setTimeout(() => loadCategories(), 100);
+            } else if (page === 'inventory' && typeof loadInventory === 'function') {
+                setTimeout(() => loadInventory(), 100);
+            } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
+                setTimeout(() => loadAnalytics(), 100);
+            } else if (page === 'reports' && typeof generateReport === 'function') {
+                // Reports page doesn't need loading
+            } else if (page === 'promotions' && typeof loadPromotions === 'function') {
+                setTimeout(() => loadPromotions(), 100);
+            } else if (page === 'content' && typeof loadBanners === 'function') {
+                setTimeout(() => loadBanners(), 100);
+            } else if (page === 'settings') {
+                // Settings page doesn't need loading
+            } else if (page === 'users' && typeof loadUsers === 'function') {
+                setTimeout(() => loadUsers(), 100);
+            } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
+                setTimeout(() => loadPurchaseOrders(), 100);
+            } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
+                setTimeout(() => loadSuppliers(), 100);
+            } else if (page === 'returns' && typeof loadReturns === 'function') {
+                setTimeout(() => loadReturns(), 100);
+            } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
+                setTimeout(() => loadStockTransfers(), 100);
+            } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
+                setTimeout(() => {
+                    loadERPNextConfig();
+                    if (typeof loadIntegrationLogs === 'function') loadIntegrationLogs();
+                    if (typeof loadErrorLogs === 'function') loadErrorLogs();
+                    if (typeof updateIntegrationStatus === 'function') updateIntegrationStatus();
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Error loading page data:', error);
+        }
+    } else {
+        console.error(`Page element not found: ${page}Page`);
+    }
+};
+
+// Navigation - Simplified and reliable setup
 function setupNavigation() {
     console.log('Setting up navigation...');
     
     const attachNavHandlers = () => {
-        const navItems = document.querySelectorAll('.nav-item');
-        const pageTitle = document.getElementById('pageTitle');
+        const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.querySelector('.sidebar');
 
@@ -284,99 +374,38 @@ function setupNavigation() {
 
         console.log(`Found ${navItems.length} navigation items`);
 
-        // Direct event handlers on each nav item for maximum reliability
-        navItems.forEach(item => {
-            // Remove any existing handlers by cloning
-            const newItem = item.cloneNode(true);
-            item.parentNode.replaceChild(newItem, item);
+        // Use event delegation on the sidebar-nav for maximum reliability
+        const sidebarNav = document.querySelector('.sidebar-nav');
+        if (sidebarNav) {
+            // Remove all existing listeners by cloning
+            const newNav = sidebarNav.cloneNode(true);
+            sidebarNav.parentNode.replaceChild(newNav, sidebarNav);
             
-            // Attach multiple event handlers for maximum reliability
-            const handleNavClick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const page = this.getAttribute('data-page');
-                console.log('Navigation clicked:', page, this);
-
-                if (!page) {
-                    console.error('No data-page attribute found');
-                    return;
-                }
-
-                // Update active nav
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-
-                // Show correct page
-                const allPages = document.querySelectorAll('.page-content');
-                allPages.forEach(content => content.classList.remove('active'));
-                
-                const targetPage = document.getElementById(`${page}Page`);
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    if (pageTitle) {
-                        const span = this.querySelector('span');
-                        if (span) {
-                            pageTitle.textContent = span.textContent;
-                        }
+            // Use event delegation - single listener on parent
+            newNav.addEventListener('click', function(e) {
+                const navItem = e.target.closest('.nav-item');
+                if (navItem) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const page = navItem.getAttribute('data-page');
+                    if (page) {
+                        window.handleNavClick(e, page);
                     }
-                    
-                    console.log(`Switched to ${page} page`);
-                    
-                    // Load page-specific data
-                    try {
-                        if (page === 'dashboard' && typeof loadDashboardData === 'function') {
-                            setTimeout(() => loadDashboardData(), 100);
-                        } else if (page === 'products' && typeof loadProducts === 'function') {
-                            setTimeout(() => loadProducts(), 100);
-                        } else if (page === 'orders' && typeof loadOrders === 'function') {
-                            setTimeout(() => loadOrders(), 100);
-                        } else if (page === 'customers' && typeof loadCustomers === 'function') {
-                            setTimeout(() => loadCustomers(), 100);
-                        } else if (page === 'categories' && typeof loadCategories === 'function') {
-                            setTimeout(() => loadCategories(), 100);
-                        } else if (page === 'inventory' && typeof loadInventory === 'function') {
-                            setTimeout(() => loadInventory(), 100);
-                        } else if (page === 'analytics' && typeof loadAnalytics === 'function') {
-                            setTimeout(() => loadAnalytics(), 100);
-                        } else if (page === 'reports' && typeof generateReport === 'function') {
-                            // Reports page doesn't need loading
-                        } else if (page === 'promotions' && typeof loadPromotions === 'function') {
-                            setTimeout(() => loadPromotions(), 100);
-                        } else if (page === 'content' && typeof loadBanners === 'function') {
-                            setTimeout(() => loadBanners(), 100);
-                        } else if (page === 'settings') {
-                            // Settings page doesn't need loading
-                        } else if (page === 'users' && typeof loadUsers === 'function') {
-                            setTimeout(() => loadUsers(), 100);
-                        } else if (page === 'purchase-orders' && typeof loadPurchaseOrders === 'function') {
-                            setTimeout(() => loadPurchaseOrders(), 100);
-                        } else if (page === 'suppliers' && typeof loadSuppliers === 'function') {
-                            setTimeout(() => loadSuppliers(), 100);
-                        } else if (page === 'returns' && typeof loadReturns === 'function') {
-                            setTimeout(() => loadReturns(), 100);
-                        } else if (page === 'stock-transfers' && typeof loadStockTransfers === 'function') {
-                            setTimeout(() => loadStockTransfers(), 100);
-                        } else if (page === 'erpnext' && typeof loadERPNextConfig === 'function') {
-                            setTimeout(() => {
-                                loadERPNextConfig();
-                                if (typeof loadIntegrationLogs === 'function') loadIntegrationLogs();
-                                if (typeof loadErrorLogs === 'function') loadErrorLogs();
-                                if (typeof updateIntegrationStatus === 'function') updateIntegrationStatus();
-                            }, 100);
-                        }
-                    } catch (error) {
-                        console.error('Error loading page data:', error);
-                    }
-                } else {
-                    console.error(`Page element not found: ${page}Page`);
                 }
-            };
-            
-            // Attach multiple handlers for reliability
-            newItem.onclick = handleNavClick;
-            newItem.addEventListener('click', handleNavClick, false);
-            newItem.addEventListener('click', handleNavClick, true);
+            }, true); // Use capture phase for better reliability
+        }
+
+        // Also attach direct handlers to each item as backup
+        document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+            const page = item.getAttribute('data-page');
+            if (page) {
+                // Direct onclick handler
+                item.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.handleNavClick(e, page);
+                };
+            }
         });
 
         // Mobile menu toggle
@@ -388,7 +417,7 @@ function setupNavigation() {
             });
         }
 
-        console.log('Navigation setup complete - all items have click handlers');
+        console.log('Navigation setup complete - event delegation and direct handlers attached');
     };
 
     // Multiple initialization attempts

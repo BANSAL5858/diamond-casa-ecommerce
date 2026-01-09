@@ -234,7 +234,9 @@ body {
 
 .sidebar-nav {
     padding: 1rem 0;
-    pointer-events: auto;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 10;
 }
 
 .nav-item {
@@ -245,13 +247,15 @@ body {
     text-decoration: none;
     transition: var(--transition);
     position: relative;
-    cursor: pointer;
-    pointer-events: auto;
+    cursor: pointer !important;
+    pointer-events: auto !important;
     user-select: none;
     -webkit-user-select: none;
     margin: 0.25rem 0.75rem;
     border-radius: 10px;
     font-weight: 500;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .nav-item i {
