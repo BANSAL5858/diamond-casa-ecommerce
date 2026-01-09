@@ -298,22 +298,24 @@ function setupNavigation() {
         // Use event delegation on the sidebar-nav for maximum reliability
         const sidebarNav = document.querySelector('.sidebar-nav');
         if (sidebarNav) {
-            // Remove all existing listeners by cloning
-            const newNav = sidebarNav.cloneNode(true);
-            sidebarNav.parentNode.replaceChild(newNav, sidebarNav);
-            
+            // DON'T clone - it removes inline onclick handlers!
             // Use event delegation - single listener on parent
-            newNav.addEventListener('click', function(e) {
+            const delegationHandler = function(e) {
                 const navItem = e.target.closest('.nav-item');
                 if (navItem) {
                     e.preventDefault();
                     e.stopPropagation();
                     const page = navItem.getAttribute('data-page');
+                    console.log('Event delegation caught click:', page);
                     if (page) {
                         window.handleNavClick(e, page);
                     }
                 }
-            }, true); // Use capture phase for better reliability
+            };
+            
+            // Remove old handler if exists and add new one
+            sidebarNav.removeEventListener('click', delegationHandler, true);
+            sidebarNav.addEventListener('click', delegationHandler, true);
         }
 
         // Also attach direct handlers to each item as backup
