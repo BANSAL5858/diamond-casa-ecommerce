@@ -43,32 +43,49 @@ window.addEventListener('load', () => {
 
 function initializeAdmin() {
     console.log('Setting up admin functions...');
+    
     // Setup login first
     if (typeof setupLogin === 'function') {
         setupLogin();
     } else {
         console.error('setupLogin function not found!');
     }
-    setupNavigation();
-    setupDashboard();
-    setupProducts();
-    setupOrders();
-    setupCustomers();
-    setupCategories();
-    setupInventory();
-    setupAnalytics();
-    setupReports();
-    setupPromotions();
-    setupContent();
-    setupSettings();
-    setupUsers();
-    setupModals();
-    setupCharts();
-    setupERPNext();
-    setupPurchaseOrders();
-    setupSuppliers();
-    setupReturns();
-    setupStockTransfers();
+    
+    // Setup all functions with safety checks
+    const setupFunctions = [
+        'setupNavigation',
+        'setupDashboard',
+        'setupProducts',
+        'setupOrders',
+        'setupCustomers',
+        'setupCategories',
+        'setupInventory',
+        'setupAnalytics',
+        'setupReports',
+        'setupPromotions',
+        'setupContent',
+        'setupSettings',
+        'setupUsers',
+        'setupModals',
+        'setupCharts',
+        'setupERPNext',
+        'setupPurchaseOrders',
+        'setupSuppliers',
+        'setupReturns',
+        'setupStockTransfers'
+    ];
+    
+    setupFunctions.forEach(funcName => {
+        try {
+            if (typeof window[funcName] === 'function') {
+                window[funcName]();
+            } else {
+                console.warn(`${funcName} is not defined, skipping...`);
+            }
+        } catch (error) {
+            console.error(`Error calling ${funcName}:`, error);
+        }
+    });
 }
 
 // Login Functionality
@@ -1380,7 +1397,8 @@ function setupERPNext() {
 
     // Configuration
     document.getElementById('saveErpnextConfigBtn')?.addEventListener('click', saveERPNextConfig);
-    document.getElementById('erpnextEnabled')?.addEventListener('change', toggleERPNext);
+    const erpnextEnabled = document.getElementById('erpnextEnabled');
+    if (erpnextEnabled) {addEventListener('change', toggleERPNext);
     
     // Sync buttons
     document.getElementById('syncProductsBtn')?.addEventListener('click', () => syncERPNextProducts());
