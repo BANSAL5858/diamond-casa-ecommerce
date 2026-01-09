@@ -1271,6 +1271,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="setup-helper.js"></script>
     <script src="erpnext-integration.js"></script>
+    <script>
+        // Ensure ERPNext Integration is initialized before admin-script.js loads
+        if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
+            window.ERPNextIntegration = new ERPNextIntegration();
+            console.log('ERPNext Integration initialized in admin.html');
+        }
+        
+        // Wait for module to load if needed
+        if (!window.ERPNextIntegration) {
+            console.warn('ERPNext Integration module not found - will retry after script loads');
+            setTimeout(() => {
+                if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
+                    window.ERPNextIntegration = new ERPNextIntegration();
+                    console.log('ERPNext Integration initialized (delayed)');
+                }
+            }, 500);
+        }
+    </script>
     <script src="admin-script.js"></script>
     <script>
         // Normal login function - Available immediately

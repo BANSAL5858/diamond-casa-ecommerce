@@ -2407,6 +2407,15 @@ class ERPNextIntegration {
     }
 }
 
+// Initialize ERPNext Integration Module
+if (typeof window !== 'undefined') {
+    // Create global instance
+    window.ERPNextIntegration = new ERPNextIntegration();
+    console.log('ERPNext Integration module initialized:', window.ERPNextIntegration);
+} else {
+    console.error('Window object not available - cannot initialize ERPNext Integration');
+}
+
 // Initialize ERPNext Integration
 const erpnextIntegration = new ERPNextIntegration();
 

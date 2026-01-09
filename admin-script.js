@@ -1250,6 +1250,21 @@ document.head.appendChild(style);
 
 // ERPNext Integration Setup
 function setupERPNext() {
+    // Ensure ERPNext Integration module is loaded
+    if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
+        window.ERPNextIntegration = new ERPNextIntegration();
+        console.log('ERPNext Integration initialized in setupERPNext');
+    }
+    
+    if (!window.ERPNextIntegration) {
+        console.error('ERPNext Integration module not available!');
+        console.error('Please ensure erpnext-integration.js is loaded before admin-script.js');
+        alert('⚠️ ERPNext Integration module not loaded!\n\nPlease check:\n1. erpnext-integration.js file exists\n2. Script is loaded in admin.html\n3. No JavaScript errors in console');
+        return;
+    }
+    
+    console.log('Setting up ERPNext integration...', window.ERPNextIntegration);
+    
     loadERPNextConfig();
     loadIntegrationLogs();
     loadErrorLogs();
