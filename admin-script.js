@@ -1421,12 +1421,22 @@ function setupERPNext() {
 function loadERPNextConfig() {
     if (!window.ERPNextIntegration) return;
 
-    const config = window.ERPNextIntegration.config;
-    document.getElementById('erpnextApiUrl').value = config.apiUrl || '';
-    document.getElementById('erpnextApiKey').value = config.apiKey || '';
-    document.getElementById('erpnextApiSecret').value = config.apiSecret || '';
-    document.getElementById('erpnextUser').value = config.integrationUser || '';
-    document.getElementById('erpnextEnabled').checked = config.enabled || false;
+    try {
+        const config = window.ERPNextIntegration.config;
+        const apiUrlEl = document.getElementById('erpnextApiUrl');
+        const apiKeyEl = document.getElementById('erpnextApiKey');
+        const apiSecretEl = document.getElementById('erpnextApiSecret');
+        const userEl = document.getElementById('erpnextUser');
+        const enabledEl = document.getElementById('erpnextEnabled');
+        
+        if (apiUrlEl) apiUrlEl.value = config.apiUrl || '';
+        if (apiKeyEl) apiKeyEl.value = config.apiKey || '';
+        if (apiSecretEl) apiSecretEl.value = config.apiSecret || '';
+        if (userEl) userEl.value = config.integrationUser || '';
+        if (enabledEl) enabledEl.checked = config.enabled || false;
+    } catch (error) {
+        console.error('Error loading ERPNext config:', error);
+    }
 }
 
 function saveERPNextConfig() {
@@ -1435,10 +1445,22 @@ function saveERPNextConfig() {
         return;
     }
 
-    const apiUrl = document.getElementById('erpnextApiUrl').value.trim();
-    const apiKey = document.getElementById('erpnextApiKey').value.trim();
-    const apiSecret = document.getElementById('erpnextApiSecret').value.trim();
-    const integrationUser = document.getElementById('erpnextUser').value.trim();
+    try {
+        const apiUrlEl = document.getElementById('erpnextApiUrl');
+        const apiKeyEl = document.getElementById('erpnextApiKey');
+        const apiSecretEl = document.getElementById('erpnextApiSecret');
+        const userEl = document.getElementById('erpnextUser');
+        const enabledEl = document.getElementById('erpnextEnabled');
+        
+        if (!apiUrlEl || !apiKeyEl || !apiSecretEl) {
+            alert('Configuration form elements not found');
+            return;
+        }
+        
+        const apiUrl = apiUrlEl.value.trim();
+        const apiKey = apiKeyEl.value.trim();
+        const apiSecret = apiSecretEl.value.trim();
+        const integrationUser = userEl ? userEl.value.trim() : '';
 
     // Validate URL format
     if (apiUrl && !apiUrl.startsWith('http://') && !apiUrl.startsWith('https://')) {
@@ -1455,24 +1477,35 @@ function saveERPNextConfig() {
         return;
     }
 
-    const config = {
-        apiUrl: cleanApiUrl,
-        apiKey: apiKey,
-        apiSecret: apiSecret,
-        integrationUser: integrationUser || 'integration@diamondcasa.in',
-        enabled: document.getElementById('erpnextEnabled').checked
-    };
+        const config = {
+            apiUrl: cleanApiUrl,
+            apiKey: apiKey,
+            apiSecret: apiSecret,
+            integrationUser: integrationUser || 'integration@diamondcasa.in',
+            enabled: enabledEl ? enabledEl.checked : false
+        };
 
-    window.ERPNextIntegration.updateConfig(config);
-    alert('✅ Configuration saved successfully!\n\nClick "Test Connection" to verify your credentials.');
-    updateIntegrationStatus();
+        window.ERPNextIntegration.updateConfig(config);
+        alert('✅ Configuration saved successfully!\n\nClick "Test Connection" to verify your credentials.');
+        updateIntegrationStatus();
+    } catch (error) {
+        console.error('Error saving ERPNext config:', error);
+        alert('Error saving configuration: ' + error.message);
+    }
 }
 
 function toggleERPNext() {
-    const enabled = document.getElementById('erpnextEnabled').checked;
-    if (window.ERPNextIntegration) {
-        window.ERPNextIntegration.updateConfig({ enabled: enabled });
-        updateIntegrationStatus();
+    try {
+        const enabledEl = document.getElementById('erpnextEnabled');
+        if (!enabledEl) return;
+        
+        const enabled = enabledEl.checked;
+        if (window.ERPNextIntegration) {
+            window.ERPNextIntegration.updateConfig({ enabled: enabled });
+            updateIntegrationStatus();
+        }
+    } catch (error) {
+        console.error('Error toggling ERPNext:', error);
     }
 }
 
@@ -1558,13 +1591,16 @@ async function testERPNextConnection() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
 
+    let originalConfig = null;
     try {
         // Temporarily update config for testing
-        const originalConfig = { ...window.ERPNextIntegration.config };
-        window.ERPNextIntegration.config.apiUrl = apiUrl;
-        window.ERPNextIntegration.config.apiKey = apiKey;
-        window.ERPNextIntegration.config.apiSecret = apiSecret;
-        window.ERPNextIntegration.config.enabled = true; // Temporarily enable for test
+        if (window.ERPNextIntegration) {
+            originalConfig = { ...window.ERPNextIntegration.config };
+            window.ERPNextIntegration.config.apiUrl = apiUrl;
+            window.ERPNextIntegration.config.apiKey = apiKey;
+            window.ERPNextIntegration.config.apiSecret = apiSecret;
+            window.ERPNextIntegration.config.enabled = true; // Temporarily enable for test
+        }
 
         const result = await window.ERPNextIntegration.testConnection();
         
@@ -1649,34 +1685,52 @@ async function testERPNextConnection() {
         if (window.ERPNextIntegration && originalConfig) {
             window.ERPNextIntegration.config = originalConfig;
         }
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+        }
     }
+}
 
 function updateIntegrationStatus() {
     if (!window.ERPNextIntegration) return;
 
-    const status = window.ERPNextIntegration.getStatus();
-    
-    document.getElementById('integrationStatus').textContent = status.enabled ? 'Enabled' : 'Disabled';
-    document.getElementById('integrationStatus').style.color = status.enabled ? '#4caf50' : '#f44336';
-    
-    document.getElementById('lastProductSync').textContent = status.lastProductSync 
-        ? new Date(status.lastProductSync).toLocaleString() 
-        : 'Never';
-    
-    document.getElementById('lastInventorySync').textContent = status.lastInventorySync 
-        ? new Date(status.lastInventorySync).toLocaleString() 
-        : 'Never';
-    
-    document.getElementById('lastOrderSync').textContent = status.lastOrderSync 
-        ? new Date(status.lastOrderSync).toLocaleString() 
-        : 'Never';
-    
-    if (status.syncInProgress) {
-        document.getElementById('syncInProgress').style.display = 'inline';
-    } else {
-        document.getElementById('syncInProgress').style.display = 'none';
+    try {
+        const status = window.ERPNextIntegration.getStatus();
+        
+        const integrationStatusEl = document.getElementById('integrationStatus');
+        if (integrationStatusEl) {
+            integrationStatusEl.textContent = status.enabled ? 'Enabled' : 'Disabled';
+            integrationStatusEl.style.color = status.enabled ? '#4caf50' : '#f44336';
+        }
+        
+        const lastProductSyncEl = document.getElementById('lastProductSync');
+        if (lastProductSyncEl) {
+            lastProductSyncEl.textContent = status.lastProductSync 
+                ? new Date(status.lastProductSync).toLocaleString() 
+                : 'Never';
+        }
+        
+        const lastInventorySyncEl = document.getElementById('lastInventorySync');
+        if (lastInventorySyncEl) {
+            lastInventorySyncEl.textContent = status.lastInventorySync 
+                ? new Date(status.lastInventorySync).toLocaleString() 
+                : 'Never';
+        }
+        
+        const lastOrderSyncEl = document.getElementById('lastOrderSync');
+        if (lastOrderSyncEl) {
+            lastOrderSyncEl.textContent = status.lastOrderSync 
+                ? new Date(status.lastOrderSync).toLocaleString() 
+                : 'Never';
+        }
+        
+        const syncInProgressEl = document.getElementById('syncInProgress');
+        if (syncInProgressEl) {
+            syncInProgressEl.style.display = status.syncInProgress ? 'inline' : 'none';
+        }
+    } catch (error) {
+        console.error('Error updating integration status:', error);
     }
 }
 
@@ -2319,5 +2373,4 @@ async function uploadExcelToERPNext(file) {
     }
 }
 
-}
 console.log('Admin Dashboard loaded successfully!');
