@@ -1255,6 +1255,12 @@ function setupSuppliers() {
 // Returns Setup - Defined early to ensure availability
 function setupReturns() {
     loadReturns();
+    const statusFilterEl = document.getElementById('returnStatusFilter');
+    if (statusFilterEl) {
+        statusFilterEl.addEventListener('change', (e) => {
+            loadReturns(e.target.value);
+        });
+    }
 }
 
 // Stock Transfers Setup - Defined early to ensure availability
