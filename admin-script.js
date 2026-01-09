@@ -1240,6 +1240,69 @@ function setupExcelUpload() {
     });
 }
 
+// Purchase Orders - Load function defined first
+function loadPurchaseOrders() {
+    const table = document.getElementById('purchaseOrdersTable');
+    if (!table) return;
+
+    // Load from ERPNext if enabled
+    if (window.ERPNextIntegration && window.ERPNextIntegration.config.enabled) {
+        window.ERPNextIntegration.getPurchaseOrders().then(orders => {
+            if (orders && orders.length > 0) {
+                table.innerHTML = orders.map(po => `
+                    <tr>
+                        <td>${po.name}</td>
+                        <td>${po.supplier}</td>
+                        <td>${new Date(po.transaction_date).toLocaleDateString()}</td>
+                        <td>${po.items?.length || 0} items</td>
+                        <td>₹${(po.grand_total || 0).toLocaleString('en-IN')}</td>
+                        <td><span class="status-badge status-${po.status?.toLowerCase()}">${po.status || 'Draft'}</span></td>
+                        <td>
+                            <button class="btn-icon" onclick="viewPurchaseOrder('${po.name}')" title="View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                table.innerHTML = '<tr><td colspan="7" class="text-center">No purchase orders found</td></tr>';
+            }
+        }).catch(err => {
+            console.error('Error loading purchase orders:', err);
+            table.innerHTML = '<tr><td colspan="7" class="text-center">Error loading purchase orders</td></tr>';
+        });
+    } else {
+        // Load from local storage
+        const purchaseOrders = JSON.parse(localStorage.getItem('purchaseOrders')) || [];
+        if (purchaseOrders.length === 0) {
+            table.innerHTML = '<tr><td colspan="7" class="text-center">No purchase orders found</td></tr>';
+        } else {
+            table.innerHTML = purchaseOrders.map(po => `
+                <tr>
+                    <td>${po.number}</td>
+                    <td>${po.supplier}</td>
+                    <td>${new Date(po.date).toLocaleDateString()}</td>
+                    <td>${po.items.length} items</td>
+                    <td>₹${po.total.toLocaleString('en-IN')}</td>
+                    <td><span class="status-badge status-${po.status.toLowerCase()}">${po.status}</span></td>
+                    <td>
+                        <button class="btn-icon" onclick="viewPurchaseOrder('${po.id}')" title="View">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+}
+
+async function openPurchaseOrderModal() {
+    // Load suppliers first
+    const suppliers = await loadSuppliersForSelect();
+    // Open modal (implementation would go here)
+    alert('Purchase Order modal - Implementation in progress');
+}
+
 // Purchase Orders Setup - Defined early to ensure availability
 function setupPurchaseOrders() {
     loadPurchaseOrders();
@@ -1741,6 +1804,7 @@ async function openPurchaseOrderModal() {
     alert('Purchase Order modal - Implementation in progress');
 }
 
+// Suppliers - Load function defined first
 async function loadSuppliers() {
     const table = document.getElementById('suppliersTable');
     if (!table) return;
