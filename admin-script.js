@@ -1258,10 +1258,23 @@ function setupERPNext() {
     document.getElementById('bulkImportBtn')?.addEventListener('click', () => startBulkImport());
     
     // Excel upload
-    setupExcelUpload();
+    if (typeof setupExcelUpload === 'function') {
+        setupExcelUpload();
+    } else {
+        console.warn('setupExcelUpload function not yet defined, will load when available');
+        setTimeout(() => {
+            if (typeof setupExcelUpload === 'function') {
+                setupExcelUpload();
+            } else {
+                console.error('setupExcelUpload function still not available after retry');
+            }
+        }, 100);
+    }
 
     // Auto-refresh status every 30 seconds
-    setInterval(updateIntegrationStatus, 30000);
+    if (typeof updateIntegrationStatus === 'function') {
+        setInterval(updateIntegrationStatus, 30000);
+    }
 }
 
 function loadERPNextConfig() {
