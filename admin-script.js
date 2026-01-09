@@ -2194,9 +2194,12 @@ async function uploadExcelToERPNext(file) {
     } catch (error) {
         console.error('Error reading file:', error);
         alert('Error reading file: ' + error.message);
-        uploadBtn.disabled = false;
-        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload All Products to ERPNext';
+        if (uploadBtn) {
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload All Products to ERPNext';
+        }
     }
 }
 
+}
 console.log('Admin Dashboard loaded successfully!');
