@@ -1272,22 +1272,31 @@
     <script src="setup-helper.js"></script>
     <script src="erpnext-integration.js"></script>
     <script>
-        // Ensure ERPNext Integration is initialized before admin-script.js loads
-        if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
-            window.ERPNextIntegration = new ERPNextIntegration();
-            console.log('ERPNext Integration initialized in admin.html');
-        }
-        
-        // Wait for module to load if needed
-        if (!window.ERPNextIntegration) {
-            console.warn('ERPNext Integration module not found - will retry after script loads');
-            setTimeout(() => {
-                if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
-                    window.ERPNextIntegration = new ERPNextIntegration();
-                    console.log('ERPNext Integration initialized (delayed)');
-                }
-            }, 500);
-        }
+        // Verify ERPNext Integration module loaded
+        (function() {
+            if (window.ERPNextIntegration) {
+                console.log('✅ ERPNext Integration module loaded and ready');
+                console.log('Module config:', window.ERPNextIntegration.config);
+            } else {
+                console.error('❌ ERPNext Integration module failed to load!');
+                console.error('Please check:');
+                console.error('1. erpnext-integration.js file exists');
+                console.error('2. No JavaScript errors in erpnext-integration.js');
+                console.error('3. Script is loaded before admin-script.js');
+                
+                // Retry initialization after a delay
+                setTimeout(() => {
+                    if (typeof ERPNextIntegration !== 'undefined' && !window.ERPNextIntegration) {
+                        try {
+                            window.ERPNextIntegration = new ERPNextIntegration();
+                            console.log('✅ ERPNext Integration initialized (retry)');
+                        } catch (e) {
+                            console.error('❌ Failed to initialize ERPNext Integration:', e);
+                        }
+                    }
+                }, 1000);
+            }
+        })();
     </script>
     <script src="admin-script.js"></script>
     <script>
