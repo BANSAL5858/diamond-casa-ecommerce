@@ -1,0 +1,47 @@
+==========================================
+EXACT VALUES FOR FRAPPE CLOUD ADD APP FORM
+==========================================
+
+Copy these values exactly:
+
+Repository: diamond-casa-ecommerce
+Branch: main
+App Name: diamondcasa_jewellery
+App Directory: diamondcasa_jewellery
+
+==========================================
+STEP-BY-STEP:
+==========================================
+
+1. Login to: https://frappecloud.com
+2. Go to: diamondcasa.frappe.cloud
+3. Click: Apps tab
+4. Click: Add App button
+5. Select: From GitHub
+6. Choose: BANSAL5858
+7. Choose Repository: diamond-casa-ecommerce
+8. Choose Branch: main
+9. App Name: diamondcasa_jewellery
+10. App Directory: diamondcasa_jewellery  ← LOOK FOR THIS FIELD!
+11. Click: Add App
+
+==========================================
+WHERE TO FIND APP DIRECTORY FIELD:
+==========================================
+
+- Look below the App Name field
+- Check for "Advanced" or "More Options" section
+- Scroll down in the form
+- Look for dropdown or text field labeled:
+  * "App Directory"
+  * "Subdirectory"
+  * "App Subdirectory"
+  * "Directory"
+
+==========================================
+IF FIELD NOT VISIBLE:
+==========================================
+
+Use SSH method (see SSH_INSTALL_INSTRUCTIONS.md)
+
+==========================================
