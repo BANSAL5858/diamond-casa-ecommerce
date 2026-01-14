@@ -1,5 +1,4 @@
-# App version
-__version__ = "0.0.1"
+from . import __version__ as app_version
 
 app_name = "diamondcasa_jewellery"
 app_title = "DiamondCasa Jewellery"
@@ -9,3 +8,5 @@ app_icon = "octicon octicon-file-directory"
 app_color = "green"
 app_email = ""
 app_license = "MIT"
+
+# No hooks defined (minimal scaffold)

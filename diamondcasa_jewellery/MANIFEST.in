@@ -1,0 +1,2 @@
+include README.md
+recursive-include diamondcasa_jewellery *.py *.txt *.md
