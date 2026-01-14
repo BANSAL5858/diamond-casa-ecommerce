@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "worker_code",
+  "worker_name",
+  "worker_type",
+  "section_contact",
+  "phone",
+  "email",
+  "address",
+  "section_supplier",
+  "supplier",
+  "section_skills",
+  "specialization",
+  "skill_level",
+  "section_performance",
+  "total_jobs_completed",
+  "average_completion_time_days",
+  "average_wastage_percent",
+  "quality_rating",
+  "section_terms",
+  "wastage_terms",
+  "payment_terms",
+  "section_settings",
+  "is_active",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "worker_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Worker Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "worker_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Worker Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "worker_type",
+   "fieldtype": "Select",
+   "label": "Worker Type",
+   "options": "Caster\nSetter\nPolisher\nQC Inspector\nHallmarker\nGeneral",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_contact",
+   "fieldtype": "Section Break",
+   "label": "Contact Information"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "section_supplier",
+   "fieldtype": "Section Break",
+   "label": "Supplier Link"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "description": "Link to ERPNext Supplier for payments"
+  },
+  {
+   "fieldname": "section_skills",
+   "fieldtype": "Section Break",
+   "label": "Skills & Specialization"
+  },
+  {
+   "fieldname": "specialization",
+   "fieldtype": "Small Text",
+   "label": "Specialization",
+   "description": "Specific skills and expertise"
+  },
+  {
+   "fieldname": "skill_level",
+   "fieldtype": "Select",
+   "label": "Skill Level",
+   "options": "Beginner\nIntermediate\nAdvanced\nExpert\nMaster"
+  },
+  {
+   "fieldname": "section_performance",
+   "fieldtype": "Section Break",
+   "label": "Performance Metrics"
+  },
+  {
+   "fieldname": "total_jobs_completed",
+   "fieldtype": "Int",
+   "label": "Total Jobs Completed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "average_completion_time_days",
+   "fieldtype": "Float",
+   "label": "Average Completion Time (days)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "average_wastage_percent",
+   "fieldtype": "Percent",
+   "label": "Average Wastage %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quality_rating",
+   "fieldtype": "Select",
+   "label": "Quality Rating",
+   "options": "1\n2\n3\n4\n5",
+   "description": "1 = Poor, 5 = Excellent"
+  },
+  {
+   "fieldname": "section_terms",
+   "fieldtype": "Section Break",
+   "label": "Terms & Conditions"
+  },
+  {
+   "fieldname": "wastage_terms",
+   "fieldtype": "Small Text",
+   "label": "Wastage Terms",
+   "description": "Agreed wastage percentage and terms"
+  },
+  {
+   "fieldname": "payment_terms",
+   "fieldtype": "Small Text",
+   "label": "Payment Terms",
+   "description": "Payment terms and conditions"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Craft Worker",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

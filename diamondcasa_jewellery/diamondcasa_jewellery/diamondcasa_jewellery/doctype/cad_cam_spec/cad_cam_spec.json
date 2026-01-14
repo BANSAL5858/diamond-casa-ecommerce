@@ -1,0 +1,196 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "spec_code",
+  "design",
+  "section_cad",
+  "cad_file",
+  "cad_version",
+  "cad_software",
+  "section_cam",
+  "cam_file",
+  "cam_version",
+  "cam_software",
+  "section_stl",
+  "stl_file",
+  "stl_viewer_url",
+  "section_cost_breakup",
+  "estimated_metal_cost",
+  "estimated_making_charge",
+  "estimated_stone_cost",
+  "estimated_total_cost",
+  "section_settings",
+  "is_active",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "spec_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Spec Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "design",
+   "fieldtype": "Link",
+   "label": "Design",
+   "options": "Jewellery Design",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_cad",
+   "fieldtype": "Section Break",
+   "label": "CAD Details"
+  },
+  {
+   "fieldname": "cad_file",
+   "fieldtype": "Attach",
+   "label": "CAD File",
+   "description": "Upload CAD design file"
+  },
+  {
+   "fieldname": "cad_version",
+   "fieldtype": "Data",
+   "label": "CAD Version"
+  },
+  {
+   "fieldname": "cad_software",
+   "fieldtype": "Select",
+   "label": "CAD Software",
+   "options": "Rhino\nSolidWorks\nAutoCAD\nFusion 360\nOther"
+  },
+  {
+   "fieldname": "section_cam",
+   "fieldtype": "Section Break",
+   "label": "CAM Details"
+  },
+  {
+   "fieldname": "cam_file",
+   "fieldtype": "Attach",
+   "label": "CAM File",
+   "description": "Upload CAM manufacturing file"
+  },
+  {
+   "fieldname": "cam_version",
+   "fieldtype": "Data",
+   "label": "CAM Version"
+  },
+  {
+   "fieldname": "cam_software",
+   "fieldtype": "Select",
+   "label": "CAM Software",
+   "options": "Mastercam\nFusion 360\nSolidCAM\nOther"
+  },
+  {
+   "fieldname": "section_stl",
+   "fieldtype": "Section Break",
+   "label": "STL File (3D Model)"
+  },
+  {
+   "fieldname": "stl_file",
+   "fieldtype": "Attach",
+   "label": "STL File",
+   "description": "Upload STL 3D model file"
+  },
+  {
+   "fieldname": "stl_viewer_url",
+   "fieldtype": "Data",
+   "label": "STL Viewer URL",
+   "description": "URL for online STL viewer (if hosted externally)"
+  },
+  {
+   "fieldname": "section_cost_breakup",
+   "fieldtype": "Section Break",
+   "label": "Estimated Cost Breakup"
+  },
+  {
+   "fieldname": "estimated_metal_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Metal Cost"
+  },
+  {
+   "fieldname": "estimated_making_charge",
+   "fieldtype": "Currency",
+   "label": "Estimated Making Charge"
+  },
+  {
+   "fieldname": "estimated_stone_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Stone Cost"
+  },
+  {
+   "fieldname": "estimated_total_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "CAD CAM Spec",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

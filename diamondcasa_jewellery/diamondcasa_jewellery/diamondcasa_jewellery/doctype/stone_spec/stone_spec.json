@@ -1,0 +1,169 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "stone_code",
+  "stone_name",
+  "stone_type",
+  "section_diamond_attributes",
+  "shape",
+  "color",
+  "clarity",
+  "cut",
+  "carat_range_min",
+  "carat_range_max",
+  "section_certification",
+  "certification_required",
+  "certification_types",
+  "section_settings",
+  "is_active",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "stone_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Stone Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "stone_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Stone Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "stone_type",
+   "fieldtype": "Select",
+   "label": "Stone Type",
+   "options": "Diamond\nGemstone\nLab Grown Diamond\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_diamond_attributes",
+   "fieldtype": "Section Break",
+   "label": "Diamond Attributes"
+  },
+  {
+   "fieldname": "shape",
+   "fieldtype": "Select",
+   "label": "Shape",
+   "options": "Round\nPrincess\nCushion\nOval\nEmerald\nRadiant\nPear\nMarquise\nHeart\nAsscher\nOther"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Select",
+   "label": "Color",
+   "options": "D\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO-P\nQ-R\nS-T\nU-V\nW-X\nY-Z",
+   "description": "GIA color grading scale"
+  },
+  {
+   "fieldname": "clarity",
+   "fieldtype": "Select",
+   "label": "Clarity",
+   "options": "FL\nIF\nVVS1\nVVS2\nVS1\nVS2\nSI1\nSI2\nI1\nI2\nI3",
+   "description": "GIA clarity grading scale"
+  },
+  {
+   "fieldname": "cut",
+   "fieldtype": "Select",
+   "label": "Cut",
+   "options": "Excellent\nVery Good\nGood\nFair\nPoor"
+  },
+  {
+   "fieldname": "carat_range_min",
+   "fieldtype": "Float",
+   "label": "Carat Range (Min)"
+  },
+  {
+   "fieldname": "carat_range_max",
+   "fieldtype": "Float",
+   "label": "Carat Range (Max)"
+  },
+  {
+   "fieldname": "section_certification",
+   "fieldtype": "Section Break",
+   "label": "Certification"
+  },
+  {
+   "fieldname": "certification_required",
+   "fieldtype": "Check",
+   "label": "Certification Required"
+  },
+  {
+   "fieldname": "certification_types",
+   "fieldtype": "Small Text",
+   "label": "Certification Types",
+   "description": "Comma-separated list: GIA, IGI, AGS, etc."
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Stone Spec",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

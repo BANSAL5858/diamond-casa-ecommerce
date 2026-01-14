@@ -1,0 +1,16 @@
+# Diamond Casa Jewellery ERP - Python Dependencies
+
+# Core Frappe dependencies are handled by bench
+# Add only app-specific dependencies here
+
+# For barcode/QR generation
+qrcode>=7.4.2
+Pillow>=10.0.0
+
+# For API rate limiting
+limits>=3.0.0
+
+# For WhatsApp integration
+requests>=2.31.0
+
+# Note: hashlib is part of Python standard library, no need for hashlib-compat

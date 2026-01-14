@@ -1,0 +1,179 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "action_type",
+  "action_description",
+  "user",
+  "action_timestamp",
+  "reference_doctype",
+  "reference_name",
+  "section_details",
+  "old_value",
+  "new_value",
+  "action_status",
+  "ip_address",
+  "user_agent",
+  "section_audit",
+  "is_critical_action",
+  "requires_approval",
+  "approved_by",
+  "approved_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "action_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Action Type",
+   "options": "Create\nUpdate\nDelete\nSubmit\nCancel\nApprove\nReject\nPrint\nExport\nView",
+   "reqd": 1
+  },
+  {
+   "fieldname": "action_description",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Action Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "User",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "action_timestamp",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Action Timestamp",
+   "default": "Now",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Name",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "section_details",
+   "fieldtype": "Section Break",
+   "label": "Action Details"
+  },
+  {
+   "fieldname": "old_value",
+   "fieldtype": "Code",
+   "label": "Old Value",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "new_value",
+   "fieldtype": "Code",
+   "label": "New Value",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "action_status",
+   "fieldtype": "Select",
+   "label": "Action Status",
+   "options": "Success\nFailed\nPending\nCancelled",
+   "default": "Success"
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP Address"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Data",
+   "label": "User Agent"
+  },
+  {
+   "fieldname": "section_audit",
+   "fieldtype": "Section Break",
+   "label": "Audit Information"
+  },
+  {
+   "fieldname": "is_critical_action",
+   "fieldtype": "Check",
+   "label": "Is Critical Action",
+   "description": "Mark if this is a critical financial/security action"
+  },
+  {
+   "fieldname": "requires_approval",
+   "fieldtype": "Check",
+   "label": "Requires Approval"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User"
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Jewellery Action Log",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "action_timestamp",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

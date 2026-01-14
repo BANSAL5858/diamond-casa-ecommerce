@@ -1,0 +1,289 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "version_code",
+  "design",
+  "version_number",
+  "version_name",
+  "section_prototype",
+  "is_prototype",
+  "prototype_status",
+  "prototype_date",
+  "prototype_notes",
+  "section_changes",
+  "change_summary",
+  "change_details",
+  "section_files",
+  "design_files",
+  "cad_files",
+  "cam_files",
+  "stl_files",
+  "images",
+  "videos",
+  "section_approval",
+  "approval_status",
+  "approved_by",
+  "approved_on",
+  "section_evolution",
+  "parent_version",
+  "next_version",
+  "evolution_notes",
+  "section_settings",
+  "created_by",
+  "created_on",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "version_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Version Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "design",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Design",
+   "options": "Jewellery Design",
+   "reqd": 1
+  },
+  {
+   "fieldname": "version_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Version Number",
+   "reqd": 1,
+   "description": "e.g., v1.0, v1.1, v2.0"
+  },
+  {
+   "fieldname": "version_name",
+   "fieldtype": "Data",
+   "label": "Version Name",
+   "description": "Optional descriptive name"
+  },
+  {
+   "fieldname": "section_prototype",
+   "fieldtype": "Section Break",
+   "label": "Prototype Information"
+  },
+  {
+   "fieldname": "is_prototype",
+   "fieldtype": "Check",
+   "label": "Is Prototype",
+   "default": 0
+  },
+  {
+   "fieldname": "prototype_status",
+   "fieldtype": "Select",
+   "label": "Prototype Status",
+   "options": "Not Started\nIn Progress\nCompleted\nRejected\nOn Hold",
+   "default": "Not Started",
+   "depends_on": "eval:doc.is_prototype == 1"
+  },
+  {
+   "fieldname": "prototype_date",
+   "fieldtype": "Date",
+   "label": "Prototype Date",
+   "depends_on": "eval:doc.is_prototype == 1"
+  },
+  {
+   "fieldname": "prototype_notes",
+   "fieldtype": "Text Editor",
+   "label": "Prototype Notes",
+   "depends_on": "eval:doc.is_prototype == 1"
+  },
+  {
+   "fieldname": "section_changes",
+   "fieldtype": "Section Break",
+   "label": "Version Changes"
+  },
+  {
+   "fieldname": "change_summary",
+   "fieldtype": "Data",
+   "label": "Change Summary",
+   "reqd": 1
+  },
+  {
+   "fieldname": "change_details",
+   "fieldtype": "Text Editor",
+   "label": "Change Details"
+  },
+  {
+   "fieldname": "section_files",
+   "fieldtype": "Section Break",
+   "label": "Version Files"
+  },
+  {
+   "fieldname": "design_files",
+   "fieldtype": "Attach",
+   "label": "Design Files"
+  },
+  {
+   "fieldname": "cad_files",
+   "fieldtype": "Attach",
+   "label": "CAD Files"
+  },
+  {
+   "fieldname": "cam_files",
+   "fieldtype": "Attach",
+   "label": "CAM Files"
+  },
+  {
+   "fieldname": "stl_files",
+   "fieldtype": "Attach",
+   "label": "STL Files"
+  },
+  {
+   "fieldname": "images",
+   "fieldtype": "Attach Image",
+   "label": "Images"
+  },
+  {
+   "fieldname": "videos",
+   "fieldtype": "Attach",
+   "label": "Videos"
+  },
+  {
+   "fieldname": "section_approval",
+   "fieldtype": "Section Break",
+   "label": "Approval"
+  },
+  {
+   "fieldname": "approval_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Approval Status",
+   "options": "Pending\nApproved\nRejected",
+   "default": "Pending",
+   "reqd": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_evolution",
+   "fieldtype": "Section Break",
+   "label": "Version Evolution"
+  },
+  {
+   "fieldname": "parent_version",
+   "fieldtype": "Link",
+   "label": "Parent Version",
+   "options": "Design Version"
+  },
+  {
+   "fieldname": "next_version",
+   "fieldtype": "Link",
+   "label": "Next Version",
+   "options": "Design Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evolution_notes",
+   "fieldtype": "Text Editor",
+   "label": "Evolution Notes",
+   "description": "Notes about how this version evolved from parent"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1,
+   "default": "__user__"
+  },
+  {
+   "fieldname": "created_on",
+   "fieldtype": "Datetime",
+   "label": "Created On",
+   "read_only": 1,
+   "default": "Now"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Design Version",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Viewer"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,242 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scrap_recovery_no",
+  "recovery_date",
+  "section_source",
+  "source_type",
+  "job_card",
+  "material_issue",
+  "section_scrap_details",
+  "scrap_weight",
+  "metal_spec",
+  "purity_percent",
+  "fine_gold_recovered",
+  "stone_loss_weight",
+  "stone_loss_count",
+  "section_recovery",
+  "recovery_percent",
+  "expected_recovery",
+  "actual_recovery",
+  "variance",
+  "section_costing",
+  "scrap_value",
+  "recovery_value",
+  "net_recovery_value",
+  "section_settings",
+  "is_approved",
+  "approved_by",
+  "approved_on",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "scrap_recovery_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Scrap Recovery No",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "recovery_date",
+   "fieldtype": "Date",
+   "label": "Recovery Date",
+   "default": "Today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_source",
+   "fieldtype": "Section Break",
+   "label": "Source Information"
+  },
+  {
+   "fieldname": "source_type",
+   "fieldtype": "Select",
+   "label": "Source Type",
+   "options": "Job Card\nMaterial Issue\nProduction Scrap\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "job_card",
+   "fieldtype": "Link",
+   "label": "Job Card",
+   "options": "Job Card",
+   "depends_on": "eval:doc.source_type == 'Job Card'"
+  },
+  {
+   "fieldname": "material_issue",
+   "fieldtype": "Link",
+   "label": "Material Issue",
+   "options": "Stock Entry",
+   "depends_on": "eval:doc.source_type == 'Material Issue'"
+  },
+  {
+   "fieldname": "section_scrap_details",
+   "fieldtype": "Section Break",
+   "label": "Scrap Details"
+  },
+  {
+   "fieldname": "scrap_weight",
+   "fieldtype": "Float",
+   "label": "Scrap Weight (grams)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "metal_spec",
+   "fieldtype": "Link",
+   "label": "Metal Spec",
+   "options": "Metal Spec",
+   "reqd": 1
+  },
+  {
+   "fieldname": "purity_percent",
+   "fieldtype": "Percent",
+   "label": "Purity %",
+   "fetch_from": "metal_spec.purity_percent",
+   "reqd": 1
+  },
+  {
+   "fieldname": "fine_gold_recovered",
+   "fieldtype": "Float",
+   "label": "Fine Gold Recovered (grams)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stone_loss_weight",
+   "fieldtype": "Float",
+   "label": "Stone Loss Weight (carats)"
+  },
+  {
+   "fieldname": "stone_loss_count",
+   "fieldtype": "Int",
+   "label": "Stone Loss Count"
+  },
+  {
+   "fieldname": "section_recovery",
+   "fieldtype": "Section Break",
+   "label": "Recovery Analysis"
+  },
+  {
+   "fieldname": "recovery_percent",
+   "fieldtype": "Percent",
+   "label": "Recovery %",
+   "description": "Percentage of fine gold recovered"
+  },
+  {
+   "fieldname": "expected_recovery",
+   "fieldtype": "Float",
+   "label": "Expected Recovery (grams)"
+  },
+  {
+   "fieldname": "actual_recovery",
+   "fieldtype": "Float",
+   "label": "Actual Recovery (grams)"
+  },
+  {
+   "fieldname": "variance",
+   "fieldtype": "Float",
+   "label": "Variance (grams)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_costing",
+   "fieldtype": "Section Break",
+   "label": "Costing"
+  },
+  {
+   "fieldname": "scrap_value",
+   "fieldtype": "Currency",
+   "label": "Scrap Value"
+  },
+  {
+   "fieldname": "recovery_value",
+   "fieldtype": "Currency",
+   "label": "Recovery Value"
+  },
+  {
+   "fieldname": "net_recovery_value",
+   "fieldtype": "Currency",
+   "label": "Net Recovery Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_approved",
+   "fieldtype": "Check",
+   "label": "Is Approved"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Scrap Recovery",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

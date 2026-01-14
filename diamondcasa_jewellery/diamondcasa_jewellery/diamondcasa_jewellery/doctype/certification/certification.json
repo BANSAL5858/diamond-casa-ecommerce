@@ -1,0 +1,181 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "certificate_number",
+  "certificate_type",
+  "issuing_lab",
+  "certificate_date",
+  "section_diamond_details",
+  "diamond_carat",
+  "diamond_shape",
+  "diamond_color",
+  "diamond_clarity",
+  "diamond_cut",
+  "section_certificate_file",
+  "certificate_file",
+  "section_linked_items",
+  "linked_sku",
+  "linked_stone_spec",
+  "section_settings",
+  "is_active",
+  "is_verified"
+ ],
+ "fields": [
+  {
+   "fieldname": "certificate_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Certificate Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "certificate_type",
+   "fieldtype": "Select",
+   "label": "Certificate Type",
+   "options": "GIA\nIGI\nAGS\nHRD\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "issuing_lab",
+   "fieldtype": "Data",
+   "label": "Issuing Lab",
+   "description": "Name of the certification laboratory"
+  },
+  {
+   "fieldname": "certificate_date",
+   "fieldtype": "Date",
+   "label": "Certificate Date"
+  },
+  {
+   "fieldname": "section_diamond_details",
+   "fieldtype": "Section Break",
+   "label": "Diamond Details"
+  },
+  {
+   "fieldname": "diamond_carat",
+   "fieldtype": "Float",
+   "label": "Diamond Carat"
+  },
+  {
+   "fieldname": "diamond_shape",
+   "fieldtype": "Select",
+   "label": "Shape",
+   "options": "Round\nPrincess\nCushion\nOval\nEmerald\nRadiant\nPear\nMarquise\nHeart\nAsscher"
+  },
+  {
+   "fieldname": "diamond_color",
+   "fieldtype": "Select",
+   "label": "Color",
+   "options": "D\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO-P\nQ-R\nS-T\nU-V\nW-X\nY-Z"
+  },
+  {
+   "fieldname": "diamond_clarity",
+   "fieldtype": "Select",
+   "label": "Clarity",
+   "options": "FL\nIF\nVVS1\nVVS2\nVS1\nVS2\nSI1\nSI2\nI1\nI2\nI3"
+  },
+  {
+   "fieldname": "diamond_cut",
+   "fieldtype": "Select",
+   "label": "Cut",
+   "options": "Excellent\nVery Good\nGood\nFair\nPoor"
+  },
+  {
+   "fieldname": "section_certificate_file",
+   "fieldtype": "Section Break",
+   "label": "Certificate File"
+  },
+  {
+   "fieldname": "certificate_file",
+   "fieldtype": "Attach",
+   "label": "Certificate File",
+   "description": "Upload certificate PDF/image"
+  },
+  {
+   "fieldname": "section_linked_items",
+   "fieldtype": "Section Break",
+   "label": "Linked Items"
+  },
+  {
+   "fieldname": "linked_sku",
+   "fieldtype": "Link",
+   "label": "Linked SKU",
+   "options": "Jewellery SKU"
+  },
+  {
+   "fieldname": "linked_stone_spec",
+   "fieldtype": "Link",
+   "label": "Linked Stone Spec",
+   "options": "Stone Spec"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "is_verified",
+   "fieldtype": "Check",
+   "label": "Is Verified",
+   "description": "Certificate has been verified"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Certification",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

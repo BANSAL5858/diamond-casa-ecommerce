@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pricing_rule_name",
+  "pricing_rule_type",
+  "section_metal",
+  "metal_rate_source",
+  "metal_rate_adjustment_percent",
+  "section_making",
+  "making_charge_type",
+  "making_charge_amount",
+  "making_charge_percent",
+  "section_stone",
+  "stone_markup_percent",
+  "section_margin",
+  "margin_percent",
+  "section_channels",
+  "channel_web",
+  "channel_web_margin_adjustment",
+  "channel_showroom",
+  "channel_showroom_margin_adjustment",
+  "section_settings",
+  "is_active",
+  "valid_from",
+  "valid_until"
+ ],
+ "fields": [
+  {
+   "fieldname": "pricing_rule_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Pricing Rule Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "pricing_rule_type",
+   "fieldtype": "Select",
+   "label": "Rule Type",
+   "options": "Standard\nPromotional\nCustom",
+   "default": "Standard"
+  },
+  {
+   "fieldname": "section_metal",
+   "fieldtype": "Section Break",
+   "label": "Metal Pricing"
+  },
+  {
+   "fieldname": "metal_rate_source",
+   "fieldtype": "Select",
+   "label": "Metal Rate Source",
+   "options": "MCX\nManual\nMetal Spec Rate",
+   "default": "Metal Spec Rate"
+  },
+  {
+   "fieldname": "metal_rate_adjustment_percent",
+   "fieldtype": "Percent",
+   "label": "Metal Rate Adjustment %",
+   "description": "Adjustment to base metal rate"
+  },
+  {
+   "fieldname": "section_making",
+   "fieldtype": "Section Break",
+   "label": "Making Charge"
+  },
+  {
+   "fieldname": "making_charge_type",
+   "fieldtype": "Select",
+   "label": "Making Charge Type",
+   "options": "Fixed Amount\nPercentage of Metal Cost\nPer Gram",
+   "default": "Fixed Amount"
+  },
+  {
+   "fieldname": "making_charge_amount",
+   "fieldtype": "Currency",
+   "label": "Making Charge Amount",
+   "depends_on": "eval:doc.making_charge_type == 'Fixed Amount'"
+  },
+  {
+   "fieldname": "making_charge_percent",
+   "fieldtype": "Percent",
+   "label": "Making Charge %",
+   "depends_on": "eval:doc.making_charge_type == 'Percentage of Metal Cost'"
+  },
+  {
+   "fieldname": "section_stone",
+   "fieldtype": "Section Break",
+   "label": "Stone Pricing"
+  },
+  {
+   "fieldname": "stone_markup_percent",
+   "fieldtype": "Percent",
+   "label": "Stone Markup %",
+   "description": "Markup on stone cost"
+  },
+  {
+   "fieldname": "section_margin",
+   "fieldtype": "Section Break",
+   "label": "Margin"
+  },
+  {
+   "fieldname": "margin_percent",
+   "fieldtype": "Percent",
+   "label": "Margin %",
+   "description": "Final margin on total cost"
+  },
+  {
+   "fieldname": "section_channels",
+   "fieldtype": "Section Break",
+   "label": "Channel Pricing"
+  },
+  {
+   "fieldname": "channel_web",
+   "fieldtype": "Check",
+   "label": "Apply to Web Channel"
+  },
+  {
+   "fieldname": "channel_web_margin_adjustment",
+   "fieldtype": "Percent",
+   "label": "Web Margin Adjustment %",
+   "description": "Additional margin adjustment for web channel"
+  },
+  {
+   "fieldname": "channel_showroom",
+   "fieldtype": "Check",
+   "label": "Apply to Showroom Channel"
+  },
+  {
+   "fieldname": "channel_showroom_margin_adjustment",
+   "fieldtype": "Percent",
+   "label": "Showroom Margin Adjustment %",
+   "description": "Additional margin adjustment for showroom channel"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "valid_from",
+   "fieldtype": "Date",
+   "label": "Valid From"
+  },
+  {
+   "fieldname": "valid_until",
+   "fieldtype": "Date",
+   "label": "Valid Until"
+  }
+ ],
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Pricing Rule",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

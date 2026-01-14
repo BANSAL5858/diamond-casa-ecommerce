@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "design_code",
+  "design_name",
+  "design_category",
+  "design_description",
+  "design_image",
+  "design_video",
+  "design_3d_asset",
+  "design_status",
+  "section_metal",
+  "default_metal_type",
+  "default_metal_purity",
+  "section_stone",
+  "default_stone_type",
+  "default_stone_shape",
+  "default_stone_carat_range",
+  "section_pricing",
+  "base_making_charge",
+  "base_margin_percent",
+  "section_settings",
+  "is_active",
+  "is_web_visible",
+  "created_by",
+  "created_on",
+  "modified_by",
+  "modified_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "design_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Design Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "design_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Design Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "design_category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "design_description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "design_image",
+   "fieldtype": "Attach Image",
+   "label": "Design Image"
+  },
+  {
+   "fieldname": "design_video",
+   "fieldtype": "Attach",
+   "label": "Design Video"
+  },
+  {
+   "fieldname": "design_3d_asset",
+   "fieldtype": "Attach",
+   "label": "3D Asset"
+  },
+  {
+   "fieldname": "design_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nActive\nDiscontinued",
+   "default": "Draft"
+  },
+  {
+   "fieldname": "section_metal",
+   "fieldtype": "Section Break",
+   "label": "Default Metal Specifications"
+  },
+  {
+   "fieldname": "default_metal_type",
+   "fieldtype": "Link",
+   "label": "Metal Type",
+   "options": "Metal Spec"
+  },
+  {
+   "fieldname": "default_metal_purity",
+   "fieldtype": "Data",
+   "label": "Metal Purity",
+   "description": "e.g., 18K, 22K, 24K"
+  },
+  {
+   "fieldname": "section_stone",
+   "fieldtype": "Section Break",
+   "label": "Default Stone Specifications"
+  },
+  {
+   "fieldname": "default_stone_type",
+   "fieldtype": "Link",
+   "label": "Stone Type",
+   "options": "Stone Spec"
+  },
+  {
+   "fieldname": "default_stone_shape",
+   "fieldtype": "Data",
+   "label": "Stone Shape",
+   "description": "e.g., Round, Princess, Cushion"
+  },
+  {
+   "fieldname": "default_stone_carat_range",
+   "fieldtype": "Data",
+   "label": "Stone Carat Range",
+   "description": "e.g., 0.5-1.0, 1.0-2.0"
+  },
+  {
+   "fieldname": "section_pricing",
+   "fieldtype": "Section Break",
+   "label": "Default Pricing"
+  },
+  {
+   "fieldname": "base_making_charge",
+   "fieldtype": "Currency",
+   "label": "Base Making Charge"
+  },
+  {
+   "fieldname": "base_margin_percent",
+   "fieldtype": "Percent",
+   "label": "Base Margin %"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "is_web_visible",
+   "fieldtype": "Check",
+   "label": "Web Visible",
+   "default": 0
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_on",
+   "fieldtype": "Datetime",
+   "label": "Created On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modified_by",
+   "fieldtype": "Link",
+   "label": "Modified By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modified_on",
+   "fieldtype": "Datetime",
+   "label": "Modified On",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Jewellery Design",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

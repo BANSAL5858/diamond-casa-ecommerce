@@ -1,0 +1,174 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "metal_code",
+  "metal_name",
+  "metal_type",
+  "purity",
+  "purity_percent",
+  "section_rate",
+  "rate_basis",
+  "current_rate_per_gram",
+  "rate_source",
+  "rate_last_updated",
+  "section_wastage",
+  "wastage_percent",
+  "wastage_calculation_method",
+  "section_settings",
+  "is_active",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "metal_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Metal Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "metal_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Metal Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "metal_type",
+   "fieldtype": "Select",
+   "label": "Metal Type",
+   "options": "Gold\nPlatinum\nSilver\nRose Gold\nWhite Gold\nYellow Gold",
+   "reqd": 1
+  },
+  {
+   "fieldname": "purity",
+   "fieldtype": "Data",
+   "label": "Purity",
+   "description": "e.g., 18K, 22K, 24K, 916, 999",
+   "reqd": 1
+  },
+  {
+   "fieldname": "purity_percent",
+   "fieldtype": "Percent",
+   "label": "Purity %",
+   "description": "Fine gold percentage (e.g., 18K = 75%, 22K = 91.67%, 24K = 100%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_rate",
+   "fieldtype": "Section Break",
+   "label": "Rate Information"
+  },
+  {
+   "fieldname": "rate_basis",
+   "fieldtype": "Select",
+   "label": "Rate Basis",
+   "options": "Per Gram\nPer 10 Grams\nPer Kilogram",
+   "default": "Per Gram"
+  },
+  {
+   "fieldname": "current_rate_per_gram",
+   "fieldtype": "Currency",
+   "label": "Current Rate (per gram)",
+   "description": "Current market rate for this metal and purity"
+  },
+  {
+   "fieldname": "rate_source",
+   "fieldtype": "Select",
+   "label": "Rate Source",
+   "options": "MCX\nManual\nAPI\nOther",
+   "default": "Manual"
+  },
+  {
+   "fieldname": "rate_last_updated",
+   "fieldtype": "Datetime",
+   "label": "Rate Last Updated"
+  },
+  {
+   "fieldname": "section_wastage",
+   "fieldtype": "Section Break",
+   "label": "Wastage Rules"
+  },
+  {
+   "fieldname": "wastage_percent",
+   "fieldtype": "Percent",
+   "label": "Default Wastage %",
+   "description": "Default wastage percentage for manufacturing"
+  },
+  {
+   "fieldname": "wastage_calculation_method",
+   "fieldtype": "Select",
+   "label": "Wastage Calculation Method",
+   "options": "Percentage of Gross Weight\nFixed Amount per Gram\nPercentage of Fine Gold",
+   "default": "Percentage of Gross Weight"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Metal Spec",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

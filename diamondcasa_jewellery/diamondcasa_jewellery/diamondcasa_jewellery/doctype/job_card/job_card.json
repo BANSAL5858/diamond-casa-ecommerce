@@ -1,0 +1,340 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "job_card_no",
+  "design",
+  "sku",
+  "section_stages",
+  "stage_casting",
+  "casting_status",
+  "casting_start_date",
+  "casting_completion_date",
+  "casting_vendor",
+  "casting_wastage",
+  "stage_setting",
+  "setting_status",
+  "setting_start_date",
+  "setting_completion_date",
+  "setting_vendor",
+  "setting_wastage",
+  "stage_polishing",
+  "polishing_status",
+  "polishing_start_date",
+  "polishing_completion_date",
+  "polishing_vendor",
+  "polishing_wastage",
+  "stage_qc",
+  "qc_status",
+  "qc_start_date",
+  "qc_completion_date",
+  "qc_approved",
+  "qc_remarks",
+  "stage_hallmarking",
+  "hallmarking_status",
+  "hallmarking_start_date",
+  "hallmarking_completion_date",
+  "hallmarking_vendor",
+  "section_materials",
+  "materials_table",
+  "section_costing",
+  "material_cost",
+  "labor_cost",
+  "wastage_cost",
+  "total_cost",
+  "section_settings",
+  "status",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "job_card_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Job Card No",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "design",
+   "fieldtype": "Link",
+   "label": "Design",
+   "options": "Jewellery Design",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sku",
+   "fieldtype": "Link",
+   "label": "SKU",
+   "options": "Jewellery SKU"
+  },
+  {
+   "fieldname": "section_stages",
+   "fieldtype": "Section Break",
+   "label": "Manufacturing Stages"
+  },
+  {
+   "fieldname": "stage_casting",
+   "fieldtype": "Section Break",
+   "label": "Casting Stage"
+  },
+  {
+   "fieldname": "casting_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nIn Progress\nCompleted\nOn Hold",
+   "default": "Not Started"
+  },
+  {
+   "fieldname": "casting_start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "casting_completion_date",
+   "fieldtype": "Datetime",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "casting_vendor",
+   "fieldtype": "Link",
+   "label": "Vendor/Karigar",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "casting_wastage",
+   "fieldtype": "Percent",
+   "label": "Wastage %"
+  },
+  {
+   "fieldname": "stage_setting",
+   "fieldtype": "Section Break",
+   "label": "Setting Stage"
+  },
+  {
+   "fieldname": "setting_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nIn Progress\nCompleted\nOn Hold",
+   "default": "Not Started"
+  },
+  {
+   "fieldname": "setting_start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "setting_completion_date",
+   "fieldtype": "Datetime",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "setting_vendor",
+   "fieldtype": "Link",
+   "label": "Vendor/Karigar",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "setting_wastage",
+   "fieldtype": "Percent",
+   "label": "Wastage %"
+  },
+  {
+   "fieldname": "stage_polishing",
+   "fieldtype": "Section Break",
+   "label": "Polishing Stage"
+  },
+  {
+   "fieldname": "polishing_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nIn Progress\nCompleted\nOn Hold",
+   "default": "Not Started"
+  },
+  {
+   "fieldname": "polishing_start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "polishing_completion_date",
+   "fieldtype": "Datetime",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "polishing_vendor",
+   "fieldtype": "Link",
+   "label": "Vendor/Karigar",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "polishing_wastage",
+   "fieldtype": "Percent",
+   "label": "Wastage %"
+  },
+  {
+   "fieldname": "stage_qc",
+   "fieldtype": "Section Break",
+   "label": "Quality Control Stage"
+  },
+  {
+   "fieldname": "qc_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nIn Progress\nCompleted\nOn Hold",
+   "default": "Not Started"
+  },
+  {
+   "fieldname": "qc_start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "qc_completion_date",
+   "fieldtype": "Datetime",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "qc_approved",
+   "fieldtype": "Check",
+   "label": "QC Approved"
+  },
+  {
+   "fieldname": "qc_remarks",
+   "fieldtype": "Small Text",
+   "label": "QC Remarks"
+  },
+  {
+   "fieldname": "stage_hallmarking",
+   "fieldtype": "Section Break",
+   "label": "Hallmarking Stage"
+  },
+  {
+   "fieldname": "hallmarking_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nIn Progress\nCompleted\nOn Hold",
+   "default": "Not Started"
+  },
+  {
+   "fieldname": "hallmarking_start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "hallmarking_completion_date",
+   "fieldtype": "Datetime",
+   "label": "Completion Date"
+  },
+  {
+   "fieldname": "hallmarking_vendor",
+   "fieldtype": "Link",
+   "label": "Vendor/Karigar",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "section_materials",
+   "fieldtype": "Section Break",
+   "label": "Materials"
+  },
+  {
+   "fieldname": "materials_table",
+   "fieldtype": "Table",
+   "label": "Materials",
+   "options": "Job Card Material"
+  },
+  {
+   "fieldname": "section_costing",
+   "fieldtype": "Section Break",
+   "label": "Costing"
+  },
+  {
+   "fieldname": "material_cost",
+   "fieldtype": "Currency",
+   "label": "Material Cost"
+  },
+  {
+   "fieldname": "labor_cost",
+   "fieldtype": "Currency",
+   "label": "Labor Cost"
+  },
+  {
+   "fieldname": "wastage_cost",
+   "fieldtype": "Currency",
+   "label": "Wastage Cost"
+  },
+  {
+   "fieldname": "total_cost",
+   "fieldtype": "Currency",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Overall Status",
+   "options": "Draft\nIn Progress\nCompleted\nCancelled",
+   "default": "Draft"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  }
+ ],
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Job Card",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

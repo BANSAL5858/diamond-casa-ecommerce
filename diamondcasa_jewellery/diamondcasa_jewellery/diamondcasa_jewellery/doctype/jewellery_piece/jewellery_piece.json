@@ -1,0 +1,224 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "piece_id",
+  "tag_id",
+  "sku",
+  "item_code",
+  "section_barcode",
+  "barcode",
+  "qr_code",
+  "section_details",
+  "gross_weight",
+  "net_weight",
+  "fine_gold_equivalent",
+  "stone_weight",
+  "section_location",
+  "warehouse",
+  "location",
+  "section_status",
+  "status",
+  "current_owner",
+  "section_tracking",
+  "manufacturing_date",
+  "hallmark_date",
+  "certification",
+  "section_settings",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "piece_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Piece ID",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Unique identifier for this piece"
+  },
+  {
+   "fieldname": "tag_id",
+   "fieldtype": "Data",
+   "label": "Tag ID",
+   "description": "Physical tag/barcode ID"
+  },
+  {
+   "fieldname": "sku",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "SKU",
+   "options": "Jewellery SKU",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item Code",
+   "options": "Item",
+   "fetch_from": "sku.item_code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_barcode",
+   "fieldtype": "Section Break",
+   "label": "Barcode/QR Code"
+  },
+  {
+   "fieldname": "barcode",
+   "fieldtype": "Attach Image",
+   "label": "Barcode Image",
+   "read_only": 1
+  },
+  {
+   "fieldname": "qr_code",
+   "fieldtype": "Attach Image",
+   "label": "QR Code Image",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_details",
+   "fieldtype": "Section Break",
+   "label": "Piece Details"
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight (grams)"
+  },
+  {
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight (grams)"
+  },
+  {
+   "fieldname": "fine_gold_equivalent",
+   "fieldtype": "Float",
+   "label": "Fine Gold Equivalent (grams)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stone_weight",
+   "fieldtype": "Float",
+   "label": "Stone Weight (carats)"
+  },
+  {
+   "fieldname": "section_location",
+   "fieldtype": "Section Break",
+   "label": "Location"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Physical Location",
+   "description": "Specific location within warehouse"
+  },
+  {
+   "fieldname": "section_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "In Production\nIn Stock\nSold\nReserved\nReturned\nScrapped",
+   "default": "In Stock"
+  },
+  {
+   "fieldname": "current_owner",
+   "fieldtype": "Link",
+   "label": "Current Owner",
+   "options": "Customer",
+   "description": "Customer who owns this piece (if sold)"
+  },
+  {
+   "fieldname": "section_tracking",
+   "fieldtype": "Section Break",
+   "label": "Tracking Information"
+  },
+  {
+   "fieldname": "manufacturing_date",
+   "fieldtype": "Date",
+   "label": "Manufacturing Date"
+  },
+  {
+   "fieldname": "hallmark_date",
+   "fieldtype": "Date",
+   "label": "Hallmark Date"
+  },
+  {
+   "fieldname": "certification",
+   "fieldtype": "Link",
+   "label": "Certification",
+   "options": "Certification"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Jewellery Piece",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

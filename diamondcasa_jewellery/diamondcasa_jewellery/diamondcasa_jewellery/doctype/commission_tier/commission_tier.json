@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tier_name",
+  "min_amount",
+  "max_amount",
+  "commission_rate",
+  "commission_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "tier_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tier Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "min_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Min Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "max_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Max Amount"
+  },
+  {
+   "fieldname": "commission_rate",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Commission Rate (%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "commission_type",
+   "fieldtype": "Select",
+   "label": "Commission Type",
+   "options": "Percentage\nFixed Amount",
+   "default": "Percentage"
+  }
+ ],
+ "is_child_table": 1,
+ "links": [],
+ "modified": "2024-12-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Commission Tier",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "min_amount",
+ "sort_order": "ASC",
+ "states": []
+}

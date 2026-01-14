@@ -1,0 +1,284 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sku_code",
+  "item_code",
+  "item_name",
+  "design",
+  "section_metal",
+  "metal_spec",
+  "metal_purity",
+  "gross_weight",
+  "net_weight",
+  "fine_gold_equivalent",
+  "section_stone",
+  "stone_spec",
+  "stone_carat",
+  "stone_count",
+  "stone_weight",
+  "section_pricing",
+  "pricing_rule",
+  "metal_cost",
+  "making_charge",
+  "stone_cost",
+  "margin_percent",
+  "final_price",
+  "section_inventory",
+  "warehouse",
+  "available_qty",
+  "piece_level_tracking",
+  "section_publishing",
+  "is_web_visible",
+  "is_web_approved",
+  "sync_status",
+  "last_synced",
+  "section_settings",
+  "is_active",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "sku_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SKU Code",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Deterministic SKU: Design-Metal-Stone-Size"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item Code",
+   "options": "Item",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "fetch_from": "item_code.item_name"
+  },
+  {
+   "fieldname": "design",
+   "fieldtype": "Link",
+   "label": "Design",
+   "options": "Jewellery Design",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_metal",
+   "fieldtype": "Section Break",
+   "label": "Metal Specifications"
+  },
+  {
+   "fieldname": "metal_spec",
+   "fieldtype": "Link",
+   "label": "Metal Spec",
+   "options": "Metal Spec"
+  },
+  {
+   "fieldname": "metal_purity",
+   "fieldtype": "Data",
+   "label": "Metal Purity"
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight (grams)"
+  },
+  {
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight (grams)"
+  },
+  {
+   "fieldname": "fine_gold_equivalent",
+   "fieldtype": "Float",
+   "label": "Fine Gold Equivalent (grams)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_stone",
+   "fieldtype": "Section Break",
+   "label": "Stone Specifications"
+  },
+  {
+   "fieldname": "stone_spec",
+   "fieldtype": "Link",
+   "label": "Stone Spec",
+   "options": "Stone Spec"
+  },
+  {
+   "fieldname": "stone_carat",
+   "fieldtype": "Float",
+   "label": "Stone Carat"
+  },
+  {
+   "fieldname": "stone_count",
+   "fieldtype": "Int",
+   "label": "Stone Count"
+  },
+  {
+   "fieldname": "stone_weight",
+   "fieldtype": "Float",
+   "label": "Stone Weight (carats)"
+  },
+  {
+   "fieldname": "section_pricing",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "pricing_rule",
+   "fieldtype": "Link",
+   "label": "Pricing Rule",
+   "options": "Pricing Rule"
+  },
+  {
+   "fieldname": "metal_cost",
+   "fieldtype": "Currency",
+   "label": "Metal Cost"
+  },
+  {
+   "fieldname": "making_charge",
+   "fieldtype": "Currency",
+   "label": "Making Charge"
+  },
+  {
+   "fieldname": "stone_cost",
+   "fieldtype": "Currency",
+   "label": "Stone Cost"
+  },
+  {
+   "fieldname": "margin_percent",
+   "fieldtype": "Percent",
+   "label": "Margin %"
+  },
+  {
+   "fieldname": "final_price",
+   "fieldtype": "Currency",
+   "label": "Final Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_inventory",
+   "fieldtype": "Section Break",
+   "label": "Inventory"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "available_qty",
+   "fieldtype": "Float",
+   "label": "Available Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "piece_level_tracking",
+   "fieldtype": "Check",
+   "label": "Piece Level Tracking",
+   "description": "Enable unique piece ID tracking for high-value items"
+  },
+  {
+   "fieldname": "section_publishing",
+   "fieldtype": "Section Break",
+   "label": "Web Publishing"
+  },
+  {
+   "fieldname": "is_web_visible",
+   "fieldtype": "Check",
+   "label": "Web Visible"
+  },
+  {
+   "fieldname": "is_web_approved",
+   "fieldtype": "Check",
+   "label": "Web Approved",
+   "description": "Approved for web publishing"
+  },
+  {
+   "fieldname": "sync_status",
+   "fieldtype": "Select",
+   "label": "Sync Status",
+   "options": "Pending\nSynced\nFailed\nNot Synced",
+   "default": "Not Synced"
+  },
+  {
+   "fieldname": "last_synced",
+   "fieldtype": "Datetime",
+   "label": "Last Synced"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Jewellery SKU",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

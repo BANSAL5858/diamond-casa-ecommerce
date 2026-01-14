@@ -1,0 +1,308 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "asset_code",
+  "asset_name",
+  "section_type",
+  "asset_type",
+  "media_category",
+  "section_linked_to",
+  "linked_to_doctype",
+  "linked_to_name",
+  "design_code",
+  "sku_code",
+  "item_code",
+  "section_file",
+  "file_attachment",
+  "file_url",
+  "file_type",
+  "file_size",
+  "thumbnail",
+  "section_metadata",
+  "description",
+  "tags",
+  "section_approval",
+  "approval_status",
+  "approved_by",
+  "approved_on",
+  "rejection_reason",
+  "section_web_publish",
+  "is_web_visible",
+  "is_web_approved",
+  "publish_priority",
+  "section_settings",
+  "uploaded_by",
+  "uploaded_on",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "asset_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Asset Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "asset_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Asset Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_type",
+   "fieldtype": "Section Break",
+   "label": "Asset Type"
+  },
+  {
+   "fieldname": "asset_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Asset Type",
+   "options": "Image\nVideo\n3D Model\nDocument\nCertificate",
+   "reqd": 1,
+   "default": "Image"
+  },
+  {
+   "fieldname": "media_category",
+   "fieldtype": "Select",
+   "label": "Media Category",
+   "options": "Product Image\nProduct Video\nDesign Image\nDesign Video\nCAD File\nCAM File\nSTL File\nCertificate\nDocument\nOther",
+   "default": "Product Image"
+  },
+  {
+   "fieldname": "section_linked_to",
+   "fieldtype": "Section Break",
+   "label": "Linked To"
+  },
+  {
+   "fieldname": "linked_to_doctype",
+   "fieldtype": "Link",
+   "label": "Linked To DocType",
+   "options": "DocType",
+   "default": "Item"
+  },
+  {
+   "fieldname": "linked_to_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Linked To",
+   "options": "linked_to_doctype"
+  },
+  {
+   "fieldname": "design_code",
+   "fieldtype": "Link",
+   "label": "Design Code",
+   "options": "Jewellery Design"
+  },
+  {
+   "fieldname": "sku_code",
+   "fieldtype": "Link",
+   "label": "SKU Code",
+   "options": "Jewellery SKU"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item Code",
+   "options": "Item"
+  },
+  {
+   "fieldname": "section_file",
+   "fieldtype": "Section Break",
+   "label": "File Information"
+  },
+  {
+   "fieldname": "file_attachment",
+   "fieldtype": "Attach",
+   "label": "File Attachment",
+   "reqd": 1
+  },
+  {
+   "fieldname": "file_url",
+   "fieldtype": "Data",
+   "label": "File URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "file_type",
+   "fieldtype": "Data",
+   "label": "File Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "file_size",
+   "fieldtype": "Int",
+   "label": "File Size (bytes)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "thumbnail",
+   "fieldtype": "Attach Image",
+   "label": "Thumbnail"
+  },
+  {
+   "fieldname": "section_metadata",
+   "fieldtype": "Section Break",
+   "label": "Metadata"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Small Text",
+   "label": "Tags",
+   "description": "Comma-separated tags"
+  },
+  {
+   "fieldname": "section_approval",
+   "fieldtype": "Section Break",
+   "label": "Approval Workflow"
+  },
+  {
+   "fieldname": "approval_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Approval Status",
+   "options": "Pending\nApproved\nRejected",
+   "default": "Pending",
+   "reqd": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rejection_reason",
+   "fieldtype": "Small Text",
+   "label": "Rejection Reason",
+   "depends_on": "eval:doc.approval_status == 'Rejected'"
+  },
+  {
+   "fieldname": "section_web_publish",
+   "fieldtype": "Section Break",
+   "label": "Web Publishing"
+  },
+  {
+   "fieldname": "is_web_visible",
+   "fieldtype": "Check",
+   "label": "Web Visible",
+   "default": 0
+  },
+  {
+   "fieldname": "is_web_approved",
+   "fieldtype": "Check",
+   "label": "Web Approved",
+   "default": 0,
+   "depends_on": "eval:doc.approval_status == 'Approved'"
+  },
+  {
+   "fieldname": "publish_priority",
+   "fieldtype": "Select",
+   "label": "Publish Priority",
+   "options": "Low\nMedium\nHigh",
+   "default": "Medium"
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "uploaded_by",
+   "fieldtype": "Link",
+   "label": "Uploaded By",
+   "options": "User",
+   "read_only": 1,
+   "default": "__user__"
+  },
+  {
+   "fieldname": "uploaded_on",
+   "fieldtype": "Datetime",
+   "label": "Uploaded On",
+   "read_only": 1,
+   "default": "Now"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "Media Asset",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Viewer"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

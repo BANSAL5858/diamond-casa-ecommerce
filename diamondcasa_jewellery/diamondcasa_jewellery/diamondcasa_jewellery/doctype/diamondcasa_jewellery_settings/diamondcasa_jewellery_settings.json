@@ -1,0 +1,270 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-19 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_feature_flags",
+  "enable_barcode_generation",
+  "enable_piece_level_tracking",
+  "enable_whatsapp_integration",
+  "enable_mobile_upload",
+  "enable_stl_viewer",
+  "enable_prebagging",
+  "section_integration",
+  "diamondcasa_api_url",
+  "diamondcasa_api_key",
+  "diamondcasa_api_secret",
+  "diamondcasa_webhook_secret",
+  "diamondcasa_sync_enabled",
+  "diamondcasa_sync_interval",
+  "section_wastage_rules",
+  "default_wastage_percent",
+  "wastage_alert_threshold",
+  "section_pricing",
+  "default_margin_percent",
+  "default_making_charge_percent",
+  "section_notifications",
+  "enable_email_notifications",
+  "enable_sms_notifications",
+  "enable_whatsapp_notifications",
+  "section_whatsapp",
+  "whatsapp_enabled",
+  "whatsapp_api_url",
+  "whatsapp_api_key",
+  "whatsapp_api_secret",
+  "section_approvals",
+  "require_qc_approval",
+  "require_scrap_approval",
+  "require_discount_approval",
+  "discount_approval_threshold"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_feature_flags",
+   "fieldtype": "Section Break",
+   "label": "Feature Flags"
+  },
+  {
+   "fieldname": "enable_barcode_generation",
+   "fieldtype": "Check",
+   "label": "Enable Barcode/QR Generation",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_piece_level_tracking",
+   "fieldtype": "Check",
+   "label": "Enable Piece-level Tracking",
+   "default": 0
+  },
+  {
+   "fieldname": "enable_whatsapp_integration",
+   "fieldtype": "Check",
+   "label": "Enable WhatsApp Integration",
+   "default": 0
+  },
+  {
+   "fieldname": "enable_mobile_upload",
+   "fieldtype": "Check",
+   "label": "Enable Mobile Photo Upload",
+   "default": 0
+  },
+  {
+   "fieldname": "enable_stl_viewer",
+   "fieldtype": "Check",
+   "label": "Enable STL Viewer",
+   "default": 0
+  },
+  {
+   "fieldname": "enable_prebagging",
+   "fieldtype": "Check",
+   "label": "Enable Pre-bagging Workflow",
+   "default": 0,
+   "description": "Automatically create Bag from Material Request"
+  },
+  {
+   "fieldname": "section_integration",
+   "fieldtype": "Section Break",
+   "label": "DiamondCasa Integration"
+  },
+  {
+   "fieldname": "diamondcasa_api_url",
+   "fieldtype": "Data",
+   "label": "DiamondCasa API URL"
+  },
+  {
+   "fieldname": "diamondcasa_api_key",
+   "fieldtype": "Password",
+   "label": "DiamondCasa API Key"
+  },
+  {
+   "fieldname": "diamondcasa_api_secret",
+   "fieldtype": "Password",
+   "label": "DiamondCasa API Secret"
+  },
+  {
+   "fieldname": "diamondcasa_webhook_secret",
+   "fieldtype": "Password",
+   "label": "DiamondCasa Webhook Secret"
+  },
+  {
+   "fieldname": "diamondcasa_sync_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Sync",
+   "default": 0
+  },
+  {
+   "fieldname": "diamondcasa_sync_interval",
+   "fieldtype": "Int",
+   "label": "Sync Interval (seconds)",
+   "default": 900,
+   "description": "Default: 900 (15 minutes)"
+  },
+  {
+   "fieldname": "section_wastage_rules",
+   "fieldtype": "Section Break",
+   "label": "Wastage Rules"
+  },
+  {
+   "fieldname": "default_wastage_percent",
+   "fieldtype": "Percent",
+   "label": "Default Wastage %"
+  },
+  {
+   "fieldname": "wastage_alert_threshold",
+   "fieldtype": "Percent",
+   "label": "Wastage Alert Threshold %",
+   "description": "Alert if wastage exceeds this percentage"
+  },
+  {
+   "fieldname": "section_pricing",
+   "fieldtype": "Section Break",
+   "label": "Default Pricing"
+  },
+  {
+   "fieldname": "default_margin_percent",
+   "fieldtype": "Percent",
+   "label": "Default Margin %"
+  },
+  {
+   "fieldname": "default_making_charge_percent",
+   "fieldtype": "Percent",
+   "label": "Default Making Charge %"
+  },
+  {
+   "fieldname": "section_notifications",
+   "fieldtype": "Section Break",
+   "label": "Notifications"
+  },
+  {
+   "fieldname": "enable_email_notifications",
+   "fieldtype": "Check",
+   "label": "Enable Email Notifications",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_sms_notifications",
+   "fieldtype": "Check",
+   "label": "Enable SMS Notifications",
+   "default": 0
+  },
+  {
+   "fieldname": "enable_whatsapp_notifications",
+   "fieldtype": "Check",
+   "label": "Enable WhatsApp Notifications",
+   "default": 0
+  },
+  {
+   "fieldname": "section_whatsapp",
+   "fieldtype": "Section Break",
+   "label": "WhatsApp Integration"
+  },
+  {
+   "fieldname": "whatsapp_enabled",
+   "fieldtype": "Check",
+   "label": "Enable WhatsApp Integration",
+   "default": 0
+  },
+  {
+   "fieldname": "whatsapp_api_url",
+   "fieldtype": "Data",
+   "label": "WhatsApp API URL"
+  },
+  {
+   "fieldname": "whatsapp_api_key",
+   "fieldtype": "Password",
+   "label": "WhatsApp API Key"
+  },
+  {
+   "fieldname": "whatsapp_api_secret",
+   "fieldtype": "Password",
+   "label": "WhatsApp API Secret"
+  },
+  {
+   "fieldname": "section_approvals",
+   "fieldtype": "Section Break",
+   "label": "Approval Settings"
+  },
+  {
+   "fieldname": "require_qc_approval",
+   "fieldtype": "Check",
+   "label": "Require QC Approval",
+   "default": 1
+  },
+  {
+   "fieldname": "require_scrap_approval",
+   "fieldtype": "Check",
+   "label": "Require Scrap Recovery Approval",
+   "default": 1
+  },
+  {
+   "fieldname": "require_discount_approval",
+   "fieldtype": "Check",
+   "label": "Require Discount Approval",
+   "default": 1
+  },
+  {
+   "fieldname": "discount_approval_threshold",
+   "fieldtype": "Percent",
+   "label": "Discount Approval Threshold %",
+   "description": "Require approval if discount exceeds this percentage"
+  }
+ ],
+ "is_single": 1,
+ "links": [],
+ "modified": "2024-12-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Diamond Casa Jewellery",
+ "name": "DiamondCasa Jewellery Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Jewellery Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
