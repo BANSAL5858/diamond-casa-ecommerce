@@ -1,0 +1,20 @@
+==========================================
+COPY & PASTE THESE SSH COMMANDS
+==========================================
+
+Step 1: SSH into your site
+---------------------------
+ssh frappe@diamondcasa.frappe.cloud
+
+Step 2: Copy and paste ALL of this:
+-------------------------------------
+cd ~/frappe-bench
+bench get-app diamondcasa_jewellery https://github.com/BANSAL5858/diamond-casa-ecommerce.git --branch main --app-directory diamondcasa_jewellery
+bench --site diamondcasa.frappe.cloud install-app diamondcasa_jewellery
+bench --site diamondcasa.frappe.cloud migrate
+bench --site diamondcasa.frappe.cloud clear-cache
+bench restart
+
+==========================================
+DONE! App will be installed.
+==========================================
