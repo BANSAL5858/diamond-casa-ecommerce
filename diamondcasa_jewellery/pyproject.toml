@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diamondcasa_jewellery"
+version = "0.0.1"
+description = "Diamond Casa Jewellery Frappe app"
+readme = "README.md"
+authors = [{ name = "BANSAL5858", email = "" }]
+requires-python = ">=3.8"
+dependencies = ["frappe"]
